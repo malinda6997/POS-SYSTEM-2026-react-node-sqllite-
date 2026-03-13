@@ -130,11 +130,12 @@ const Sidebar = ({ isOpen, onClose, isCollapsed, onToggleCollapse }) => {
         className="hidden md:flex flex-col bg-white dark:bg-slate-950 border-r border-gray-200 dark:border-slate-800 overflow-hidden flex-shrink-0"
       >
         {/* Logo Section */}
-        <div className="bg-white dark:bg-slate-950 border-b border-gray-200 dark:border-slate-800 p-4 flex items-center justify-between flex-shrink-0">
+        <div className="bg-white dark:bg-slate-950 border-b border-gray-200 dark:border-slate-800 p-4 flex items-center justify-between flex-shrink-0 relative z-10">
           <motion.div
             className="flex items-center gap-3 min-w-0"
             animate={{ opacity: isCollapsed ? 0 : 1 }}
             transition={{ duration: 0.2 }}
+            style={{ pointerEvents: isCollapsed ? 'none' : 'auto' }}
           >
             <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-gradient-to-br from-blue-600 to-indigo-600 flex-shrink-0">
               <span className="text-white font-bold text-lg">Z</span>
@@ -148,13 +149,14 @@ const Sidebar = ({ isOpen, onClose, isCollapsed, onToggleCollapse }) => {
           {/* Collapse Toggle */}
           <button
             onClick={onToggleCollapse}
-            className="p-1.5 hover:bg-gray-100 dark:hover:bg-slate-800 rounded-lg transition-colors flex-shrink-0 ml-2"
+            className="p-2 hover:bg-blue-100 dark:hover:bg-slate-800 rounded-lg transition-all duration-200 flex-shrink-0 ml-auto cursor-pointer active:scale-95 relative z-20"
             title={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+            type="button"
           >
             {isCollapsed ? (
-              <ChevronRight size={20} className="text-gray-600 dark:text-gray-400" />
+              <ChevronRight size={20} className="text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400" />
             ) : (
-              <ChevronLeft size={20} className="text-gray-600 dark:text-gray-400" />
+              <ChevronLeft size={20} className="text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400" />
             )}
           </button>
         </div>
