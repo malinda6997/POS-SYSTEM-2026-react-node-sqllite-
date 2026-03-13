@@ -155,7 +155,7 @@ const Bookings = () => {
           <motion.div
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-red-50 dark:bg-red-900 dark:bg-opacity-20 border border-red-200 dark:border-red-700 text-red-800 dark:text-red-200 px-4 py-3 rounded-lg flex items-center gap-2"
+            className="bg-gray-100 dark:bg-gray-900/20 border border-gray-200 dark:border-gray-700 text-gray-800 dark:text-gray-200 px-4 py-3 rounded-lg flex items-center gap-2"
           >
             <AlertCircle size={20} />
             {error}
@@ -166,7 +166,7 @@ const Bookings = () => {
           <motion.div
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-green-50 dark:bg-green-900 dark:bg-opacity-20 border border-green-200 dark:border-green-700 text-green-800 dark:text-green-200 px-4 py-3 rounded-lg flex items-center gap-2"
+            className="bg-gray-100 dark:bg-gray-900/20 border border-gray-200 dark:border-gray-700 text-gray-800 dark:text-gray-200 px-4 py-3 rounded-lg flex items-center gap-2"
           >
             <CheckCircle size={20} />
             {success}

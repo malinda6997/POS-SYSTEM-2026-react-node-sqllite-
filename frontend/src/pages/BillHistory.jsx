@@ -65,7 +65,7 @@ const BillHistory = () => {
           </div>
           <div className="text-right">
             <p className="text-gray-600 dark:text-gray-400 text-sm">Total Amount</p>
-            <p className="text-3xl font-bold text-blue-600 dark:text-blue-400">${totalAmount.toFixed(2)}</p>
+            <p className="text-3xl font-bold text-gray-900 dark:text-white">${totalAmount.toFixed(2)}</p>
           </div>
         </motion.div>
 
@@ -188,11 +188,11 @@ const BillHistory = () => {
                         </td>
                         <td className="px-6 py-4 text-center">
                           <div className="flex items-center justify-center gap-2">
-                            <button className="p-2 hover:bg-blue-100 dark:hover:bg-blue-900/20 rounded-lg transition" title="View">
-                              <Eye size={16} className="text-blue-600 dark:text-blue-400" />
+                            <button className="p-2 hover:bg-gray-100 dark:hover:bg-gray-900/30 rounded-lg transition" title="View">
+                              <Eye size={16} className="text-gray-600 dark:text-gray-400" />
                             </button>
-                            <button className="p-2 hover:bg-green-100 dark:hover:bg-green-900/20 rounded-lg transition" title="Print">
-                              <Printer size={16} className="text-green-600 dark:text-green-400" />
+                            <button className="p-2 hover:bg-gray-100 dark:hover:bg-gray-900/30 rounded-lg transition" title="Print">
+                              <Printer size={16} className="text-gray-600 dark:text-gray-400" />
                             </button>
                             <button className="p-2 hover:bg-gray-100 dark:hover:bg-slate-700 rounded-lg transition">
                               <MoreVertical size={16} className="text-gray-600 dark:text-gray-400" />
