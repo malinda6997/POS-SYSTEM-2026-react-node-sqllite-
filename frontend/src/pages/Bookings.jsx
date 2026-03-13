@@ -180,13 +180,13 @@ const Bookings = () => {
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           <div>
-            <h1 className="text-2xl font-bold text-slate-900 dark:text-white">Bookings</h1>
-            <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">Manage and track all customer bookings</p>
+            <h1 className="text-2xl font-bold text-gray-100 dark:text-white">Bookings</h1>
+            <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Manage and track all customer bookings</p>
           </div>
           <motion.button
             whileTap={{ scale: 0.95 }}
             onClick={() => setShowForm(!showForm)}
-            className="bg-slate-700 hover:bg-slate-800 text-white font-bold px-6 py-3 rounded-lg transition-all dark:bg-slate-800 dark:hover:bg-slate-900 w-fit"
+            className="bg-gray-900 hover:bg-gray-800 text-white font-bold px-6 py-3 rounded-lg transition-all border border-gray-800 w-fit"
           >
             + New Booking
           </motion.button>
@@ -220,18 +220,18 @@ const Bookings = () => {
           <motion.div
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="border border-gray-200 dark:border-gray-700 rounded-xl p-8 bg-gradient-to-br from-gray-50 to-white dark:from-slate-900 dark:to-slate-800"
+            className="border border-gray-200 dark:border-gray-700 rounded-xl p-8 bg-gradient-to-br from-gray-50 to-white dark:from-black dark:to-black"
           >
-            <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-6">Create New Order</h2>
+            <h2 className="text-2xl font-bold text-gray-100 dark:text-white mb-6">Create New Order</h2>
             <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <label className="block text-slate-700 dark:text-slate-300 font-semibold mb-2">Select Customer *</label>
+                <label className="block text-gray-700 dark:text-gray-300 font-semibold mb-2">Select Customer *</label>
                 <select
                   name="customer_id"
                   value={formData.customer_id}
                   onChange={handleInputChange}
                   disabled={loading}
-                  className="w-full col-span-2 px-4 py-3 rounded-lg bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 text-slate-900 dark:text-white focus:outline-none focus:border-gray-500 transition-all disabled:opacity-50"
+                  className="w-full col-span-2 px-4 py-3 rounded-lg bg-black dark:bg-black border border-gray-800 dark:border-gray-800 text-white focus:outline-none focus:border-gray-700 transition-all disabled:opacity-50"
                 >
                   <option value="">-- Choose Customer --</option>
                   {customers.map(customer => (
@@ -243,7 +243,7 @@ const Bookings = () => {
                 )}
               </div>
               <div>
-                <label className="block text-slate-700 dark:text-slate-300 font-semibold mb-2">Mobile Number *</label>
+                <label className="block text-gray-700 dark:text-gray-300 font-semibold mb-2">Mobile Number *</label>
                 <input
                   type="tel"
                   name="customer_mobile"
@@ -251,14 +251,14 @@ const Bookings = () => {
                   onChange={handleInputChange}
                   placeholder="+94-7XX-XXXXXX"
                   disabled={loading}
-                  className="w-full px-4 py-3 rounded-lg bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 text-slate-900 dark:text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 transition-all disabled:opacity-50"
+                  className="w-full px-4 py-3 rounded-lg bg-black dark:bg-black border border-gray-800 dark:border-gray-800 text-white placeholder-gray-500 focus:outline-none focus:border-gray-700 transition-all disabled:opacity-50"
                 />
                 {validationErrors.customer_mobile && (
                   <p className="text-red-500 text-sm mt-1">{validationErrors.customer_mobile}</p>
                 )}
               </div>
               <div className="md:col-span-2">
-                <label className="block text-slate-700 dark:text-slate-300 font-semibold mb-2">Address *</label>
+                <label className="block text-gray-700 dark:text-gray-300 font-semibold mb-2">Address *</label>
                 <textarea
                   name="customer_address"
                   value={formData.customer_address}
@@ -266,14 +266,14 @@ const Bookings = () => {
                   placeholder="Street address, city, postal code"
                   disabled={loading}
                   rows="3"
-                  className="w-full px-4 py-3 rounded-lg bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 text-slate-900 dark:text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 transition-all disabled:opacity-50"
+                  className="w-full px-4 py-3 rounded-lg bg-black dark:bg-black border border-gray-800 dark:border-gray-800 text-white placeholder-gray-500 focus:outline-none focus:border-gray-700 transition-all disabled:opacity-50"
                 />
                 {validationErrors.customer_address && (
                   <p className="text-red-500 text-sm mt-1">{validationErrors.customer_address}</p>
                 )}
               </div>
               <div>
-                <label className="block text-slate-700 dark:text-slate-300 font-semibold mb-2">Total Amount (Rs.) *</label>
+                <label className="block text-gray-700 dark:text-gray-300 font-semibold mb-2">Total Amount (Rs.) *</label>
                 <input
                   type="number"
                   name="total_amount"
@@ -281,14 +281,14 @@ const Bookings = () => {
                   onChange={handleInputChange}
                   placeholder="0.00"
                   disabled={loading}
-                  className="w-full px-4 py-3 rounded-lg bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 text-slate-900 dark:text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 transition-all disabled:opacity-50"
+                  className="w-full px-4 py-3 rounded-lg bg-black dark:bg-black border border-gray-800 dark:border-gray-800 text-white placeholder-gray-500 focus:outline-none focus:border-gray-700 transition-all disabled:opacity-50"
                 />
                 {validationErrors.total_amount && (
                   <p className="text-red-500 text-sm mt-1">{validationErrors.total_amount}</p>
                 )}
               </div>
               <div>
-                <label className="block text-slate-700 dark:text-slate-300 font-semibold mb-2">Advance Paid (Rs.)</label>
+                <label className="block text-gray-700 dark:text-gray-300 font-semibold mb-2">Advance Paid (Rs.)</label>
                 <input
                   type="number"
                   name="advance_paid"
@@ -296,45 +296,45 @@ const Bookings = () => {
                   onChange={handleInputChange}
                   placeholder="0.00"
                   disabled={loading}
-                  className="w-full px-4 py-3 rounded-lg bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 text-slate-900 dark:text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 transition-all disabled:opacity-50"
+                  className="w-full px-4 py-3 rounded-lg bg-black dark:bg-black border border-gray-800 dark:border-gray-800 text-white placeholder-gray-500 focus:outline-none focus:border-gray-700 transition-all disabled:opacity-50"
                 />
               </div>
               <div>
-                <label className="block text-slate-700 dark:text-slate-300 font-semibold mb-2">Event Date *</label>
+                <label className="block text-gray-700 dark:text-gray-300 font-semibold mb-2">Event Date *</label>
                 <input
                   type="date"
                   name="event_date"
                   value={formData.event_date}
                   onChange={handleInputChange}
                   disabled={loading}
-                  className="w-full px-4 py-3 rounded-lg bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 text-slate-900 dark:text-white focus:outline-none focus:border-blue-500 transition-all disabled:opacity-50"
+                  className="w-full px-4 py-3 rounded-lg bg-black dark:bg-black border border-gray-800 dark:border-gray-800 text-white focus:outline-none focus:border-gray-700 transition-all disabled:opacity-50"
                 />
                 {validationErrors.event_date && (
                   <p className="text-red-500 text-sm mt-1">{validationErrors.event_date}</p>
                 )}
               </div>
               <div>
-                <label className="block text-slate-700 dark:text-slate-300 font-semibold mb-2">Event Time *</label>
+                <label className="block text-gray-700 dark:text-gray-300 font-semibold mb-2">Event Time *</label>
                 <input
                   type="time"
                   name="event_time"
                   value={formData.event_time}
                   onChange={handleInputChange}
                   disabled={loading}
-                  className="w-full px-4 py-3 rounded-lg bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 text-slate-900 dark:text-white focus:outline-none focus:border-blue-500 transition-all disabled:opacity-50"
+                  className="w-full px-4 py-3 rounded-lg bg-black dark:bg-black border border-gray-800 dark:border-gray-800 text-white focus:outline-none focus:border-gray-700 transition-all disabled:opacity-50"
                 />
                 {validationErrors.event_time && (
                   <p className="text-red-500 text-sm mt-1">{validationErrors.event_time}</p>
                 )}
               </div>
               <div>
-                <label className="block text-slate-700 dark:text-slate-300 font-semibold mb-2">Status</label>
+                <label className="block text-gray-700 dark:text-gray-300 font-semibold mb-2\">Status</label>
                 <select
                   name="status"
                   value={formData.status}
                   onChange={handleInputChange}
                   disabled={loading}
-                  className="w-full px-4 py-3 rounded-lg bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 text-slate-900 dark:text-white focus:outline-none focus:border-blue-500 transition-all disabled:opacity-50"
+                  className="w-full px-4 py-3 rounded-lg bg-black dark:bg-black border border-gray-800 dark:border-gray-800 text-white focus:outline-none focus:border-gray-700 transition-all disabled:opacity-50"
                 >
                   <option value="Pending">Pending</option>
                   <option value="Processing">Processing</option>
@@ -366,7 +366,7 @@ const Bookings = () => {
                 className={`px-4 py-2 rounded-lg font-medium text-sm transition-all whitespace-nowrap ${
                   activeTab === tab
                     ? 'bg-gray-600 text-white shadow-md'
-                    : 'bg-gray-100 dark:bg-slate-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-slate-700'
+                    : 'bg-gray-900 dark:bg-gray-900 text-gray-300 dark:text-gray-300 hover:bg-gray-800 dark:hover:bg-gray-800 border border-gray-800'
                 }`}
               >
                 {tab}
@@ -382,7 +382,7 @@ const Bookings = () => {
               placeholder="Search orders..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-12 pr-4 py-3 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-800 text-gray-900 dark:text-white placeholder-gray-500 focus:outline-none focus:border-gray-500 transition-all"
+              className="w-full pl-12 pr-4 py-3 rounded-lg border border-gray-800 bg-black dark:bg-black text-white placeholder-gray-500 focus:outline-none focus:border-gray-700 transition-all"
             />
           </div>
         </div>
@@ -414,7 +414,7 @@ const Bookings = () => {
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         transition={{ delay: idx * 0.05 }}
-                        className="border-t border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-slate-900/50 transition-colors"
+                        className="border-t border-gray-200 dark:border-gray-700 hover:bg-gray-900/50 dark:hover:bg-gray-900/50 transition-colors"
                       >
                         <td className="px-6 py-4 font-bold text-gray-900 dark:text-white">ORD-{booking.id?.toString().padStart(4, '0')}</td>
                         <td className="px-6 py-4">

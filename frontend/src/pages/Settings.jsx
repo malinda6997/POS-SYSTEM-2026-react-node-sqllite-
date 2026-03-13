@@ -23,7 +23,7 @@ const Settings = () => {
   return (
     <Layout>
       <div className="mb-6">
-        <h1 className="text-2xl font-bold text-slate-100 flex items-center gap-2">
+        <h1 className="text-2xl font-bold text-white flex items-center gap-2">
           <SettingsIcon size={32} />
           Settings
         </h1>
@@ -38,8 +38,8 @@ const Settings = () => {
               onClick={() => setActiveTab(tab.id)}
               className={`flex items-center justify-center gap-2 px-4 py-2 rounded-lg font-semibold transition ${
                 activeTab === tab.id
-                  ? 'bg-amber-500 text-slate-900'
-                  : 'bg-slate-700 text-slate-100 hover:bg-slate-600'
+                  ? 'bg-amber-500 text-white'
+                  : 'bg-gray-900 text-gray-300 hover:bg-gray-800 border border-gray-800'
               }`}
             >
               <tab.icon size={18} />
@@ -56,33 +56,33 @@ const Settings = () => {
           animate={{ opacity: 1, y: 0 }}
           className="border border-gray-200 dark:border-gray-700 rounded-lg p-6"
         >
-          <h2 className="text-xl font-bold text-slate-100 mb-4">General Settings</h2>
+          <h2 className="text-xl font-bold text-white mb-4">General Settings</h2>
           
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-semibold text-slate-300 mb-2">Studio Name</label>
+              <label className="block text-sm font-semibold text-gray-300 mb-2">Studio Name</label>
               <input
                 type="text"
                 defaultValue="Shine Art Studio"
-                className="w-full bg-slate-700 border border-slate-600 rounded-lg px-4 py-2 text-slate-100 focus:outline-none focus:border-amber-500"
+                className="w-full bg-black border border-gray-800 rounded-lg px-4 py-2 text-gray-100 focus:outline-none focus:border-gray-600"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-slate-300 mb-2">Email</label>
+              <label className="block text-sm font-semibold text-gray-300 mb-2">Email</label>
               <input
                 type="email"
                 defaultValue="info@shineart.com"
-                className="w-full bg-slate-700 border border-slate-600 rounded-lg px-4 py-2 text-slate-100 focus:outline-none focus:border-amber-500"
+                className="w-full bg-black border border-gray-800 rounded-lg px-4 py-2 text-gray-100 focus:outline-none focus:border-gray-600"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-slate-300 mb-2">Phone</label>
+              <label className="block text-sm font-semibold text-gray-300 mb-2">Phone</label>
               <input
                 type="tel"
                 defaultValue="+92 123 456 7890"
-                className="w-full bg-slate-700 border border-slate-600 rounded-lg px-4 py-2 text-slate-100 focus:outline-none focus:border-amber-500"
+                className="w-full bg-black border border-gray-800 rounded-lg px-4 py-2 text-gray-100 focus:outline-none focus:border-gray-600"
               />
             </div>
 
@@ -105,18 +105,18 @@ const Settings = () => {
           animate={{ opacity: 1, y: 0 }}
           className="border border-gray-200 dark:border-gray-700 rounded-lg p-6"
         >
-          <h2 className="text-xl font-bold text-slate-100 mb-4">Appearance Settings</h2>
+          <h2 className="text-xl font-bold text-gray-100 mb-4">Appearance Settings</h2>
           
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-semibold text-slate-300 mb-2">Theme</label>
+              <label className="block text-sm font-semibold text-gray-300 mb-2">Theme</label>
               <div className="flex gap-3">
                 <button
                   onClick={() => toggleTheme()}
                   className={`px-6 py-2 rounded-lg font-semibold transition ${
                     theme === 'dark'
-                      ? 'bg-amber-500 text-slate-900'
-                      : 'bg-slate-700 text-slate-100 hover:bg-slate-600'
+                      ? 'bg-amber-500 text-gray-900'
+                      : 'bg-gray-900 text-gray-100 hover:bg-gray-800'
                   }`}
                 >
                   {theme === 'dark' ? '🌙 Dark Mode (Current)' : '☀️ Light Mode (Current)'}
@@ -125,8 +125,8 @@ const Settings = () => {
                   onClick={() => toggleTheme()}
                   className={`px-6 py-2 rounded-lg font-semibold transition ${
                     theme === 'light'
-                      ? 'bg-amber-500 text-slate-900'
-                      : 'bg-slate-700 text-slate-100 hover:bg-slate-600'
+                      ? 'bg-amber-500 text-gray-900'
+                      : 'bg-black700 text-gray-100 hover:bg-black600'
                   }`}
                 >
                   {theme === 'light' ? '🌞 Light Mode (Current)' : '🌙 Dark Mode'}
@@ -135,8 +135,8 @@ const Settings = () => {
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-slate-300 mb-2">Font Size</label>
-              <select className="w-full bg-slate-700 border border-slate-600 rounded-lg px-4 py-2 text-slate-100 focus:outline-none focus:border-amber-500">
+              <label className="block text-sm font-semibold text-gray-300 mb-2">Font Size</label>
+              <select className="w-full bg-black700 border border-gray-600 rounded-lg px-4 py-2 text-gray-100 focus:outline-none focus:border-amber-500">
                 <option>Small</option>
                 <option selected>Medium</option>
                 <option>Large</option>
@@ -159,20 +159,20 @@ const Settings = () => {
           animate={{ opacity: 1, y: 0 }}
           className="border border-gray-200 dark:border-gray-700 rounded-lg p-6"
         >
-          <h2 className="text-xl font-bold text-slate-100 mb-4">Security Settings</h2>
+          <h2 className="text-xl font-bold text-gray-100 mb-4">Security Settings</h2>
           
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-semibold text-slate-300 mb-2">Session Timeout (minutes)</label>
+              <label className="block text-sm font-semibold text-gray-300 mb-2">Session Timeout (minutes)</label>
               <input
                 type="number"
                 defaultValue="30"
-                className="w-full bg-slate-700 border border-slate-600 rounded-lg px-4 py-2 text-slate-100 focus:outline-none focus:border-amber-500"
+                className="w-full bg-black700 border border-gray-600 rounded-lg px-4 py-2 text-gray-100 focus:outline-none focus:border-amber-500"
               />
             </div>
 
-            <div className="bg-slate-700/50 border border-slate-600 rounded-lg p-4">
-              <p className="text-sm text-slate-300">
+            <div className="bg-black700/50 border border-gray-600 rounded-lg p-4">
+              <p className="text-sm text-gray-300">
                 <strong>Security Tip:</strong> Sessions will automatically expire after the configured timeout period for enhanced security.
               </p>
             </div>
@@ -193,26 +193,26 @@ const Settings = () => {
           animate={{ opacity: 1, y: 0 }}
           className="border border-gray-200 dark:border-gray-700 rounded-lg p-6"
         >
-          <h2 className="text-xl font-bold text-slate-100 mb-4">Database Settings</h2>
+          <h2 className="text-xl font-bold text-gray-100 mb-4">Database Settings</h2>
           
           <div className="space-y-4">
-            <div className="bg-slate-700/50 border border-slate-600 rounded-lg p-4">
-              <p className="text-sm text-slate-300">
+            <div className="bg-black700/50 border border-gray-600 rounded-lg p-4">
+              <p className="text-sm text-gray-300">
                 <strong>Database Status:</strong> <span className="text-green-400">Connected</span>
               </p>
-              <p className="text-xs text-slate-400 mt-2">SQLite database at: /backend/data/shine_art_pro.db</p>
+              <p className="text-xs text-gray-400 mt-2">SQLite database at: /backend/data/shine_art_pro.db</p>
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-slate-300 mb-2">Backup Database</label>
+              <label className="block text-sm font-semibold text-gray-300 mb-2">Backup Database</label>
               <button className="bg-gray-700 dark:bg-gray-600 hover:bg-gray-800 dark:hover:bg-gray-700 text-white px-6 py-2 rounded-lg font-semibold transition">
                 Create Backup
               </button>
-              <p className="text-xs text-slate-400 mt-2">Last backup: Never</p>
+              <p className="text-xs text-gray-400 mt-2">Last backup: Never</p>
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-slate-300 mb-2">Clear Cache</label>
+              <label className="block text-sm font-semibold text-gray-300 mb-2">Clear Cache</label>
               <button className="bg-gray-700 dark:bg-gray-600 hover:bg-gray-800 dark:hover:bg-gray-700 text-white px-6 py-2 rounded-lg font-semibold transition">
                 Clear Application Cache
               </button>

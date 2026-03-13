@@ -27,7 +27,7 @@ const CalendarPage = () => {
     return (
       <Layout>
         <div className="flex justify-center items-center h-screen">
-          <div className="text-2xl text-slate-500 dark:text-slate-400">Loading...</div>
+          <div className="text-2xl text-gray-500 dark:text-gray-400">Loading...</div>
         </div>
       </Layout>
     );
@@ -43,8 +43,8 @@ const CalendarPage = () => {
       >
         {/* Header */}
         <div>
-          <h1 className="text-2xl font-bold text-slate-900 dark:text-white">Booking Calendar</h1>
-          <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">View and manage all booking events on calendar</p>
+          <h1 className="text-2xl font-bold text-gray-100 dark:text-white">Booking Calendar</h1>
+          <p className="text-sm text-gray-400 dark:text-gray-400 mt-1">View and manage all booking events on calendar</p>
         </div>
 
         {/* Calendar */}

@@ -114,7 +114,7 @@ const Services = () => {
     return (
       <Layout>
         <div className="flex items-center justify-center h-96">
-          <div className="text-slate-400">Loading services...</div>
+          <div className="text-gray-400">Loading services...</div>
         </div>
       </Layout>
     );
@@ -136,10 +136,10 @@ const Services = () => {
 
       {/* Header */}
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold text-slate-100">Services & Categories</h1>
+        <h1 className="text-2xl font-bold text-gray-100">Services & Categories</h1>
         <button
           onClick={() => setShowCategoryForm(!showCategoryForm)}
-          className="flex items-center gap-2 bg-amber-500 hover:bg-amber-600 text-slate-900 px-4 py-2 rounded-lg font-semibold transition"
+          className="flex items-center gap-2 bg-amber-500 hover:bg-amber-600 text-gray-900 px-4 py-2 rounded-lg font-semibold transition"
         >
           <Plus size={20} /> New Category
         </button>
@@ -158,7 +158,7 @@ const Services = () => {
               placeholder="Category name"
               value={newCategory}
               onChange={(e) => setNewCategory(e.target.value)}
-              className="flex-1 bg-slate-700 border border-slate-600 rounded-lg px-3 py-2 text-slate-100 placeholder-slate-400 focus:outline-none focus:border-amber-500"
+              className="flex-1 bg-black700 border border-gray-600 rounded-lg px-3 py-2 text-gray-100 placeholder-gray-400 focus:outline-none focus:border-amber-500"
             />
             <button
               onClick={handleAddCategory}
@@ -168,7 +168,7 @@ const Services = () => {
             </button>
             <button
               onClick={() => setShowCategoryForm(false)}
-              className="bg-slate-700 hover:bg-slate-600 text-slate-100 px-4 py-2 rounded-lg transition"
+              className="bg-black700 hover:bg-black600 text-gray-100 px-4 py-2 rounded-lg transition"
             >
               Cancel
             </button>
@@ -189,12 +189,12 @@ const Services = () => {
               placeholder="Service name"
               value={newService.service_name}
               onChange={(e) => setNewService({ ...newService, service_name: e.target.value })}
-              className="bg-slate-700 border border-slate-600 rounded-lg px-3 py-2 text-slate-100 placeholder-slate-400 focus:outline-none focus:border-amber-500"
+              className="bg-black700 border border-gray-600 rounded-lg px-3 py-2 text-gray-100 placeholder-gray-400 focus:outline-none focus:border-amber-500"
             />
             <select
               value={newService.category_id}
               onChange={(e) => setNewService({ ...newService, category_id: e.target.value })}
-              className="bg-slate-700 border border-slate-600 rounded-lg px-3 py-2 text-slate-100 focus:outline-none focus:border-amber-500"
+              className="bg-black700 border border-gray-600 rounded-lg px-3 py-2 text-gray-100 focus:outline-none focus:border-amber-500"
             >
               <option value="">Select Category</option>
               {categories.map((cat) => (
@@ -208,14 +208,14 @@ const Services = () => {
               placeholder="Price"
               value={newService.price}
               onChange={(e) => setNewService({ ...newService, price: e.target.value })}
-              className="bg-slate-700 border border-slate-600 rounded-lg px-3 py-2 text-slate-100 placeholder-slate-400 focus:outline-none focus:border-amber-500"
+              className="bg-black700 border border-gray-600 rounded-lg px-3 py-2 text-gray-100 placeholder-gray-400 focus:outline-none focus:border-amber-500"
             />
             <input
               type="number"
               placeholder="Duration (mins)"
               value={newService.duration}
               onChange={(e) => setNewService({ ...newService, duration: e.target.value })}
-              className="bg-slate-700 border border-slate-600 rounded-lg px-3 py-2 text-slate-100 placeholder-slate-400 focus:outline-none focus:border-amber-500"
+              className="bg-black700 border border-gray-600 rounded-lg px-3 py-2 text-gray-100 placeholder-gray-400 focus:outline-none focus:border-amber-500"
             />
           </div>
           <div className="flex gap-2 mt-3">
@@ -227,7 +227,7 @@ const Services = () => {
             </button>
             <button
               onClick={() => setShowServiceForm(false)}
-              className="bg-slate-700 hover:bg-slate-600 text-slate-100 px-4 py-2 rounded-lg transition"
+              className="bg-black700 hover:bg-black600 text-gray-100 px-4 py-2 rounded-lg transition"
             >
               Cancel
             </button>
@@ -252,12 +252,12 @@ const Services = () => {
                 {/* Category Header */}
                 <button
                   onClick={() => setExpandedCategory(isExpanded ? null : category.id)}
-                  className="w-full px-4 py-3 flex items-center justify-between hover:bg-slate-700/50 transition"
+                  className="w-full px-4 py-3 flex items-center justify-between hover:bg-black700/50 transition"
                 >
                   <div className="flex items-center gap-3 flex-1">
                     {isExpanded ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
-                    <span className="font-semibold text-slate-100">{category.category_name}</span>
-                    <span className="text-slate-400 text-sm">({categoryServices.length} services)</span>
+                    <span className="font-semibold text-gray-100">{category.category_name}</span>
+                    <span className="text-gray-400 text-sm">({categoryServices.length} services)</span>
                   </div>
                   <button
                     onClick={(e) => {
@@ -275,18 +275,18 @@ const Services = () => {
                   <motion.div
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
-                    className="bg-slate-700/30 border-t border-slate-700 px-4 py-3"
+                    className="bg-black700/30 border-t border-gray-700 px-4 py-3"
                   >
                     {categoryServices.length > 0 ? (
                       <div className="space-y-2">
                         {categoryServices.map((service) => (
                           <div
                             key={service.id}
-                            className="flex items-center justify-between bg-slate-700 p-3 rounded-lg"
+                            className="flex items-center justify-between bg-black700 p-3 rounded-lg"
                           >
                             <div className="flex-1">
-                              <div className="font-semibold text-slate-100">{service.service_name}</div>
-                              <div className="text-sm text-slate-400">
+                              <div className="font-semibold text-gray-100">{service.service_name}</div>
+                              <div className="text-sm text-gray-400">
                                 Price: Rs. {service.price} {service.duration && `• Duration: ${service.duration} mins`}
                               </div>
                             </div>
@@ -300,14 +300,14 @@ const Services = () => {
                         ))}
                       </div>
                     ) : (
-                      <p className="text-slate-400 text-sm">No services in this category</p>
+                      <p className="text-gray-400 text-sm">No services in this category</p>
                     )}
                     <button
                       onClick={() => {
                         setSelectedCategory(category.id);
                         setShowServiceForm(true);
                       }}
-                      className="mt-3 w-full flex items-center justify-center gap-2 bg-slate-600 hover:bg-slate-500 text-slate-100 py-2 rounded-lg transition"
+                      className="mt-3 w-full flex items-center justify-center gap-2 bg-black600 hover:bg-black500 text-gray-100 py-2 rounded-lg transition"
                     >
                       <Plus size={16} /> Add Service
                     </button>
@@ -317,7 +317,7 @@ const Services = () => {
             );
           })
         ) : (
-          <div className="text-center py-12 text-slate-400">
+          <div className="text-center py-12 text-gray-400">
             No categories yet. Create one to get started!
           </div>
         )}

@@ -75,7 +75,7 @@ const BookingCalendar = ({ bookings }) => {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.4 }}
-      className="bg-black/95 dark:bg-slate-950 border border-slate-800 rounded-2xl overflow-hidden shadow-2xl"
+      className="bg-black/95 dark:bg-black border border-gray-900 rounded-2xl overflow-hidden shadow-2xl"
     >
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-0">
         {/* Calendar */}
@@ -88,9 +88,9 @@ const BookingCalendar = ({ bookings }) => {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={handlePrevMonth}
-                className="p-2.5 hover:bg-slate-800 rounded-lg transition-all"
+                className="p-2.5 hover:bg-gray-900 rounded-lg transition-all"
               >
-                <ChevronLeft size={22} className="text-slate-400 hover:text-white" />
+                <ChevronLeft size={22} className="text-gray-500 hover:text-white" />
               </motion.button>
               <motion.button
                 whileHover={{ scale: 1.05 }}
@@ -104,9 +104,9 @@ const BookingCalendar = ({ bookings }) => {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={handleNextMonth}
-                className="p-2.5 hover:bg-slate-800 rounded-lg transition-all"
+                className="p-2.5 hover:bg-gray-900 rounded-lg transition-all"
               >
-                <ChevronRight size={22} className="text-slate-400 hover:text-white" />
+                <ChevronRight size={22} className="text-gray-500 hover:text-white" />
               </motion.button>
             </div>
           </div>
@@ -116,7 +116,7 @@ const BookingCalendar = ({ bookings }) => {
             {dayNames.map((day) => (
               <div
                 key={day}
-                className="text-center font-bold text-slate-400 text-sm py-3"
+                className="text-center font-bold text-gray-500 text-sm py-3"
               >
                 {day}
               </div>
@@ -129,7 +129,7 @@ const BookingCalendar = ({ bookings }) => {
             {emptyDays.map((day) => (
               <div
                 key={`empty-${day}`}
-                className="aspect-square bg-slate-900/30 rounded-xl"
+                className="aspect-square bg-gray-900/30 rounded-xl"
               />
             ))}
 
@@ -150,10 +150,10 @@ const BookingCalendar = ({ bookings }) => {
                   onClick={() => setSelectedDate(day)}
                   className={`aspect-square p-2 rounded-xl transition-all relative cursor-pointer ${
                     isSelected
-                      ? 'bg-slate-800 ring-2 ring-gray-500 shadow-lg'
+                      ? 'bg-gray-900 ring-2 ring-gray-500 shadow-lg'
                       : isToday
-                      ? 'bg-slate-800/60 border border-slate-700'
-                      : 'bg-slate-900/40 hover:bg-slate-800/60 border border-slate-800'
+                      ? 'bg-gray-900/60 border border-gray-700'
+                      : 'bg-gray-900/40 hover:bg-gray-900/60 border border-gray-900'
                   }`}
                 >
                   <div className="flex flex-col h-full justify-between">
@@ -173,7 +173,7 @@ const BookingCalendar = ({ bookings }) => {
                         </motion.div>
                       ))}
                       {dayBookings.length > 3 && (
-                        <div className="text-xs text-slate-500">+{dayBookings.length - 3}</div>
+                        <div className="text-xs text-gray-500">+{dayBookings.length - 3}</div>
                       )}
                     </div>
                   </div>
@@ -184,10 +184,10 @@ const BookingCalendar = ({ bookings }) => {
         </div>
 
         {/* Right sidebar - Selected date events + Upcoming */}
-        <div className="border-t lg:border-t-0 lg:border-l border-slate-800 p-8 bg-slate-900/50 flex flex-col">
+        <div className="border-t lg:border-t-0 lg:border-l border-gray-900 p-8 bg-gray-900/50 flex flex-col">
           {/* Selected Date Section */}
           <div className="mb-8">
-            <h3 className="text-sm font-bold text-slate-400 uppercase tracking-wider mb-4">
+            <h3 className="text-sm font-bold text-gray-500 uppercase tracking-wider mb-4">
               {selectedDate ? `${selectedDate} ${monthName.split(' ')[0]}` : 'No date selected'}
             </h3>
             
@@ -201,13 +201,13 @@ const BookingCalendar = ({ bookings }) => {
                         key={idx}
                         initial={{ opacity: 0, x: 20 }}
                         animate={{ opacity: 1, x: 0 }}
-                        className={`p-3 rounded-lg border ${colors.bg} border-slate-700`}
+                        className={`p-3 rounded-lg border ${colors.bg} border-gray-700`}
                       >
                         <p className={`font-semibold text-sm ${colors.text}`}>
                           {booking.customer_name}
                         </p>
-                        <p className="text-xs text-slate-500 mt-1">{booking.event_time || '–'}</p>
-                        <p className="text-xs text-slate-400 mt-2">Rs. {booking.total_amount?.toLocaleString()}</p>
+                        <p className="text-xs text-gray-500 mt-1">{booking.event_time || '–'}</p>
+                        <p className="text-xs text-gray-500 mt-2">Rs. {booking.total_amount?.toLocaleString()}</p>
                         <span className={`inline-block mt-2 px-2 py-1 rounded text-xs font-bold text-white ${colors.badge}`}>
                           {booking.status}
                         </span>
@@ -215,20 +215,20 @@ const BookingCalendar = ({ bookings }) => {
                     );
                   })
                 ) : (
-                  <p className="text-sm text-slate-500 py-4">No bookings on this date</p>
+                  <p className="text-sm text-gray-500 py-4">No bookings on this date</p>
                 )}
               </div>
             ) : (
-              <p className="text-sm text-slate-500 py-4">Click a date to view events</p>
+              <p className="text-sm text-gray-500 py-4">Click a date to view events</p>
             )}
           </div>
 
           {/* Divider */}
-          <div className="border-t border-slate-800 my-4" />
+          <div className="border-t border-gray-900 my-4" />
 
           {/* Upcoming Events Section */}
           <div>
-            <h3 className="text-sm font-bold text-slate-400 uppercase tracking-wider mb-4">Upcoming Events</h3>
+            <h3 className="text-sm font-bold text-gray-500 uppercase tracking-wider mb-4">Upcoming Events</h3>
             
             {upcomingBookings.length > 0 ? (
               <div className="space-y-3 max-h-64 overflow-y-auto">
@@ -242,18 +242,18 @@ const BookingCalendar = ({ bookings }) => {
                       initial={{ opacity: 0, x: 20 }}
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: idx * 0.05 }}
-                      className={`p-3 rounded-lg border ${colors.bg} border-slate-700`}
+                      className={`p-3 rounded-lg border ${colors.bg} border-gray-700`}
                     >
                       <p className={`font-semibold text-sm ${colors.text}`}>
                         {booking.customer_name}
                       </p>
-                      <p className="text-xs text-slate-500 mt-1">{formattedDate} • {booking.event_time || '–'}</p>
+                      <p className="text-xs text-gray-500 mt-1">{formattedDate} • {booking.event_time || '–'}</p>
                     </motion.div>
                   );
                 })}
               </div>
             ) : (
-              <p className="text-sm text-slate-500 py-4">No upcoming events</p>
+              <p className="text-sm text-gray-500 py-4">No upcoming events</p>
             )}
           </div>
         </div>

@@ -208,7 +208,7 @@ const Dashboard = () => {
                     <stop offset="95%" stopColor="#f59e0b" stopOpacity={0.1} />
                   </linearGradient>
                 </defs>
-                <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" className="dark:stroke-slate-700" />
+                <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" className="dark:stroke-gray-800" />
                 <XAxis dataKey="month" stroke="#9ca3af" />
                 <YAxis stroke="#9ca3af" />
                 <Tooltip content={<CustomTooltip />} cursor={{ stroke: '#60a5fa', strokeWidth: 2 }} />
@@ -243,7 +243,7 @@ const Dashboard = () => {
                 <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Net Profit</span>
                 <p className="text-2xl font-bold text-gray-900 dark:text-white mt-2">{formatLKRShort(profit)}</p>
               </div>
-              <div className="border-t border-gray-200 dark:border-slate-700 pt-4 mt-4">
+              <div className="border-t border-gray-800 pt-4 mt-4">
                 <div className="flex justify-between items-center mb-2">
                   <p className="text-sm text-gray-600 dark:text-gray-400">Profit Margin</p>
                   <p className="text-xl font-bold text-gray-900 dark:text-white">{revenue > 0 ? ((profit / revenue) * 100).toFixed(1) : 0}%</p>
@@ -268,7 +268,7 @@ const Dashboard = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.6, duration: 0.5 }}
             whileHover={{ boxShadow: "0 20px 25px -5rgba(0, 0, 0, 0.1)" }}
-            className="lightning-card border border-gray-200 dark:border-slate-700 rounded-xl p-6 transition-all duration-300"
+            className="lightning-card border border-gray-800 rounded-xl p-6 transition-all duration-300\"
           >
             <div className="mb-6">
               <h3 className="text-lg font-bold text-gray-900 dark:text-white">Transaction Breakdown</h3>
@@ -281,7 +281,7 @@ const Dashboard = () => {
                   { name: 'Invoices', count: totalInvoices, amount: revenue * 0.6 },
                 ]}
               >
-                <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" className="dark:stroke-slate-700" />
+                <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" className="dark:stroke-gray-800" />
                 <XAxis dataKey="name" stroke="#9ca3af" />
                 <YAxis stroke="#9ca3af" />
                 <Tooltip content={<CustomTooltip />} cursor={{ fill: 'rgba(96, 165, 250, 0.1)' }} />
@@ -298,7 +298,7 @@ const Dashboard = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.65, duration: 0.5 }}
             whileHover={{ boxShadow: "0 20px 25px -5rgba(0, 0, 0, 0.1)" }}
-            className="lightning-card border border-gray-200 dark:border-slate-700 rounded-xl p-6 transition-all duration-300"
+            className="lightning-card border border-gray-800 rounded-xl p-6 transition-all duration-300"
           >
             <div className="mb-6">
               <h3 className="text-lg font-bold text-gray-900 dark:text-white">Revenue Distribution</h3>
@@ -348,7 +348,7 @@ const Dashboard = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.7, duration: 0.5 }}
             whileHover={{ boxShadow: "0 20px 25px -5rgba(0, 0, 0, 0.1)" }}
-            className="lightning-card border border-gray-200 dark:border-slate-700 rounded-xl p-6 transition-all duration-300"
+            className="lightning-card border border-gray-800 rounded-xl p-6 transition-all duration-300"
           >
             <div className="mb-6">
               <h3 className="text-lg font-bold text-gray-900 dark:text-white">Top Services</h3>
@@ -363,7 +363,7 @@ const Dashboard = () => {
                   { name: 'Printing', value: revenue * 0.15 },
                 ]}
               >
-                <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" className="dark:stroke-slate-700" />
+                <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" className="dark:stroke-gray-800" />
                 <XAxis dataKey="name" stroke="#9ca3af" angle={-45} textAnchor="end" height={80} />
                 <YAxis stroke="#9ca3af" />
                 <Tooltip content={<CustomTooltip />} cursor={{ fill: 'rgba(6, 182, 212, 0.1)' }} />
@@ -379,7 +379,7 @@ const Dashboard = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.75, duration: 0.5 }}
             whileHover={{ boxShadow: "0 20px 25px -5rgba(0, 0, 0, 0.1)" }}
-            className="lightning-card border border-gray-200 dark:border-slate-700 rounded-xl p-6 transition-all duration-300"
+            className="lightning-card border border-gray-200 dark:border-gray-800 rounded-xl p-6 transition-all duration-300"
           >
             <div className="mb-6">
               <h3 className="text-lg font-bold text-gray-900 dark:text-white">Booking Status</h3>
@@ -431,7 +431,7 @@ const Dashboard = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.8, duration: 0.5 }}
             whileHover={{ boxShadow: "0 20px 25px -5rgba(0, 0, 0, 0.1)" }}
-            className="lightning-card border border-gray-200 dark:border-slate-700 rounded-xl p-6 transition-all duration-300"
+            className="lightning-card border border-gray-200 dark:border-gray-800 rounded-xl p-6 transition-all duration-300"
           >
             <div className="mb-6">
               <h3 className="text-lg font-bold text-gray-900 dark:text-white">Customer Growth</h3>
@@ -448,7 +448,7 @@ const Dashboard = () => {
                   { month: 'Jun', customers: 110 },
                 ]}
               >
-                <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" className="dark:stroke-slate-700" />
+                <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" className="dark:stroke-gray-800" />
                 <XAxis dataKey="month" stroke="#9ca3af" />
                 <YAxis stroke="#9ca3af" />
                 <Tooltip content={<CustomTooltip />} cursor={{ stroke: '#8b5cf6', strokeWidth: 2 }} />
@@ -475,7 +475,7 @@ const Dashboard = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.85, duration: 0.5 }}
             whileHover={{ boxShadow: "0 20px 25px -5rgba(0, 0, 0, 0.1)" }}
-            className="lightning-card border border-gray-200 dark:border-slate-700 rounded-xl p-6 transition-all duration-300"
+            className="lightning-card border border-gray-200 dark:border-gray-800 rounded-xl p-6 transition-all duration-300"
           >
             <div className="mb-6">
               <h3 className="text-lg font-bold text-gray-900 dark:text-white">Revenue vs Target</h3>
@@ -492,7 +492,7 @@ const Dashboard = () => {
                   { month: 'Jun', actual: 67000, target: 60000 },
                 ]}
               >
-                <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" className="dark:stroke-slate-700" />
+                <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" className="dark:stroke-gray-800" />
                 <XAxis dataKey="month" stroke="#9ca3af" />
                 <YAxis stroke="#9ca3af" />
                 <Tooltip content={<CustomTooltip />} cursor={{ fill: 'rgba(59, 130, 246, 0.1)' }} />
@@ -510,7 +510,7 @@ const Dashboard = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.9, duration: 0.5 }}
             whileHover={{ boxShadow: "0 20px 25px -5rgba(0, 0, 0, 0.1)" }}
-            className="lightning-card border border-gray-200 dark:border-slate-700 rounded-xl p-6 transition-all duration-300"
+            className="lightning-card border border-gray-200 dark:border-gray-800 rounded-xl p-6 transition-all duration-300"
           >
             <div className="mb-6">
               <h3 className="text-lg font-bold text-gray-900 dark:text-white">Frame Stock Status</h3>
@@ -527,7 +527,7 @@ const Dashboard = () => {
                 ]}
                 layout="vertical"
               >
-                <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" className="dark:stroke-slate-700" />
+                <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" className="dark:stroke-gray-800" />
                 <XAxis type="number" stroke="#9ca3af" />
                 <YAxis dataKey="name" type="category" stroke="#9ca3af" width={80} tick={{ fontSize: 12 }} />
                 <Tooltip content={<CustomTooltip />} cursor={{ fill: 'rgba(16, 185, 129, 0.1)' }} />
@@ -547,7 +547,7 @@ const Dashboard = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.7, duration: 0.5 }}
               whileHover={{ boxShadow: "0 20px 25px -5rgba(0, 0, 0, 0.1)" }}
-              className="lightning-card border border-gray-200 dark:border-slate-800 rounded-xl p-6 transition-all duration-300"
+              className="lightning-card border border-gray-800 rounded-xl p-6 transition-all duration-300"
             >
               <div className="flex items-center justify-between mb-6">
                 <div>
@@ -564,7 +564,7 @@ const Dashboard = () => {
                       initial={{ opacity: 0, x: -10 }}
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: 0.7 + idx * 0.05 }}
-                      className="flex items-center justify-between p-3 border border-gray-200 dark:border-slate-700 rounded-lg transition"
+                      className="flex items-center justify-between p-3 border border-gray-800 rounded-lg transition"
                     >
                       <div className="flex-1">
                         <p className="font-semibold text-gray-900 dark:text-white">{booking.customer_name}</p>
@@ -591,7 +591,7 @@ const Dashboard = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.75, duration: 0.5 }}
               whileHover={{ boxShadow: "0 20px 25px -5rgba(0, 0, 0, 0.1)" }}
-              className="lightning-card border border-gray-200 dark:border-slate-800 rounded-xl p-6 transition-all duration-300"
+              className="lightning-card border border-gray-800 rounded-xl p-6 transition-all duration-300"
             >
               <div className="flex items-center justify-between mb-6">
                 <div>

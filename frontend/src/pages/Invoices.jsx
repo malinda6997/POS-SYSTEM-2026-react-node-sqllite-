@@ -66,7 +66,7 @@ const Invoices = () => {
             <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Invoices</h1>
             <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">Browse and manage all invoices</p>
           </div>
-          <div className="flex items-center gap-2 px-4 py-2 bg-gray-100 dark:bg-slate-800 rounded-lg border border-gray-200 dark:border-slate-700 text-sm">
+          <div className="flex items-center gap-2 px-4 py-2 bg-black dark:bg-black rounded-lg border border-gray-800 text-sm">
             <FileText size={18} className="text-gray-700 dark:text-gray-300" />
             <span className="text-gray-900 dark:text-white font-medium">{invoices.length} Total</span>
           </div>
@@ -81,7 +81,7 @@ const Invoices = () => {
               placeholder="Search by invoice ID or customer..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 border border-gray-200 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-gray-700"
+              className="w-full pl-10 pr-4 py-2 border border-gray-800 rounded-lg bg-black dark:bg-black text-white focus:outline-none focus:ring-2 focus:ring-gray-700"
             />
           </div>
         </div>
@@ -113,7 +113,7 @@ const Invoices = () => {
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                       transition={{ delay: idx * 0.05 }}
-                      className="border-b border-gray-200 dark:border-slate-700 hover:bg-gray-50 dark:hover:bg-slate-700/50 transition"
+                      className="border-b border-gray-200 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-900/50 transition"
                     >
                       <td className="px-6 py-4 font-medium text-gray-900 dark:text-white">#{invoice.id}</td>
                       <td className="px-6 py-4">
@@ -133,16 +133,16 @@ const Invoices = () => {
                         <div className="flex items-center justify-center gap-2">
                           <button
                             onClick={() => handleDownloadPDF(invoice.id)}
-                            className="p-2 hover:bg-gray-100 dark:hover:bg-slate-700 rounded-lg transition text-gray-700 dark:text-gray-300"
+                            className="p-2 hover:bg-gray-100 dark:hover:bg-gray-900 rounded-lg transition text-gray-700 dark:text-gray-300"
                             title="Download"
                           >
                             <Download size={16} />
                           </button>
-                          <button className="p-2 hover:bg-gray-100 dark:hover:bg-slate-700 rounded-lg transition text-gray-700 dark:text-gray-300"
+                          <button className="p-2 hover:bg-gray-100 dark:hover:bg-gray-900 rounded-lg transition text-gray-700 dark:text-gray-300"
                             title="View">
                             <Eye size={16} />
                           </button>
-                          <button className="p-2 hover:bg-gray-100 dark:hover:bg-slate-700 rounded-lg transition text-gray-700 dark:text-gray-300">
+                          <button className="p-2 hover:bg-gray-100 dark:hover:bg-gray-900 rounded-lg transition text-gray-700 dark:text-gray-300">
                             <MoreHorizontal size={16} />
                           </button>
                         </div>
@@ -167,8 +167,8 @@ const Invoices = () => {
           <div className="flex items-center justify-between text-sm text-gray-600 dark:text-gray-400">
             <span>Showing 1-{filteredInvoices.length} of {filteredInvoices.length} results</span>
             <div className="flex gap-2">
-              <button className="px-3 py-1 border border-gray-200 dark:border-slate-700 rounded-lg hover:bg-gray-50 dark:hover:bg-slate-700 transition">Previous</button>
-              <button className="px-3 py-1 border border-gray-200 dark:border-slate-700 rounded-lg hover:bg-gray-50 dark:hover:bg-slate-700 transition">Next</button>
+              <button className="px-3 py-1 border border-gray-200 dark:border-gray-800 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-900 transition">Previous</button>
+              <button className="px-3 py-1 border border-gray-200 dark:border-gray-800 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-900 transition">Next</button>
             </div>
           </div>
         )}

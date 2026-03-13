@@ -29,7 +29,7 @@ const Inventory = () => {
     return (
       <Layout>
         <div className="flex justify-center items-center h-screen">
-          <div className="text-2xl text-slate-500 dark:text-slate-400">Loading...</div>
+          <div className="text-2xl text-gray-500 dark:text-gray-400">Loading...</div>
         </div>
       </Layout>
     );
@@ -45,8 +45,8 @@ const Inventory = () => {
       >
         {/* Header */}
         <div>
-          <h1 className="text-2xl font-bold text-slate-900 dark:text-white">Inventory</h1>
-          <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">Manage your photo frames and stock levels</p>
+          <h1 className="text-2xl font-bold text-gray-100 dark:text-white">Inventory</h1>
+          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Manage your photo frames and stock levels</p>
         </div>
 
         {/* Summary Cards */}
@@ -59,8 +59,8 @@ const Inventory = () => {
           >
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-slate-600 dark:text-slate-400 text-sm font-medium">Total Frames</p>
-                <p className="text-3xl font-bold text-slate-900 dark:text-white mt-2">{summary?.total_frames}</p>
+                <p className="text-gray-500 dark:text-gray-400 text-sm font-medium">Total Frames</p>
+                <p className="text-3xl font-bold text-gray-100 dark:text-white mt-2">{summary?.total_frames}</p>
               </div>
               <div className="bg-gray-700 dark:bg-gray-600 p-4 rounded-lg">
                 <Package className="text-white" size={32} />
@@ -76,8 +76,8 @@ const Inventory = () => {
           >
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-slate-600 dark:text-slate-400 text-sm font-medium">Total Inventory Value</p>
-                <p className="text-3xl font-bold text-slate-900 dark:text-white mt-2">
+                <p className="text-gray-500 dark:text-gray-400 text-sm font-medium">Total Inventory Value</p>
+                <p className="text-3xl font-bold text-gray-100 dark:text-white mt-2">
                   Rs. {summary?.total_inventory_value?.toFixed(0)}
                 </p>
               </div>
@@ -95,7 +95,7 @@ const Inventory = () => {
           >
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-slate-600 dark:text-slate-400 text-sm font-medium">Low Stock Items</p>
+                <p className="text-gray-500 dark:text-gray-400 text-sm font-medium">Low Stock Items</p>
                 <p className="text-3xl font-bold text-gray-700 dark:text-gray-300 mt-2">{summary?.low_stock_count}</p>
               </div>
               <div className="bg-gray-700 dark:bg-gray-600 p-4 rounded-lg">
@@ -128,14 +128,14 @@ const Inventory = () => {
               <tbody>
                 {frames.map((frame) => (
                   <tr key={frame.id} className="border-t border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-900/30 transition-all">
-                    <td className="px-6 py-4 font-semibold text-slate-900 dark:text-white">{frame.frame_name}</td>
-                    <td className="px-6 py-4 text-slate-900 dark:text-white">{frame.quantity}</td>
-                    <td className="px-6 py-4 text-slate-600 dark:text-slate-400">Rs. {frame.buying_price}</td>
-                    <td className="px-6 py-4 text-slate-600 dark:text-slate-400">Rs. {frame.selling_price}</td>
+                    <td className="px-6 py-4 font-semibold text-gray-100 dark:text-white">{frame.frame_name}</td>
+                    <td className="px-6 py-4 text-gray-100 dark:text-white">{frame.quantity}</td>
+                    <td className="px-6 py-4 text-gray-500 dark:text-gray-400">Rs. {frame.buying_price}</td>
+                    <td className="px-6 py-4 text-gray-500 dark:text-gray-400">Rs. {frame.selling_price}</td>
                     <td className="px-6 py-4 font-semibold text-gray-700 dark:text-gray-300">
                       Rs. {(frame.selling_price - frame.buying_price).toFixed(0)}
                     </td>
-                    <td className="px-6 py-4 font-semibold text-slate-900 dark:text-white">
+                    <td className="px-6 py-4 font-semibold text-gray-100 dark:text-white">
                       Rs. {frame.total_value?.toFixed(0)}
                     </td>
                     <td className="px-6 py-4">

@@ -1,4 +1,6 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { useAuth } from './hooks/useAuth';
 
 // Pages
@@ -28,6 +30,18 @@ const ProtectedRoute = ({ children }) => {
 const App = () => {
   return (
     <Router>
+      <ToastContainer
+        position="top-right"
+        autoClose={4000}
+        hideProgressBar={false}
+        newestOnTop={true}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark"
+      />
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route

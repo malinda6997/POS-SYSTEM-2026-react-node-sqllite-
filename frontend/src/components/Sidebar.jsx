@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '../hooks/useAuth';
 
 const Sidebar = ({ isOpen, onClose, isCollapsed, onToggleCollapse }) => {
-  const { userRole } = useAuth();
+  const { userRole, theme } = useAuth();
   const location = useLocation();
   const [hoveredItem, setHoveredItem] = useState(null);
 
@@ -91,22 +91,20 @@ const Sidebar = ({ isOpen, onClose, isCollapsed, onToggleCollapse }) => {
             animate={{ x: 0 }}
             exit={{ x: -256 }}
             transition={{ duration: 0.3, ease: 'easeInOut' }}
-            className="fixed md:hidden left-0 top-0 h-screen w-64 bg-white dark:bg-slate-950 border-r border-gray-200 dark:border-slate-800 z-40 overflow-y-auto shadow-lg"
+            className="fixed md:hidden left-0 top-0 h-screen w-64 bg-white dark:bg-black border-r border-gray-200 dark:border-gray-900 z-40 overflow-y-auto shadow-lg"
           >
             {/* Logo with Close Button */}
-            <div className="sticky top-0 bg-white dark:bg-slate-950 border-b border-gray-200 dark:border-slate-800 p-4 flex items-center justify-between">
+            <div className="sticky top-0 bg-white dark:bg-black border-b border-gray-200 dark:border-gray-900 p-4 flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className=\"flex items-center justify-center w-10 h-10 rounded-lg bg-gradient-to-br from-gray-600 to-gray-700\">
-                  <span className="text-white font-bold text-lg">Z</span>
-                </div>
-                <div>
-                  <h1 className="text-lg font-bold text-gray-900 dark:text-white">Zenith</h1>
-                  <p className="text-xs text-gray-500 dark:text-gray-400">ERP</p>
-                </div>
+                <img 
+                  src={theme === 'dark' ? '/logo-darkmood.png' : '/logo-lightmood.png'} 
+                  alt="Logo" 
+                  className="h-10 w-auto" 
+                />
               </div>
               <button
                 onClick={onClose}
-                className="p-1 hover:bg-gray-100 dark:hover:bg-slate-800 rounded-lg transition-colors"
+                className="p-1 hover:bg-gray-100 dark:hover:bg-gray-900 rounded-lg transition-colors"
               >
                 <X size={20} className="text-gray-600 dark:text-gray-400" />
               </button>
@@ -124,8 +122,8 @@ const Sidebar = ({ isOpen, onClose, isCollapsed, onToggleCollapse }) => {
                     onClick={handleMenuItemClick}
                     className={`flex items-center gap-3 px-4 py-2.5 rounded-lg transition-all duration-200 font-medium text-sm ${
                       active
-                        ? 'bg-slate-700 dark:bg-slate-800 text-white shadow-md'
-                        : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-800'
+                        ? 'bg-gray-900 dark:bg-gray-900 text-white shadow-md border border-gray-800'
+                        : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-900'
                     }`}
                   >
                     <Icon size={18} className={active ? '' : 'text-gray-400'} />
@@ -144,23 +142,21 @@ const Sidebar = ({ isOpen, onClose, isCollapsed, onToggleCollapse }) => {
         onClick={(e) => e.stopPropagation()}
         animate={{ width: isCollapsed ? 80 : 256 }}
         transition={{ duration: 0.3, ease: 'easeInOut' }}
-        className="hidden md:flex flex-col bg-white dark:bg-slate-950 border-r border-gray-200 dark:border-slate-800 overflow-hidden flex-shrink-0"
+        className="hidden md:flex flex-col bg-white dark:bg-black border-r border-gray-200 dark:border-gray-900 overflow-hidden flex-shrink-0"
       >
         {/* Logo Section */}
-        <div className="bg-white dark:bg-slate-950 border-b border-gray-200 dark:border-slate-800 p-4 flex items-center justify-between flex-shrink-0 relative z-10">
+        <div className="bg-white dark:bg-black border-b border-gray-200 dark:border-gray-900 p-4 flex items-center justify-between flex-shrink-0 relative z-10">
           <motion.div
             className="flex items-center gap-3 min-w-0"
             animate={{ opacity: isCollapsed ? 0 : 1 }}
             transition={{ duration: 0.2 }}
             style={{ pointerEvents: isCollapsed ? 'none' : 'auto' }}
           >
-            <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-gradient-to-br from-gray-600 to-gray-700 flex-shrink-0">
-              <span className="text-white font-bold text-lg">Z</span>
-            </div>
-            <div className="min-w-0">
-              <h1 className="text-lg font-bold text-gray-900 dark:text-white whitespace-nowrap">Zenith</h1>
-              <p className="text-xs text-gray-500 dark:text-gray-400 whitespace-nowrap">ERP</p>
-            </div>
+            <img 
+              src={theme === 'dark' ? '/logo-darkmood.png' : '/logo-lightmood.png'} 
+              alt="Logo" 
+              className="h-10 w-auto flex-shrink-0" 
+            />
           </motion.div>
 
           {/* Collapse Toggle */}
@@ -171,7 +167,7 @@ const Sidebar = ({ isOpen, onClose, isCollapsed, onToggleCollapse }) => {
               onToggleCollapse();
             }}
             onMouseDown={(e) => e.preventDefault()}
-            className="p-2 hover:bg-gray-100 dark:hover:bg-slate-800 rounded-lg transition-all duration-200 flex-shrink-0 ml-auto cursor-pointer active:scale-95 relative z-20 pointer-events-auto"
+            className="p-2 hover:bg-gray-100 dark:hover:bg-gray-900 rounded-lg transition-all duration-200 flex-shrink-0 ml-auto cursor-pointer active:scale-95 relative z-20 pointer-events-auto"
             title={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
             type="button"
           >
@@ -197,8 +193,8 @@ const Sidebar = ({ isOpen, onClose, isCollapsed, onToggleCollapse }) => {
                   onMouseLeave={() => setHoveredItem(null)}
                   className={`flex items-center gap-3 px-4 py-2.5 rounded-lg transition-all duration-200 font-medium text-sm relative ${
                     isActiveItem
-                      ? 'bg-slate-700 dark:bg-slate-800 text-white shadow-md'
-                      : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-800'
+                      ? 'bg-gray-900 dark:bg-gray-900 text-white shadow-md'
+                      : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-900'
                   }`}
                 >
                   <Icon size={18} className="flex-shrink-0" />

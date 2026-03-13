@@ -85,7 +85,7 @@ const BillHistory = () => {
               placeholder="Search by bill #, customer, or phone..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full pl-10 pr-4 py-2.5 border border-gray-200 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-gray-500 transition"
+              className="w-full pl-10 pr-4 py-2.5 border border-gray-800 rounded-lg bg-black dark:bg-black text-white focus:outline-none focus:ring-2 focus:ring-gray-700 transition"
             />
           </div>
 
@@ -94,7 +94,7 @@ const BillHistory = () => {
             <select
               value={filterGuest}
               onChange={(e) => setFilterGuest(e.target.value)}
-              className="w-full px-4 py-2.5 border border-gray-200 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
+              className="w-full px-4 py-2.5 border border-gray-800 rounded-lg bg-black dark:bg-black text-white focus:outline-none focus:ring-2 focus:ring-gray-600 transition"
             >
               <option value="all">All Customers</option>
               <option value="registered">Registered</option>
@@ -108,7 +108,7 @@ const BillHistory = () => {
               type="date"
               value={dateFrom}
               onChange={(e) => setDateFrom(e.target.value)}
-              className="w-full px-4 py-2.5 border border-gray-200 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
+              className="w-full px-4 py-2.5 border border-gray-800 rounded-lg bg-black dark:bg-black text-white focus:outline-none focus:ring-2 focus:ring-gray-600 transition"
             />
           </div>
 
@@ -118,7 +118,7 @@ const BillHistory = () => {
               type="date"
               value={dateTo}
               onChange={(e) => setDateTo(e.target.value)}
-              className="w-full px-4 py-2.5 border border-gray-200 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
+              className="w-full px-4 py-2.5 border border-gray-800 rounded-lg bg-black dark:bg-black text-white focus:outline-none focus:ring-2 focus:ring-gray-600 transition"
             />
           </div>
         </motion.div>
@@ -155,7 +155,7 @@ const BillHistory = () => {
                     <th className="px-6 py-3 text-center font-bold text-gray-900 dark:text-white">Actions</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-gray-200 dark:divide-slate-700">
+                <tbody className="divide-y divide-gray-800 dark:divide-gray-800">
                   {filteredBills.map((bill, index) => {
                     const isGuest = !bill.customer_id || bill.customer_id === 0;
                     return (
@@ -164,7 +164,7 @@ const BillHistory = () => {
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         transition={{ delay: index * 0.05 }}
-                        className="hover:bg-gray-50 dark:hover:bg-slate-700/50 transition"
+                        className="hover:bg-gray-900/50 dark:hover:bg-gray-900/50 transition"
                       >
                         <td className="px-6 py-4 font-medium text-gray-900 dark:text-white">#{bill.bill_number || bill.id}</td>
                         <td className="px-6 py-4 text-gray-900 dark:text-white">{bill.customer_name}</td>
@@ -195,7 +195,7 @@ const BillHistory = () => {
                             <button className="p-2 hover:bg-gray-100 dark:hover:bg-gray-900/30 rounded-lg transition" title="Print">
                               <Printer size={16} className="text-gray-600 dark:text-gray-400" />
                             </button>
-                            <button className="p-2 hover:bg-gray-100 dark:hover:bg-slate-700 rounded-lg transition">
+                            <button className="p-2 hover:bg-gray-900/50 dark:hover:bg-gray-900/50 rounded-lg transition" title="Delete">
                               <MoreVertical size={16} className="text-gray-600 dark:text-gray-400" />
                             </button>
                           </div>

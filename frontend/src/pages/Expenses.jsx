@@ -96,7 +96,7 @@ const Expenses = () => {
     return (
       <Layout>
         <div className="flex items-center justify-center h-96">
-          <div className="text-slate-400">Loading expenses...</div>
+          <div className="text-gray-400">Loading expenses...</div>
         </div>
       </Layout>
     );
@@ -118,7 +118,7 @@ const Expenses = () => {
 
       {/* Header */}
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold text-slate-100">Expenses</h1>
+        <h1 className="text-2xl font-bold text-gray-100">Expenses</h1>
         <button
           onClick={() => setShowForm(!showForm)}
           className="flex items-center gap-2 bg-gray-700 dark:bg-gray-600 hover:bg-gray-800 dark:hover:bg-gray-700 text-white px-4 py-2 rounded-lg font-semibold transition"
@@ -176,23 +176,23 @@ const Expenses = () => {
               placeholder="Expense name"
               value={newExpense.expense_name}
               onChange={(e) => setNewExpense({ ...newExpense, expense_name: e.target.value })}
-              className="bg-slate-700 border border-slate-600 rounded-lg px-3 py-2 text-slate-100 placeholder-slate-400 focus:outline-none focus:border-amber-500"
+              className="bg-black border border-gray-800 rounded-lg px-3 py-2 text-gray-100 placeholder-gray-500 focus:outline-none focus:border-gray-600"
             />
             <input
               type="number"
               placeholder="Price"
               value={newExpense.price}
               onChange={(e) => setNewExpense({ ...newExpense, price: e.target.value })}
-              className="bg-slate-700 border border-slate-600 rounded-lg px-3 py-2 text-slate-100 placeholder-slate-400 focus:outline-none focus:border-amber-500"
+              className="bg-black border border-gray-800 rounded-lg px-3 py-2 text-gray-100 placeholder-gray-500 focus:outline-none focus:border-gray-600"
             />
             <input
               type="date"
               value={newExpense.expense_date}
               onChange={(e) => setNewExpense({ ...newExpense, expense_date: e.target.value })}
-              className="bg-slate-700 border border-slate-600 rounded-lg px-3 py-2 text-slate-100 focus:outline-none focus:border-amber-500"
+              className="bg-black border border-gray-800 rounded-lg px-3 py-2 text-gray-100 focus:outline-none focus:border-gray-600"
             />
           </div>
-          <div className="text-xs text-slate-400 mt-2">User: {user?.username} (auto-captured)</div>
+          <div className="text-xs text-gray-500 mt-2">User: {user?.username} (auto-captured)</div>
           <div className="flex gap-2 mt-3">
             <button
               onClick={handleAddExpense}

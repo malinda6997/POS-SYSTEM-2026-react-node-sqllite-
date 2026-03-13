@@ -39,7 +39,7 @@ const Layout = ({ children }) => {
   }, []);
 
   return (
-    <div className="flex h-screen w-screen bg-gray-50 dark:bg-slate-950 overflow-hidden">
+    <div className="flex h-screen w-screen bg-gray-50 dark:bg-black overflow-hidden">
       {/* Sidebar - Never unmounts, state persisted */}
       <Sidebar 
         isOpen={sidebarOpen} 
@@ -51,7 +51,7 @@ const Layout = ({ children }) => {
       {/* Main Content Area */}
       <div className="flex flex-1 flex-col min-w-0 overflow-hidden">
         <Navbar onMenuClick={handleMenuClick} />
-        <main className="flex-1 overflow-y-auto bg-gray-50 dark:bg-slate-950">
+        <main className="flex-1 overflow-y-auto bg-gray-50 dark:bg-black">
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}

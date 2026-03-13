@@ -148,14 +148,14 @@ const Help = () => {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="flex flex-col md:flex-row gap-4 md:gap-0 md:border-b border-gray-200 dark:border-slate-700"
+          className="flex flex-col md:flex-row gap-4 md:gap-0 md:border-b border-gray-800"
         >
           <button
             onClick={() => setActiveTab('faq')}
             className={`flex items-center gap-2 px-6 py-4 font-medium transition border-b-2 md:border-b-2 ${
               activeTab === 'faq'
-                ? 'text-blue-600 dark:text-blue-400 border-blue-600 dark:border-blue-400'
-                : 'text-gray-700 dark:text-gray-300 border-transparent hover:border-gray-300 dark:hover:border-slate-600'
+                ? 'text-gray-600 dark:text-gray-400 border-gray-600 dark:border-gray-400'
+                : 'text-gray-700 dark:text-gray-300 border-transparent hover:border-gray-300 dark:hover:border-gray-700'
             }`}
           >
             <HelpCircle size={20} />
@@ -165,8 +165,8 @@ const Help = () => {
             onClick={() => setActiveTab('guide')}
             className={`flex items-center gap-2 px-6 py-4 font-medium transition border-b-2 md:border-b-2 ${
               activeTab === 'guide'
-                ? 'text-blue-600 dark:text-blue-400 border-blue-600 dark:border-blue-400'
-                : 'text-gray-700 dark:text-gray-300 border-transparent hover:border-gray-300 dark:hover:border-slate-600'
+                ? 'text-gray-600 dark:text-gray-400 border-gray-600 dark:border-gray-400'
+                : 'text-gray-700 dark:text-gray-300 border-transparent hover:border-gray-300 dark:hover:border-gray-700'
             }`}
           >
             <BookOpen size={20} />
@@ -176,8 +176,8 @@ const Help = () => {
             onClick={() => setActiveTab('contact')}
             className={`flex items-center gap-2 px-6 py-4 font-medium transition border-b-2 md:border-b-2 ${
               activeTab === 'contact'
-                ? 'text-blue-600 dark:text-blue-400 border-blue-600 dark:border-blue-400'
-                : 'text-gray-700 dark:text-gray-300 border-transparent hover:border-gray-300 dark:hover:border-slate-600'
+                ? 'text-gray-600 dark:text-gray-400 border-gray-600 dark:border-gray-400'
+                : 'text-gray-700 dark:text-gray-300 border-transparent hover:border-gray-300 dark:hover:border-gray-700'
             }`}
           >
             <MessageSquare size={20} />
@@ -203,7 +203,7 @@ const Help = () => {
               >
                 <button
                   onClick={() => setExpandedFaq(expandedFaq === index ? -1 : index)}
-                  className="w-full px-6 py-4 flex items-center justify-between hover:bg-gray-50 dark:hover:bg-slate-700/50 transition"
+                  className="w-full px-6 py-4 flex items-center justify-between hover:bg-gray-900/50 dark:hover:bg-gray-900/50 transition"
                 >
                   <h3 className="text-lg font-semibold text-gray-900 dark:text-white text-left">{faq.question}</h3>
                   <motion.div
@@ -219,7 +219,7 @@ const Help = () => {
                     initial={{ opacity: 0, height: 0 }}
                     animate={{ opacity: 1, height: 'auto' }}
                     exit={{ opacity: 0, height: 0 }}
-                    className="border-t border-gray-200 dark:border-slate-700 px-6 py-4 bg-gray-50 dark:bg-slate-700/30"
+                    className="border-t border-gray-800 px-6 py-4 bg-black dark:bg-black"
                   >
                     <p className="text-gray-700 dark:text-gray-300 leading-relaxed">{faq.answer}</p>
                   </motion.div>

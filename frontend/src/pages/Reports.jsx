@@ -102,7 +102,7 @@ const Reports = () => {
                 onClick={() => setReportType(report.id)}
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
-                className={`p-4 rounded-xl transition ${ isSelected ? `bg-gradient-to-br ${report.color} text-white shadow-lg` : 'bg-white dark:bg-slate-800 text-gray-900 dark:text-white border border-gray-200 dark:border-slate-700 hover:border-gray-500 dark:hover:border-gray-400'}`}
+                className={`p-4 rounded-xl transition ${ isSelected ? `bg-gradient-to-br ${report.color} text-white shadow-lg` : 'bg-black dark:bg-black text-white border border-gray-800 hover:border-gray-700 dark:hover:border-gray-700'}`}
               >
                 <Icon size={24} className="mx-auto mb-2" />
                 <p className="font-semibold text-sm">{report.name}</p>
@@ -116,7 +116,7 @@ const Reports = () => {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.15 }}
-          className="flex flex-col md:flex-row gap-4 bg-white dark:bg-slate-800 p-6 rounded-xl shadow-lg"
+          className="flex flex-col md:flex-row gap-4 bg-black dark:bg-black p-6 rounded-xl shadow-lg border border-gray-800"
         >
           <div className="flex-1">
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">From Date</label>
@@ -124,7 +124,7 @@ const Reports = () => {
               type="date"
               value={dateFrom}
               onChange={(e) => setDateFrom(e.target.value)}
-              className="w-full px-4 py-2.5 border border-gray-200 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-gray-500 transition"
+              className="w-full px-4 py-2.5 border border-gray-200 dark:border-gray-800 rounded-lg bg-white dark:bg-black text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-gray-500 transition"
             />
           </div>
           <div className="flex-1">
@@ -133,7 +133,7 @@ const Reports = () => {
               type="date"
               value={dateTo}
               onChange={(e) => setDateTo(e.target.value)}
-              className="w-full px-4 py-2.5 border border-gray-200 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-gray-500 transition"
+              className="w-full px-4 py-2.5 border border-gray-200 dark:border-gray-800 rounded-lg bg-white dark:bg-black text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-gray-500 transition"
             />
           </div>
           <div className="flex items-end">

@@ -29,8 +29,8 @@ const Users = () => {
         <div className="flex items-center justify-center h-96">
           <div className="text-center">
             <Shield className="text-gray-600 dark:text-gray-400 mx-auto mb-3" size={32} />
-            <p className="text-slate-400">Access Denied</p>
-            <p className="text-slate-500 text-sm">Only Administrators can manage users.</p>
+            <p className="text-gray-500">Access Denied</p>
+            <p className="text-gray-600 text-sm">Only Administrators can manage users.</p>
           </div>
         </div>
       </Layout>
@@ -167,7 +167,7 @@ const Users = () => {
     return (
       <Layout>
         <div className="flex items-center justify-center h-96">
-          <div className="text-slate-400">Loading users...</div>
+          <div className="text-gray-500">Loading users...</div>
         </div>
       </Layout>
     );
@@ -208,8 +208,8 @@ const Users = () => {
         {/* Header */}
         <div className="flex justify-between items-center">
           <div>
-            <h1 className="text-2xl font-bold text-slate-900 dark:text-white">User Management</h1>
-            <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">Create, edit, and manage system users</p>
+            <h1 className="text-2xl font-bold text-white">User Management</h1>
+            <p className="text-sm text-gray-400 mt-1">Create, edit, and manage system users</p>
           </div>
           <motion.button
             whileTap={{ scale: 0.95 }}
@@ -218,7 +218,7 @@ const Users = () => {
               setNewUser({ username: '', password: '', full_name: '', role: 'staff' });
               setShowForm(!showForm);
             }}
-            className="flex items-center gap-2 bg-slate-800 hover:bg-slate-700 text-white px-6 py-3 rounded-lg font-semibold transition"
+            className="flex items-center gap-2 bg-gray-900 hover:bg-gray-800 text-white px-6 py-3 rounded-lg font-semibold transition border border-gray-800"
           >
             <Plus size={20} /> New User
           </motion.button>
@@ -229,15 +229,15 @@ const Users = () => {
           <motion.div
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="border border-slate-700 dark:border-slate-600 rounded-xl p-8 bg-slate-900 dark:bg-slate-800"
+            className="border border-gray-800 rounded-xl p-8 bg-black"
           >
-            <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-6">
+            <h2 className="text-2xl font-bold text-white mb-6">
               {editingId ? 'Edit User' : 'Create New User'}
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Username */}
               <div>
-                <label className="block text-slate-300 font-semibold mb-2">Username *</label>
+                <label className="block text-gray-300 font-semibold mb-2">Username *</label>
                 <input
                   type="text"
                   value={newUser.username}
@@ -247,7 +247,7 @@ const Users = () => {
                   }}
                   disabled={editingId}
                   placeholder="Enter username"
-                  className="w-full px-4 py-3 rounded-lg bg-slate-800 dark:bg-slate-700 border border-slate-600 dark:border-slate-500 text-white focus:outline-none focus:border-slate-500 transition-all disabled:opacity-50"
+                  className="w-full px-4 py-3 rounded-lg bg-gray-900 border border-gray-800 text-white focus:outline-none focus:border-gray-700 transition-all disabled:opacity-50"
                 />
                 {validationErrors.username && (
                   <p className="text-red-500 text-sm mt-1">{validationErrors.username}</p>
@@ -256,7 +256,7 @@ const Users = () => {
 
               {/* Password */}
               <div>
-                <label className="block text-slate-300 font-semibold mb-2">
+                <label className="block text-gray-300 font-semibold mb-2">
                   Password {editingId ? '(leave blank to keep current)' : '*'}
                 </label>
                 <input
@@ -267,7 +267,7 @@ const Users = () => {
                     setValidationErrors({ ...validationErrors, password: '' });
                   }}
                   placeholder="Enter password"
-                  className="w-full px-4 py-3 rounded-lg bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 text-slate-900 dark:text-white focus:outline-none focus:border-gray-500 transition-all"
+                  className="w-full px-4 py-3 rounded-lg bg-black dark:bg-black border border-gray-800 dark:border-gray-800 text-white focus:outline-none focus:border-gray-700 transition-all"
                 />
                 {validationErrors.password && (
                   <p className="text-red-500 text-sm mt-1">{validationErrors.password}</p>
@@ -276,7 +276,7 @@ const Users = () => {
 
               {/* Full Name */}
               <div>
-                <label className="block text-slate-300 font-semibold mb-2">Full Name *</label>
+                <label className="block text-gray-300 font-semibold mb-2">Full Name *</label>
                 <input
                   type="text"
                   value={newUser.full_name}
@@ -285,7 +285,7 @@ const Users = () => {
                     setValidationErrors({ ...validationErrors, full_name: '' });
                   }}
                   placeholder="Enter full name"
-                  className="w-full px-4 py-3 rounded-lg bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 text-slate-900 dark:text-white focus:outline-none focus:border-gray-500 transition-all"
+                  className="w-full px-4 py-3 rounded-lg bg-black dark:bg-black border border-gray-800 dark:border-gray-800 text-white focus:outline-none focus:border-gray-700 transition-all"
                 />
                 {validationErrors.full_name && (
                   <p className="text-red-500 text-sm mt-1">{validationErrors.full_name}</p>
@@ -294,14 +294,14 @@ const Users = () => {
 
               {/* Role */}
               <div>
-                <label className="block text-slate-300 font-semibold mb-2">Role *</label>
+                <label className="block text-gray-300 font-semibold mb-2">Role *</label>
                 <select
                   value={newUser.role}
                   onChange={(e) => {
                     setNewUser({ ...newUser, role: e.target.value });
                     setValidationErrors({ ...validationErrors, role: '' });
                   }}
-                  className="w-full px-4 py-3 rounded-lg bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 text-slate-900 dark:text-white focus:outline-none focus:border-gray-500 transition-all"
+                  className="w-full px-4 py-3 rounded-lg bg-black dark:bg-black border border-gray-800 dark:border-gray-800 text-white focus:outline-none focus:border-gray-700 transition-all"
                 >
                   <option value="staff">Staff</option>
                   <option value="admin">Admin</option>
@@ -318,14 +318,14 @@ const Users = () => {
               <motion.button
                 whileTap={{ scale: 0.95 }}
                 onClick={handleSaveUser}
-                className="bg-slate-800 hover:bg-slate-700 text-white font-bold px-6 py-3 rounded-lg transition"
+                className="bg-gray-900 hover:bg-gray-800 text-white font-bold px-6 py-3 rounded-lg transition border border-gray-800"
               >
                 {editingId ? 'Update User' : 'Create User'}
               </motion.button>
               <motion.button
                 whileTap={{ scale: 0.95 }}
                 onClick={handleCancel}
-                className="bg-slate-700 hover:bg-slate-600 text-white font-bold px-6 py-3 rounded-lg transition"
+                className="bg-gray-950 hover:bg-gray-900 text-gray-400 font-bold px-6 py-3 rounded-lg transition border border-gray-800"
               >
                 Cancel
               </motion.button>
@@ -342,7 +342,7 @@ const Users = () => {
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
-                <tr className="border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-slate-800">
+                <tr className="border-b border-gray-800 bg-black">
                   <th className="px-6 py-4 text-left font-bold text-gray-900 dark:text-white">Username</th>
                   <th className="px-6 py-4 text-left font-bold text-gray-900 dark:text-white">Full Name</th>
                   <th className="px-6 py-4 text-left font-bold text-gray-900 dark:text-white">Role</th>
@@ -359,7 +359,7 @@ const Users = () => {
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                       transition={{ delay: idx * 0.05 }}
-                      className="border-t border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-slate-900/50 transition-colors"
+                      className="border-t border-gray-800 hover:bg-gray-900/50 transition-colors"
                     >
                       <td className="px-6 py-4 font-semibold text-gray-900 dark:text-white flex items-center gap-2">
                         <Shield size={16} className="text-gray-600 dark:text-gray-400" />
@@ -367,12 +367,12 @@ const Users = () => {
                       </td>
                       <td className="px-6 py-4 text-gray-700 dark:text-gray-300">{user.full_name}</td>
                       <td className="px-6 py-4">
-                        <span className={`px-3 py-1.5 rounded-full text-xs font-bold bg-slate-700 text-slate-100`}>
+                        <span className={`px-3 py-1.5 rounded-full text-xs font-bold bg-gray-900 text-gray-300 border border-gray-800`}>
                           {user.role}
                         </span>
                       </td>
                       <td className="px-6 py-4 text-center">
-                        <span className={`inline-flex items-center gap-1 px-3 py-1.5 rounded-full text-xs font-bold bg-slate-700 text-slate-100`}>
+                        <span className={`inline-flex items-center gap-1 px-3 py-1.5 rounded-full text-xs font-bold bg-gray-900 text-gray-300 border border-gray-800`}>
                           {user.is_active ? 'Active' : 'Disabled'}
                         </span>
                       </td>
