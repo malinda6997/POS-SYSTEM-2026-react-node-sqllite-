@@ -10,8 +10,9 @@ const Sidebar = ({ isOpen, onClose, isCollapsed, onToggleCollapse }) => {
   const [hoveredItem, setHoveredItem] = useState(null);
 
   // Close sidebar on item click (mobile only)
-  const handleMenuItemClick = () => {
+  const handleMenuItemClick = (e) => {
     if (window.innerWidth < 768) {
+      e.stopPropagation();
       setTimeout(() => onClose(), 100);
     }
   };
@@ -72,6 +73,7 @@ const Sidebar = ({ isOpen, onClose, isCollapsed, onToggleCollapse }) => {
       <AnimatePresence>
         {isOpen && (
           <motion.aside
+            onClick={(e) => e.stopPropagation()}
             initial={{ x: -256 }}
             animate={{ x: 0 }}
             exit={{ x: -256 }}
@@ -105,10 +107,7 @@ const Sidebar = ({ isOpen, onClose, isCollapsed, onToggleCollapse }) => {
                   <Link
                     key={item.to}
                     to={item.to}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleMenuItemClick();
-                    }}
+                    onClick={handleMenuItemClick}
                     className={`flex items-center gap-3 px-4 py-2.5 rounded-lg transition-all duration-200 font-medium text-sm ${
                       isActive(item.to)
                         ? 'bg-blue-600 text-white shadow-md'
@@ -128,6 +127,7 @@ const Sidebar = ({ isOpen, onClose, isCollapsed, onToggleCollapse }) => {
 
       {/* Desktop Collapsible Sidebar */}
       <motion.aside
+        onClick={(e) => e.stopPropagation()}
         animate={{ width: isCollapsed ? 80 : 256 }}
         transition={{ duration: 0.3, ease: 'easeInOut' }}
         className="hidden md:flex flex-col bg-white dark:bg-slate-950 border-r border-gray-200 dark:border-slate-800 overflow-hidden flex-shrink-0"
@@ -170,7 +170,7 @@ const Sidebar = ({ isOpen, onClose, isCollapsed, onToggleCollapse }) => {
         </div>
 
         {/* Navigation */}
-        <nav className="flex-1 p-3 space-y-1 mt-4 overflow-y-auto">
+        <nav className="flex-1 p-3 space-y-1 mt-4 overflow-y-auto" onClick={(e) => e.stopPropagation()}>
           {menuItems.map((item) => {
             const Icon = item.icon;
             const isActiveItem = isActive(item.to);
@@ -179,10 +179,6 @@ const Sidebar = ({ isOpen, onClose, isCollapsed, onToggleCollapse }) => {
               <div key={item.to} className="relative group">
                 <Link
                   to={item.to}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleMenuItemClick();
-                  }}
                   onMouseEnter={() => setHoveredItem(item.to)}
                   onMouseLeave={() => setHoveredItem(null)}
                   className={`flex items-center gap-3 px-4 py-2.5 rounded-lg transition-all duration-200 font-medium text-sm relative ${
