@@ -17,3 +17,20 @@ html, body, #root {
 body {
   font-family: system-ui, -apple-system, sans-serif;
 }
+
+/* Hide scrollbars - Chrome, Safari, Edge */
+::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbars - Firefox */
+* {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+/* Ensure overflow still works but scrollbar is hidden */
+html, body {
+  overflow-y: auto;
+  overflow-x: hidden;
+}
