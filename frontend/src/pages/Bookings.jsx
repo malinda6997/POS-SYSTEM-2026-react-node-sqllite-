@@ -178,7 +178,7 @@ const Bookings = () => {
           <motion.div
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-white dark:bg-slate-800 rounded-xl shadow-lg p-8"
+            className="border border-gray-200 dark:border-gray-700 rounded-xl p-8"
           >
             <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-6">Create New Booking</h2>
             <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-6">

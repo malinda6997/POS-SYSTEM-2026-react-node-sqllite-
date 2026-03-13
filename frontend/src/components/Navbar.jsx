@@ -66,7 +66,7 @@ const Navbar = ({ onMenuClick }) => {
           </button>
 
           {profileOpen && (
-            <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-slate-900 rounded-lg shadow-lg border border-gray-200 dark:border-slate-800 py-2 z-50">
+            <div className="absolute right-0 mt-2 w-48 border border-gray-200 dark:border-slate-800 rounded-lg py-2 z-50">
               <div className="px-4 py-2 border-b border-gray-200 dark:border-slate-800">
                 <p className="text-sm font-semibold text-gray-900 dark:text-white">{user?.full_name}</p>
                 <p className="text-xs text-gray-500 dark:text-gray-400 capitalize">{user?.role}</p>

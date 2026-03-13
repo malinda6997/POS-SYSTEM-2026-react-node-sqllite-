@@ -226,7 +226,7 @@ const Dashboard = () => {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.6 }}
-            className="bg-white dark:bg-slate-800 rounded-lg border border-gray-200 dark:border-slate-700 p-6 shadow-sm"
+            className="border border-gray-200 dark:border-slate-700 rounded-lg p-6"
           >
             <div className="mb-6">
               <h3 className="text-lg font-bold text-gray-900 dark:text-white">Transaction Summary</h3>
@@ -261,7 +261,7 @@ const Dashboard = () => {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.65 }}
-            className="bg-white dark:bg-slate-800 rounded-lg border border-gray-200 dark:border-slate-700 p-6 shadow-sm"
+            className="border border-gray-200 dark:border-slate-700 rounded-lg p-6"
           >
             <div className="mb-6">
               <h3 className="text-lg font-bold text-gray-900 dark:text-white">Financial Overview</h3>
@@ -308,7 +308,7 @@ const Dashboard = () => {
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.6 }}
-              className="bg-white dark:bg-slate-900 rounded-lg border border-gray-200 dark:border-slate-800 p-6 shadow-sm"
+              className="border border-gray-200 dark:border-slate-800 rounded-lg p-6"
             >
               <div className="flex items-center justify-between mb-6">
                 <h3 className="text-lg font-bold text-gray-900 dark:text-white">Recent Orders</h3>
@@ -341,7 +341,7 @@ const Dashboard = () => {
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.7 }}
-              className="bg-white dark:bg-slate-900 rounded-lg border border-gray-200 dark:border-slate-800 p-6 shadow-sm"
+              className="border border-gray-200 dark:border-slate-800 rounded-lg p-6"
             >
               <div className="flex items-center justify-between mb-6">
                 <h3 className="text-lg font-bold text-gray-900 dark:text-white">Low Stock Items</h3>

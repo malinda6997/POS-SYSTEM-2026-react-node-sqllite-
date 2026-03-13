@@ -153,7 +153,7 @@ const Reports = () => {
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4"
         >
           {/* Bills Card */}
-          <div className="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-lg">
+          <div className="border border-gray-200 dark:border-gray-700 rounded-xl p-6">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-gray-600 dark:text-gray-400 text-sm font-medium">Total Bills</p>
@@ -167,7 +167,7 @@ const Reports = () => {
           </div>
 
           {/* Invoices Card */}
-          <div className="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-lg">
+          <div className="border border-gray-200 dark:border-gray-700 rounded-xl p-6">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-gray-600 dark:text-gray-400 text-sm font-medium">Total Invoices</p>
@@ -181,7 +181,7 @@ const Reports = () => {
           </div>
 
           {/* Expenses Card */}
-          <div className="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-lg">
+          <div className="border border-gray-200 dark:border-gray-700 rounded-xl p-6">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-gray-600 dark:text-gray-400 text-sm font-medium">Total Expenses</p>
@@ -195,7 +195,7 @@ const Reports = () => {
           </div>
 
           {/* Customers Card */}
-          <div className="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-lg">
+          <div className="border border-gray-200 dark:border-gray-700 rounded-xl p-6">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-gray-600 dark:text-gray-400 text-sm font-medium">Total Customers</p>
@@ -247,7 +247,7 @@ const Reports = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.35 }}
-          className="bg-white dark:bg-slate-800 rounded-xl p-8 shadow-lg"
+          className="border border-gray-200 dark:border-gray-700 rounded-xl p-8"
         >
           <div className="flex items-center gap-3 mb-6">
             {SelectedIcon && <SelectedIcon size={28} className="text-blue-600 dark:text-blue-400" />}

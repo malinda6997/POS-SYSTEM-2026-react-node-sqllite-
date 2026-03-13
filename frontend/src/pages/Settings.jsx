@@ -30,7 +30,7 @@ const Settings = () => {
       </div>
 
       {/* Tabs */}
-      <div className="bg-slate-800 border border-slate-700 rounded-lg p-6 mb-6">
+      <div className="border border-gray-200 dark:border-gray-700 rounded-lg p-6 mb-6">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
           {visibleTabs.map((tab) => (
             <button
@@ -54,7 +54,7 @@ const Settings = () => {
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-slate-800 border border-slate-700 rounded-lg p-6"
+          className="border border-gray-200 dark:border-gray-700 rounded-lg p-6"
         >
           <h2 className="text-xl font-bold text-slate-100 mb-4">General Settings</h2>
           
@@ -103,7 +103,7 @@ const Settings = () => {
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-slate-800 border border-slate-700 rounded-lg p-6"
+          className="border border-gray-200 dark:border-gray-700 rounded-lg p-6"
         >
           <h2 className="text-xl font-bold text-slate-100 mb-4">Appearance Settings</h2>
           
@@ -157,7 +157,7 @@ const Settings = () => {
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-slate-800 border border-slate-700 rounded-lg p-6"
+          className="border border-gray-200 dark:border-gray-700 rounded-lg p-6"
         >
           <h2 className="text-xl font-bold text-slate-100 mb-4">Security Settings</h2>
           
@@ -191,7 +191,7 @@ const Settings = () => {
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-slate-800 border border-slate-700 rounded-lg p-6"
+          className="border border-gray-200 dark:border-gray-700 rounded-lg p-6"
         >
           <h2 className="text-xl font-bold text-slate-100 mb-4">Database Settings</h2>
           

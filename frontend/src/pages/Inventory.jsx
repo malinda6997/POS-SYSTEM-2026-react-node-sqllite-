@@ -55,7 +55,7 @@ const Inventory = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="bg-white dark:bg-slate-800 rounded-xl shadow-lg p-6"
+            className="border border-gray-200 dark:border-gray-700 rounded-xl p-6"
           >
             <div className="flex items-center justify-between">
               <div>
@@ -72,7 +72,7 @@ const Inventory = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="bg-white dark:bg-slate-800 rounded-xl shadow-lg p-6"
+            className="border border-gray-200 dark:border-gray-700 rounded-xl p-6"
           >
             <div className="flex items-center justify-between">
               <div>
@@ -91,7 +91,7 @@ const Inventory = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
-            className="bg-white dark:bg-slate-800 rounded-xl shadow-lg p-6 border-l-4 border-gray-400"
+            className="border border-gray-200 dark:border-gray-700 rounded-xl p-6"
           >
             <div className="flex items-center justify-between">
               <div>

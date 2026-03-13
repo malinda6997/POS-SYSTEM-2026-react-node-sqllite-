@@ -150,7 +150,7 @@ const Services = () => {
         <motion.div
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-slate-800 p-4 rounded-lg mb-6 border border-slate-700"
+          className="border border-gray-200 dark:border-gray-700 p-4 rounded-lg mb-6"
         >
           <div className="flex gap-2">
             <input
@@ -181,7 +181,7 @@ const Services = () => {
         <motion.div
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-slate-800 p-4 rounded-lg mb-6 border border-slate-700"
+          className="border border-gray-200 dark:border-gray-700 p-4 rounded-lg mb-6"
         >
           <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
             <input
@@ -247,7 +247,7 @@ const Services = () => {
                 key={category.id}
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="bg-slate-800 border border-slate-700 rounded-lg overflow-hidden"
+                className="border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden"
               >
                 {/* Category Header */}
                 <button

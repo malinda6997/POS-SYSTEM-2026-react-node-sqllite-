@@ -199,7 +199,7 @@ const Help = () => {
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.05 }}
-                className="bg-white dark:bg-slate-800 rounded-xl overflow-hidden shadow-lg"
+                className="border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden"
               >
                 <button
                   onClick={() => setExpandedFaq(expandedFaq === index ? -1 : index)}
@@ -243,7 +243,7 @@ const Help = () => {
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.05 }}
-                className="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-lg"
+                className="border border-gray-200 dark:border-gray-700 rounded-xl p-6"
               >
                 <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4">{guide.title}</h3>
                 <p className="text-gray-700 dark:text-gray-300 whitespace-pre-line text-sm leading-relaxed">
@@ -268,7 +268,7 @@ const Help = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2 }}
-                className="bg-white dark:bg-slate-800 rounded-xl p-8 shadow-lg text-center"
+                className="border border-gray-200 dark:border-gray-700 rounded-xl p-8 text-center"
               >
                 <div className="flex justify-center mb-4">
                   <div className="p-4 bg-blue-100 dark:bg-blue-900/20 rounded-full">
@@ -289,7 +289,7 @@ const Help = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.25 }}
-                className="bg-white dark:bg-slate-800 rounded-xl p-8 shadow-lg text-center"
+                className="border border-gray-200 dark:border-gray-700 rounded-xl p-8 text-center"
               >
                 <div className="flex justify-center mb-4">
                   <div className="p-4 bg-green-100 dark:bg-green-900/20 rounded-full">
