@@ -8,8 +8,9 @@ if (!fs.existsSync(invoicesDir)) {
   fs.mkdirSync(invoicesDir, { recursive: true });
 }
 
+
 // Generate thermal bill (80mm format - quick transactions)
-exports.generateThermalBill = (bookingData, outputPath = null) => {
+const generateThermalBill = (bookingData, outputPath = null) => {
   return new Promise((resolve, reject) => {
     try {
       const fileName =
@@ -110,8 +111,9 @@ exports.generateThermalBill = (bookingData, outputPath = null) => {
   });
 };
 
+
 // Generate A4 invoice (professional layout for bookings)
-exports.generateA4Invoice = (bookingData, studioInfo = {}, outputPath = null) => {
+const generateA4Invoice = (bookingData, studioInfo = {}, outputPath = null) => {
   return new Promise((resolve, reject) => {
     try {
       const fileName =
@@ -280,7 +282,7 @@ exports.generateA4Invoice = (bookingData, studioInfo = {}, outputPath = null) =>
 };
 
 // Generate expense report
-exports.generateExpenseReport = (expenses, startDate, endDate, outputPath = null) => {
+const generateExpenseReport = (expenses, startDate, endDate, outputPath = null) => {
   return new Promise((resolve, reject) => {
     try {
       const fileName =
