@@ -38,7 +38,7 @@ const createUser = (req, res) => {
     const { username, password, full_name, role } = req.body;
 
     if (!username || !password || !full_name || !role) {
-      return res.status(400).json({ message: "All fields are required" });
+      return res.status(400).json({ message: "All required fields must be provided" });
     }
 
     // Check if username exists
@@ -46,7 +46,7 @@ const createUser = (req, res) => {
     const existing = checkStmt.get(username);
 
     if (existing) {
-      return res.status(400).json({ message: "Username already exists" });
+      return res.status(400).json({ message: "This username is already registered in the system" });
     }
 
     // Hash password
@@ -77,7 +77,7 @@ const updateUser = (req, res) => {
     const { full_name, role, password } = req.body;
 
     if (!full_name || !role) {
-      return res.status(400).json({ message: "Name and role are required" });
+      return res.status(400).json({ message: "Name and role are mandatory" });
     }
 
     let query = "UPDATE users SET full_name = ?, role = ?";
@@ -149,6 +149,96 @@ const deleteUser = (req, res) => {
   }
 };
 
+// Update user profile (for logged-in users)
+const updateUserProfile = (req, res) => {
+  try {
+    console.log("=== UPDATE PROFILE START ===");
+    console.log("updateUserProfile - req.user:", req.user);
+    console.log("updateUserProfile - req.body:", req.body);
+    
+    const userId = req.user?.id; // From auth middleware
+
+    if (!userId) {
+      console.log("updateUserProfile - No userId found in TOKEN");
+      return res.status(401).json({ message: "Unauthorized - No user ID found in token" });
+    }
+
+    const { first_name, last_name, email, bio, avatar } = req.body;
+    console.log("updateUserProfile - Extracted fields:", { first_name, last_name, email, bio, avatar });
+
+    let query = "UPDATE users SET ";
+    let values = [];
+    let updates = [];
+
+    // Build UPDATE query dynamically based on provided fields
+    if (first_name !== undefined && first_name !== null) {
+      updates.push("first_name = ?");
+      values.push(first_name);
+      console.log("Adding first_name to update");
+    }
+    if (last_name !== undefined && last_name !== null) {
+      updates.push("last_name = ?");
+      values.push(last_name);
+      console.log("Adding last_name to update");
+    }
+    if (email !== undefined && email !== null) {
+      updates.push("email = ?");
+      values.push(email);
+      console.log("Adding email to update");
+    }
+    if (bio !== undefined && bio !== null) {
+      updates.push("bio = ?");
+      values.push(bio);
+      console.log("Adding bio to update");
+    }
+    if (avatar !== undefined && avatar !== null) {
+      updates.push("avatar = ?");
+      values.push(avatar);
+      console.log("Adding avatar to update");
+    }
+
+    if (updates.length === 0) {
+      console.log("updateUserProfile - No fields provided for update");
+      return res.status(400).json({ message: "No fields to update" });
+    }
+
+    query += updates.join(", ");
+    query += " WHERE id = ?";
+    values.push(userId);
+
+    console.log("updateUserProfile - Final Query:", query);
+    console.log("updateUserProfile - Final Values:", values);
+
+    const stmt = db.prepare(query);
+    const result = stmt.run(...values);
+
+    console.log("updateUserProfile - DB Result:", result);
+
+    if (result.changes === 0) {
+      console.log("updateUserProfile - User not found with ID:", userId);
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Fetch updated user data
+    const updatedUser = db.prepare(
+      "SELECT id, username, first_name, last_name, email, full_name, role, bio, avatar FROM users WHERE id = ?"
+    ).get(userId);
+
+    console.log("updateUserProfile - Updated user:", updatedUser);
+    console.log("=== UPDATE PROFILE END (SUCCESS) ===");
+
+    res.json({ 
+      message: "Profile updated successfully", 
+      user: updatedUser 
+    });
+  } catch (err) {
+    console.error("=== UPDATE PROFILE ERROR ===");
+    console.error("Error message:", err.message);
+    console.error("Error stack:", err.stack);
+    res.status(500).json({ message: "Error updating profile: " + err.message });
+  }
+};
+
 module.exports = {
   getAllUsers,
   getUserById,
@@ -156,4 +246,5 @@ module.exports = {
   updateUser,
   toggleUserStatus,
   deleteUser,
+  updateUserProfile,
 };

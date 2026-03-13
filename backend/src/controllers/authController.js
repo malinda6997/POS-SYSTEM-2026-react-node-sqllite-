@@ -11,12 +11,12 @@ exports.login = (req, res) => {
       .prepare("SELECT * FROM users WHERE username = ?")
       .get(username);
 
-    if (!user) return res.status(404).json({ message: "User not found!" });
+    if (!user) return res.status(404).json({ message: "Invalid username or password" });
 
 
     const isMatch = bcrypt.compareSync(password, user.password);
     if (!isMatch)
-      return res.status(400).json({ message: "Invalid credentials!" });
+      return res.status(401).json({ message: "Invalid username or password" });
 
 
     const token = jwt.sign(

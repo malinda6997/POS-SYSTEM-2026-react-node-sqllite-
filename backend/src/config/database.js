@@ -16,6 +16,11 @@ const initDatabase = () => {
             password TEXT NOT NULL,
             role TEXT NOT NULL CHECK(role IN ('Administrator', 'admin', 'staff')),
             full_name TEXT NOT NULL,
+            first_name TEXT,
+            last_name TEXT,
+            email TEXT,
+            bio TEXT,
+            avatar TEXT,
             is_active INTEGER DEFAULT 1,
             created_at DATETIME DEFAULT CURRENT_TIMESTAMP
         );
@@ -81,6 +86,29 @@ const initDatabase = () => {
             expense_date DATETIME DEFAULT CURRENT_TIMESTAMP
         );
     `);
+
+  // Add missing columns to users table if they don't exist
+  try {
+    const tableInfo = db.pragma("table_info(users)");
+    const columnNames = tableInfo.map(col => col.name);
+    
+    const columnsToAdd = [
+      { name: 'first_name', def: 'TEXT' },
+      { name: 'last_name', def: 'TEXT' },
+      { name: 'email', def: 'TEXT' },
+      { name: 'bio', def: 'TEXT' },
+      { name: 'avatar', def: 'TEXT' }
+    ];
+
+    columnsToAdd.forEach(col => {
+      if (!columnNames.includes(col.name)) {
+        db.exec(`ALTER TABLE users ADD COLUMN ${col.name} ${col.def}`);
+        console.log(`✔️ Added '${col.name}' column to users table`);
+      }
+    });
+  } catch (err) {
+    console.log("Note: Columns migration skipped or already exist");
+  }
 
   // Seed default admin user if doesn't exist
   try {

@@ -141,7 +141,7 @@ const Bookings = () => {
         event_time: formData.event_time,
         status: formData.status,
       });
-      setSuccess('Booking created successfully!');
+      setSuccess('Booking created successfully! Event scheduled.');
       setFormData({
         customer_id: '',
         customer_mobile: '',

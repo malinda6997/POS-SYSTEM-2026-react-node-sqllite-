@@ -57,7 +57,7 @@ const Customers = () => {
   const handleAddCustomer = async (e) => {
     e.preventDefault();
     if (!formData.customer_name.trim()) {
-      toast.warning('Please enter customer name');
+      toast.warning('Please enter the customer name');
       return;
     }
 

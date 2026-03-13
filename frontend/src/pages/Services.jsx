@@ -98,7 +98,7 @@ const Services = () => {
 
   // Delete category
   const handleDeleteCategory = async (categoryId) => {
-    if (!window.confirm('Are you sure? This will delete the category and all its services.')) return;
+    if (!window.confirm('This action will permanently delete the category and all associated services. This cannot be undone. Continue?')) return;
     try {
       await api.delete(`/services/categories/${categoryId}`);
       setCategories(categories.filter(c => c.id !== categoryId));

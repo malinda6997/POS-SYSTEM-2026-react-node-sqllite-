@@ -19,7 +19,7 @@ exports.createServiceCategory = (req, res) => {
   const { category_name, base_price } = req.body;
 
   if (!category_name) {
-    return res.status(400).json({ message: "Category name is required!" });
+    return res.status(400).json({ message: "Category name is mandatory" });
   }
 
   try {
@@ -65,7 +65,7 @@ exports.deleteServiceCategory = (req, res) => {
 
     if (service) {
       return res.status(400).json({
-        message: "Cannot delete category with existing services!",
+        message: "Cannot delete category because it contains services. Please delete all services first.",
       });
     }
 
@@ -122,7 +122,7 @@ exports.createService = (req, res) => {
 
   if (!category_id || !service_name || !price) {
     return res.status(400).json({
-      message: "Category ID, service name, and price are required!",
+      message: "Category ID, service name, and price are mandatory",
     });
   }
 
@@ -133,7 +133,7 @@ exports.createService = (req, res) => {
       .get(category_id);
 
     if (!category) {
-      return res.status(404).json({ message: "Category not found!" });
+      return res.status(404).json({ message: "The specified category does not exist in the system" });
     }
 
     const stmt = db.prepare(
