@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback } from 'react';
 import { motion } from 'framer-motion';
-import { Plus, Search, Filter, X, CheckCircle, Clock, AlertCircle, Trash2, Eye, Printer } from 'lucide-react';
+import { Search, Filter, Trash2, Eye, Printer } from 'lucide-react';
 import Layout from '../components/Layout';
 import api from '../utils/api';
 
@@ -17,7 +17,7 @@ const Billing = () => {
     mobileNumber: '',
     address: '',
     email: '',
-    paymentStatus: 'full', // full, advance, partial
+    paymentStatus: 'full',
     advanceAmount: '',
     selectedServices: [],
   });
@@ -75,7 +75,6 @@ const Billing = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Validate required fields
     if (!formData.customerName.trim()) {
       alert('Customer name is required');
       return;
@@ -102,7 +101,6 @@ const Billing = () => {
 
       await api.post('/bookings', billData);
       
-      // Reset form
       setFormData({
         customerName: '',
         mobileNumber: '',
@@ -112,10 +110,9 @@ const Billing = () => {
         advanceAmount: '',
         selectedServices: [],
       });
-      setShowForm(false);
       
-      // Refresh bills
       fetchBills();
+      alert('Bill created successfully!');
     } catch (err) {
       console.error('Error creating bill:', err);
       alert('Error creating bill: ' + err.message);
@@ -125,13 +122,13 @@ const Billing = () => {
   const getStatusColor = (status) => {
     switch (status?.toLowerCase()) {
       case 'completed':
-        return { bg: 'bg-green-100 dark:bg-green-900/30', text: 'text-green-700 dark:text-green-400', icon: CheckCircle };
+        return { bg: 'bg-green-100 dark:bg-green-900/30', text: 'text-green-700 dark:text-green-400', icon: '✓' };
       case 'pending':
-        return { bg: 'bg-yellow-100 dark:bg-yellow-900/30', text: 'text-yellow-700 dark:text-yellow-400', icon: Clock };
+        return { bg: 'bg-yellow-100 dark:bg-yellow-900/30', text: 'text-yellow-700 dark:text-yellow-400', icon: '◐' };
       case 'cancelled':
-        return { bg: 'bg-red-100 dark:bg-red-900/30', text: 'text-red-700 dark:text-red-400', icon: AlertCircle };
+        return { bg: 'bg-red-100 dark:bg-red-900/30', text: 'text-red-700 dark:text-red-400', icon: '✕' };
       default:
-        return { bg: 'bg-gray-100 dark:bg-gray-700', text: 'text-gray-700 dark:text-gray-400', icon: Clock };
+        return { bg: 'bg-gray-100 dark:bg-gray-700', text: 'text-gray-700 dark:text-gray-400', icon: '○' };
     }
   };
 
@@ -162,9 +159,23 @@ const Billing = () => {
   const handlePrintBill = () => {
     const printContent = document.getElementById('thermal-bill-preview');
     const printWindow = window.open('', '', 'width=400,height=600');
-    printWindow.document.write(printContent.innerHTML);
+    printWindow.document.write(`
+      <html>
+        <head>
+          <style>
+            body { font-family: 'Courier New', monospace; font-size: 12px; margin: 0; padding: 10px; }
+            .receipt { width: 80mm; }
+          </style>
+        </head>
+        <body>
+          <div class="receipt">
+            ${printContent.innerHTML}
+          </div>
+        </body>
+      </html>
+    `);
     printWindow.document.close();
-    printWindow.print();
+    setTimeout(() => printWindow.print(), 250);
   };
 
   const resetForm = () => {
@@ -190,26 +201,26 @@ const Billing = () => {
         >
           <div>
             <h1 className="text-4xl font-bold text-gray-900 dark:text-white">Billing System</h1>
-            <p className="text-gray-600 dark:text-gray-400 mt-1">Create bills with thermal printer preview and manage billing records</p>
+            <p className="text-gray-600 dark:text-gray-400 mt-1">Create bills with thermal printer support and manage billing records</p>
           </div>
         </motion.div>
 
         {/* Main Content: Two Column Layout */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* LEFT SIDE: Billing Form */}
+          {/* LEFT SIDE: Billing Form (Larger - 2 Columns) */}
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.1 }}
-            className="lg:col-span-1"
+            className="lg:col-span-2"
           >
-            <div className="bg-white dark:bg-slate-800 rounded-xl shadow-lg p-6 sticky top-24">
-              <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Billing Details</h2>
+            <div className="bg-white dark:bg-slate-800 rounded-xl shadow-lg p-6">
+              <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Create Bill</h2>
               
               <form onSubmit={handleSubmit} className="space-y-5">
-                {/* Customer Information Section */}
+                {/* Customer Details Section */}
                 <div className="space-y-4">
-                  <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wide">Customer Information</h3>
+                  <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wide border-b border-gray-200 dark:border-slate-700 pb-2">Customer Details</h3>
                   
                   <div>
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
@@ -226,28 +237,29 @@ const Billing = () => {
                     />
                   </div>
 
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Mobile Number</label>
-                    <input
-                      type="tel"
-                      name="mobileNumber"
-                      value={formData.mobileNumber}
-                      onChange={handleFormChange}
-                      placeholder="+1 234-567-8900"
-                      className="w-full px-3 py-2 border border-gray-200 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition text-sm"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Email</label>
-                    <input
-                      type="email"
-                      name="email"
-                      value={formData.email}
-                      onChange={handleFormChange}
-                      placeholder="customer@example.com"
-                      className="w-full px-3 py-2 border border-gray-200 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition text-sm"
-                    />
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Mobile Number</label>
+                      <input
+                        type="tel"
+                        name="mobileNumber"
+                        value={formData.mobileNumber}
+                        onChange={handleFormChange}
+                        placeholder="+1-234-567-8900"
+                        className="w-full px-3 py-2 border border-gray-200 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition text-sm"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Email</label>
+                      <input
+                        type="email"
+                        name="email"
+                        value={formData.email}
+                        onChange={handleFormChange}
+                        placeholder="customer@example.com"
+                        className="w-full px-3 py-2 border border-gray-200 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition text-sm"
+                      />
+                    </div>
                   </div>
 
                   <div>
@@ -265,13 +277,13 @@ const Billing = () => {
 
                 {/* Services Section */}
                 <div className="space-y-3">
-                  <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wide">Services <span className="text-red-500">*</span></h3>
+                  <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wide border-b border-gray-200 dark:border-slate-700 pb-2">Choose Services <span className="text-red-500">*</span></h3>
                   {services.length === 0 ? (
-                    <p className="text-gray-500 dark:text-gray-400 text-xs">No services available</p>
+                    <p className="text-gray-500 dark:text-gray-400 text-sm">No services available</p>
                   ) : (
-                    <div className="max-h-48 overflow-y-auto space-y-2">
+                    <div className="max-h-64 overflow-y-auto space-y-2">
                       {services.map((service) => (
-                        <label key={service.id} className="flex items-start gap-2 p-2 border border-gray-200 dark:border-slate-700 rounded-lg hover:bg-blue-50 dark:hover:bg-blue-900/20 cursor-pointer transition">
+                        <label key={service.id} className="flex items-start gap-2 p-3 border border-gray-200 dark:border-slate-700 rounded-lg hover:bg-blue-50 dark:hover:bg-blue-900/20 cursor-pointer transition">
                           <input
                             type="checkbox"
                             checked={formData.selectedServices.includes(service.id)}
@@ -279,7 +291,7 @@ const Billing = () => {
                             className="w-4 h-4 mt-0.5 text-blue-600 rounded focus:ring-2 focus:ring-blue-500"
                           />
                           <div className="flex-1 min-w-0">
-                            <p className="text-xs font-medium text-gray-900 dark:text-white">{service.name}</p>
+                            <p className="text-sm font-medium text-gray-900 dark:text-white">{service.name}</p>
                             <p className="text-xs text-blue-600 dark:text-blue-400 font-semibold">${service.price}</p>
                           </div>
                         </label>
@@ -290,17 +302,31 @@ const Billing = () => {
 
                 {/* Payment Section */}
                 <div className="space-y-3">
-                  <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wide">Payment</h3>
-                  <select
-                    name="paymentStatus"
-                    value={formData.paymentStatus}
-                    onChange={handleFormChange}
-                    className="w-full px-3 py-2 border border-gray-200 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition text-sm"
-                  >
-                    <option value="full">Full Payment</option>
-                    <option value="advance">Advance Payment</option>
-                    <option value="partial">Partial Payment</option>
-                  </select>
+                  <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wide border-b border-gray-200 dark:border-slate-700 pb-2">Select Payment Type</h3>
+                  <div className="grid grid-cols-2 gap-3">
+                    <label className="flex items-center gap-2 p-3 border-2 rounded-lg cursor-pointer transition" style={{borderColor: formData.paymentStatus === 'full' ? 'rgb(59, 130, 246)' : 'rgb(229, 231, 235)', backgroundColor: formData.paymentStatus === 'full' ? 'rgb(239, 246, 255)' : 'transparent'}}>
+                      <input
+                        type="radio"
+                        name="paymentStatus"
+                        value="full"
+                        checked={formData.paymentStatus === 'full'}
+                        onChange={handleFormChange}
+                        className="w-4 h-4 text-blue-600"
+                      />
+                      <span className="text-sm font-medium text-gray-900 dark:text-white">Full Payment</span>
+                    </label>
+                    <label className="flex items-center gap-2 p-3 border-2 rounded-lg cursor-pointer transition" style={{borderColor: formData.paymentStatus === 'advance' ? 'rgb(59, 130, 246)' : 'rgb(229, 231, 235)', backgroundColor: formData.paymentStatus === 'advance' ? 'rgb(239, 246, 255)' : 'transparent'}}>
+                      <input
+                        type="radio"
+                        name="paymentStatus"
+                        value="advance"
+                        checked={formData.paymentStatus === 'advance'}
+                        onChange={handleFormChange}
+                        className="w-4 h-4 text-blue-600"
+                      />
+                      <span className="text-sm font-medium text-gray-900 dark:text-white">Advance Payment</span>
+                    </label>
+                  </div>
 
                   {formData.paymentStatus === 'advance' && (
                     <input
@@ -308,7 +334,7 @@ const Billing = () => {
                       name="advanceAmount"
                       value={formData.advanceAmount}
                       onChange={handleFormChange}
-                      placeholder="Advance amount"
+                      placeholder="Enter advance amount"
                       min="0"
                       step="0.01"
                       className="w-full px-3 py-2 border border-gray-200 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition text-sm"
@@ -316,28 +342,51 @@ const Billing = () => {
                   )}
                 </div>
 
-                {/* Total Amount */}
+                {/* Added Services View Section */}
                 {formData.selectedServices.length > 0 && (
-                  <div className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm font-semibold text-gray-700 dark:text-gray-300">Total Amount:</span>
-                      <span className="text-2xl font-bold text-blue-600 dark:text-blue-400">${total.toFixed(2)}</span>
+                  <div className="border-t border-gray-200 dark:border-slate-700 pt-5">
+                    <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wide mb-3">Added Services</h3>
+                    <div className="bg-gray-50 dark:bg-slate-700/50 rounded-lg p-4 space-y-2 max-h-48 overflow-y-auto">
+                      {services
+                        .filter(s => formData.selectedServices.includes(s.id))
+                        .map((service, idx) => (
+                          <div key={service.id} className="flex items-center justify-between p-3 bg-white dark:bg-slate-800 rounded border border-gray-200 dark:border-slate-700">
+                            <div className="flex-1">
+                              <p className="text-sm font-medium text-gray-900 dark:text-white">{idx + 1}. {service.name}</p>
+                              <p className="text-xs text-gray-500 dark:text-gray-400">${service.price.toFixed(2)}</p>
+                            </div>
+                            <button
+                              type="button"
+                              onClick={() => handleServiceToggle(service.id)}
+                              className="px-2 py-1 text-xs bg-red-100 dark:bg-red-900/20 text-red-600 dark:text-red-400 rounded hover:bg-red-200 dark:hover:bg-red-900/30 transition font-medium"
+                            >
+                              Remove
+                            </button>
+                          </div>
+                        ))}
+                      <div className="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-4 border border-blue-200 dark:border-blue-800 mt-3">
+                        <div className="flex items-center justify-between">
+                          <span className="text-sm font-semibold text-gray-700 dark:text-gray-300">Total Amount:</span>
+                          <span className="text-xl font-bold text-blue-600 dark:text-blue-400">${total.toFixed(2)}</span>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 )}
 
                 {/* Form Actions */}
-                <div className="flex gap-2 pt-4">
+                <div className="flex gap-3 pt-5 border-t border-gray-200 dark:border-slate-700">
                   <button
                     type="submit"
-                    className="flex-1 px-4 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg hover:from-blue-700 hover:to-indigo-700 transition font-medium text-sm"
+                    disabled={formData.selectedServices.length === 0}
+                    className="flex-1 px-4 py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg hover:from-blue-700 hover:to-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed transition font-medium text-sm"
                   >
-                    Create Bill
+                    Generate Bill
                   </button>
                   <button
                     type="button"
                     onClick={resetForm}
-                    className="flex-1 px-4 py-2 border border-gray-200 dark:border-slate-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-slate-700 transition font-medium text-sm"
+                    className="flex-1 px-4 py-2.5 border border-gray-200 dark:border-slate-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-slate-700 transition font-medium text-sm"
                   >
                     Clear
                   </button>
@@ -346,39 +395,52 @@ const Billing = () => {
             </div>
           </motion.div>
 
-          {/* RIGHT SIDE: Thermal Printer Bill Preview */}
+          {/* RIGHT SIDE: Bill Preview (1 Column) */}
           <motion.div
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.2 }}
-            className="lg:col-span-2"
+            className="lg:col-span-1"
           >
             <div className="space-y-4">
-              {/* Preview Controls */}
-              <div className="flex items-center justify-between">
-                <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Bill Preview</h2>
-                {formData.selectedServices.length > 0 && (
-                  <motion.button
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    onClick={handlePrintBill}
-                    className="flex items-center gap-2 px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg transition font-medium text-sm"
-                  >
-                    <Printer size={18} />
-                    Print Bill
-                  </motion.button>
+              <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Bill Preview</h2>
+              
+              {/* Thermal Printer Preview */}
+              <div className="bg-white dark:bg-slate-800 rounded-xl shadow-lg p-6 border border-gray-200 dark:border-slate-700 min-h-96" id="thermal-bill-preview">
+                {formData.selectedServices.length > 0 ? (
+                  <ThermalBillPreview formData={formData} services={services} total={total} />
+                ) : (
+                  <div className="flex items-center justify-center h-full text-center">
+                    <div>
+                      <p className="text-gray-500 dark:text-gray-400 text-lg">No Services Selected</p>
+                      <p className="text-gray-400 dark:text-gray-500 text-sm mt-2">Select services to view bill preview</p>
+                    </div>
+                  </div>
                 )}
               </div>
 
-              {/* Thermal Printer Preview */}
-              <div className="bg-white dark:bg-slate-800 rounded-xl shadow-lg p-8 border border-gray-200 dark:border-slate-700" id="thermal-bill-preview">
-                <ThermalBillPreview formData={formData} services={services} total={total} />
+              {/* Action Buttons */}
+              <div className="flex gap-3">
+                <button
+                  onClick={handlePrintBill}
+                  disabled={formData.selectedServices.length === 0}
+                  className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-green-600 hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed text-white rounded-lg transition font-medium text-sm"
+                >
+                  <Printer size={18} />
+                  Generate Bill
+                </button>
+                <button
+                  onClick={resetForm}
+                  className="flex-1 px-4 py-2.5 border border-gray-200 dark:border-slate-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-slate-700 transition font-medium text-sm"
+                >
+                  Clear
+                </button>
               </div>
             </div>
           </motion.div>
         </div>
 
-        {/* Bills History Section */}
+        {/* BILLS HISTORY SECTION */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -452,7 +514,6 @@ const Billing = () => {
                   <tbody className="divide-y divide-gray-200 dark:divide-slate-700">
                     {filteredBills.map((bill, index) => {
                       const statusColor = getStatusColor(bill.status);
-                      const StatusIcon = statusColor.icon;
                       const paymentStatusColor = getPaymentStatusColor(bill.payment_status);
 
                       return (
@@ -488,9 +549,9 @@ const Billing = () => {
                             </span>
                           </td>
                           <td className="px-6 py-4">
-                            <div className="flex items-center gap-2">
-                              <StatusIcon size={16} className={statusColor.text} />
-                              <span className={`text-xs font-medium uppercase ${statusColor.text}`}>{bill.status}</span>
+                            <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-medium ${statusColor.bg} ${statusColor.text}`}>
+                              <span>{statusColor.icon}</span>
+                              <span className="uppercase">{bill.status}</span>
                             </div>
                           </td>
                           <td className="px-6 py-4">
@@ -513,8 +574,6 @@ const Billing = () => {
           </motion.div>
         </motion.div>
       </div>
-
-      </div>
     </Layout>
   );
 };
@@ -522,13 +581,9 @@ const Billing = () => {
 // Thermal Printer Bill Preview Component
 const ThermalBillPreview = ({ formData, services, total }) => {
   const billDate = new Date();
-  const billNumber = `#${Math.random().toString(36).substr(2, 9).toUpperCase()}`;
+  const billNumber = `${Math.random().toString(36).substr(2, 9).toUpperCase()}`;
   
-  const getSelectedServiceDetails = () => {
-    return services.filter(s => formData.selectedServices.includes(s.id));
-  };
-
-  const selectedServices = getSelectedServiceDetails();
+  const selectedServices = services.filter(s => formData.selectedServices.includes(s.id));
   const remainingAmount = formData.paymentStatus === 'advance' 
     ? (total - (parseFloat(formData.advanceAmount) || 0))
     : 0;
@@ -536,59 +591,59 @@ const ThermalBillPreview = ({ formData, services, total }) => {
   return (
     <div className="font-mono text-xs text-gray-900 dark:text-gray-100 leading-relaxed">
       {/* Header */}
-      <div className="text-center mb-4 pb-4 border-b-2 border-gray-400 print:border-black">
+      <div className="text-center mb-3 pb-3 border-b-2 border-gray-400 dark:border-gray-600">
         <div className="text-sm font-bold">SHINE ART STUDIO</div>
-        <div className="text-xs text-gray-600 dark:text-gray-400">Professional Photography & Videography</div>
-        <div className="text-xs text-gray-600 dark:text-gray-400">Address • Phone • Email</div>
+        <div className="text-xs text-gray-600 dark:text-gray-400">Photography & Videography</div>
+        <div className="text-xs text-gray-600 dark:text-gray-400">Professional Services</div>
       </div>
 
       {/* Receipt Information */}
-      <div className="mb-3 pb-3 border-b border-gray-300 print:border-gray-400 text-xs">
+      <div className="mb-3 pb-3 border-b border-gray-300 dark:border-gray-700 text-xs">
         <div className="flex justify-between">
-          <span>RECEIPT {billNumber}</span>
+          <span>RECEIPT #{billNumber}</span>
           <span>{billDate.toLocaleDateString()}</span>
         </div>
-        <div className="flex justify-between text-gray-600 dark:text-gray-400">
+        <div className="flex justify-between text-gray-600 dark:text-gray-400 text-xs">
           <span>{billDate.toLocaleTimeString()}</span>
         </div>
       </div>
 
       {/* Customer Information */}
       {formData.customerName && (
-        <div className="mb-3 pb-3 border-b border-gray-300 print:border-gray-400 text-xs">
+        <div className="mb-3 pb-3 border-b border-gray-300 dark:border-gray-700 text-xs">
           <div className="font-bold">CUSTOMER</div>
           <div>{formData.customerName}</div>
-          {formData.mobileNumber && <div>Phone: {formData.mobileNumber}</div>}
-          {formData.email && <div>Email: {formData.email}</div>}
+          {formData.mobileNumber && <div>Ph: {formData.mobileNumber}</div>}
+          {formData.email && <div className="text-xs">{formData.email}</div>}
           {formData.address && <div className="text-xs whitespace-pre-wrap">{formData.address}</div>}
         </div>
       )}
 
       {/* Items */}
       {selectedServices.length > 0 && (
-        <div className="mb-3 pb-3 border-b border-gray-300 print:border-gray-400">
+        <div className="mb-3 pb-3 border-b border-gray-300 dark:border-gray-700">
           <div className="flex justify-between font-bold text-xs mb-2">
-            <span>DESCRIPTION</span>
-            <span>AMOUNT</span>
+            <span>SERVICE</span>
+            <span>PRICE</span>
           </div>
           {selectedServices.map((service) => (
             <div key={service.id} className="flex justify-between text-xs mb-1">
-              <span>{service.name}</span>
-              <span>${service.price.toFixed(2)}</span>
+              <span className="flex-1">{service.name}</span>
+              <span className="text-right">${service.price.toFixed(2)}</span>
             </div>
           ))}
         </div>
       )}
 
       {/* Totals */}
-      <div className="mb-3 pb-3 border-b border-gray-300 print:border-gray-400">
+      <div className="mb-3 pb-3 border-b border-gray-300 dark:border-gray-700">
         <div className="flex justify-between text-xs font-bold mb-1">
           <span>SUBTOTAL</span>
           <span>${total.toFixed(2)}</span>
         </div>
         {formData.paymentStatus === 'advance' && (
           <>
-            <div className="flex justify-between text-xs text-gray-600 dark:text-gray-400 mb-1">
+            <div className="flex justify-between text-xs mb-1">
               <span>ADVANCE PAID</span>
               <span>${(parseFloat(formData.advanceAmount) || 0).toFixed(2)}</span>
             </div>
@@ -601,27 +656,27 @@ const ThermalBillPreview = ({ formData, services, total }) => {
       </div>
 
       {/* Payment Status */}
-      <div className="mb-3 pb-3 border-b border-gray-300 print:border-gray-400 text-xs">
-        <div className="flex justify-between">
-          <span>TOTAL AMOUNT</span>
+      <div className="mb-3 pb-3 border-b border-gray-300 dark:border-gray-700 text-xs">
+        <div className="flex justify-between mb-1">
+          <span>TOTAL</span>
           <span className="font-bold text-sm">${total.toFixed(2)}</span>
         </div>
-        <div className="flex justify-between text-gray-600 dark:text-gray-400">
+        <div className="flex justify-between">
           <span>PAYMENT</span>
           <span className="uppercase font-bold">
-            {formData.paymentStatus === 'full' && '✓ PAID'}
-            {formData.paymentStatus === 'advance' && '◐ ADVANCE'}
-            {formData.paymentStatus === 'partial' && '◓ PARTIAL'}
+            {formData.paymentStatus === 'full' && 'PAID ✓'}
+            {formData.paymentStatus === 'advance' && 'ADVANCE'}
           </span>
         </div>
       </div>
 
       {/* Footer */}
-      <div className="text-center text-xs text-gray-600 dark:text-gray-400 mt-4">
+      <div className="text-center text-xs text-gray-600 dark:text-gray-400 pt-2">
         <div className="mb-1">Thank you for your business!</div>
-        <div className="text-xs">Please keep this receipt for your records</div>
-        <div className="mt-2 text-gray-400">---</div>
+        <div className="text-xs">&lt;- - - - - - - -&gt;</div>
       </div>
     </div>
   );
 };
+
+export default Billing;
