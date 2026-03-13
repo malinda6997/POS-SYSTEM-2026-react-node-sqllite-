@@ -62,7 +62,7 @@ const Inventory = () => {
                 <p className="text-slate-600 dark:text-slate-400 text-sm font-medium">Total Frames</p>
                 <p className="text-3xl font-bold text-slate-900 dark:text-white mt-2">{summary?.total_frames}</p>
               </div>
-              <div className="bg-blue-500 p-4 rounded-lg">
+              <div className="bg-gray-700 dark:bg-gray-600 p-4 rounded-lg">
                 <Package className="text-white" size={32} />
               </div>
             </div>
@@ -81,7 +81,7 @@ const Inventory = () => {
                   Rs. {summary?.total_inventory_value?.toFixed(0)}
                 </p>
               </div>
-              <div className="bg-green-500 p-4 rounded-lg">
+              <div className="bg-gray-700 dark:bg-gray-600 p-4 rounded-lg">
                 <Package className="text-white" size={32} />
               </div>
             </div>
@@ -91,14 +91,14 @@ const Inventory = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
-            className="bg-white dark:bg-slate-800 rounded-xl shadow-lg p-6 border-l-4 border-red-500"
+            className="bg-white dark:bg-slate-800 rounded-xl shadow-lg p-6 border-l-4 border-gray-400"
           >
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-slate-600 dark:text-slate-400 text-sm font-medium">Low Stock Items</p>
-                <p className="text-3xl font-bold text-red-600 dark:text-red-400 mt-2">{summary?.low_stock_count}</p>
+                <p className="text-3xl font-bold text-gray-700 dark:text-gray-300 mt-2">{summary?.low_stock_count}</p>
               </div>
-              <div className="bg-red-500 p-4 rounded-lg">
+              <div className="bg-gray-700 dark:bg-gray-600 p-4 rounded-lg">
                 <AlertTriangle className="text-white" size={32} />
               </div>
             </div>
@@ -132,7 +132,7 @@ const Inventory = () => {
                     <td className="px-6 py-4 text-slate-900 dark:text-white">{frame.quantity}</td>
                     <td className="px-6 py-4 text-slate-600 dark:text-slate-400">Rs. {frame.buying_price}</td>
                     <td className="px-6 py-4 text-slate-600 dark:text-slate-400">Rs. {frame.selling_price}</td>
-                    <td className="px-6 py-4 font-semibold text-green-600 dark:text-green-400">
+                    <td className="px-6 py-4 font-semibold text-gray-700 dark:text-gray-300">
                       Rs. {(frame.selling_price - frame.buying_price).toFixed(0)}
                     </td>
                     <td className="px-6 py-4 font-semibold text-slate-900 dark:text-white">

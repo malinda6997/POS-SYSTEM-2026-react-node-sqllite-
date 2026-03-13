@@ -64,10 +64,10 @@ const Invoices = () => {
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           <div>
             <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Invoices</h1>
-            <p className="text-gray-600 dark:text-gray-400 mt-1">View and manage all invoices</p>
+            <p className="text-gray-600 dark:text-gray-400 mt-1">Browse and manage all invoices</p>
           </div>
-          <div className="flex items-center gap-2 px-4 py-2 bg-gray-100 dark:bg-slate-800 rounded-lg text-sm">
-            <FileText size={18} className="text-blue-600" />
+          <div className="flex items-center gap-2 px-4 py-2 bg-gray-100 dark:bg-slate-800 rounded-lg border border-gray-200 dark:border-slate-700 text-sm">
+            <FileText size={18} className="text-gray-700 dark:text-gray-300" />
             <span className="text-gray-900 dark:text-white font-medium">{invoices.length} Total</span>
           </div>
         </div>
@@ -81,72 +81,95 @@ const Invoices = () => {
               placeholder="Search by invoice ID or customer..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 border border-gray-200 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full pl-10 pr-4 py-2 border border-gray-200 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-gray-700"
             />
           </div>
         </div>
 
-        {/* Invoices Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredInvoices.map((invoice, idx) => (
-            <motion.div
-              key={idx}
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: idx * 0.05 }}
-              className="bg-white dark:bg-slate-900 rounded-lg border border-gray-200 dark:border-slate-800 p-6 shadow-sm hover:shadow-md transition"
-            >
-              <div className="flex items-start justify-between mb-4">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-lg bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center">
-                    <FileText size={20} className="text-blue-600" />
-                  </div>
-                  <div>
-                    <p className="text-sm text-gray-500 dark:text-gray-400">Invoice ID</p>
-                    <p className="font-semibold text-gray-900 dark:text-white">#{invoice.id}</p>
-                  </div>
-                </div>
-                <button className="p-2 hover:bg-gray-100 dark:hover:bg-slate-800 rounded-lg transition">
-                  <MoreHorizontal size={18} className="text-gray-500" />
-                </button>
-              </div>
+        {/* Invoices Table */}
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+          className="bg-white dark:bg-slate-800 rounded-lg border border-gray-200 dark:border-slate-700 overflow-hidden"
+        >
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead className="bg-gray-50 dark:bg-slate-900 border-b border-gray-200 dark:border-slate-700">
+                <tr>
+                  <th className="px-6 py-4 text-left font-semibold text-gray-900 dark:text-white">Invoice ID</th>
+                  <th className="px-6 py-4 text-left font-semibold text-gray-900 dark:text-white">Customer</th>
+                  <th className="px-6 py-4 text-left font-semibold text-gray-900 dark:text-white">Amount</th>
+                  <th className="px-6 py-4 text-left font-semibold text-gray-900 dark:text-white">Date</th>
+                  <th className="px-6 py-4 text-left font-semibold text-gray-900 dark:text-white">Status</th>
+                  <th className="px-6 py-4 text-center font-semibold text-gray-900 dark:text-white">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {filteredInvoices.length > 0 ? (
+                  filteredInvoices.map((invoice, idx) => (
+                    <motion.tr
+                      key={idx}
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ delay: idx * 0.05 }}
+                      className="border-b border-gray-200 dark:border-slate-700 hover:bg-gray-50 dark:hover:bg-slate-700/50 transition"
+                    >
+                      <td className="px-6 py-4 font-medium text-gray-900 dark:text-white">#{invoice.id}</td>
+                      <td className="px-6 py-4">
+                        <div>
+                          <p className="font-medium text-gray-900 dark:text-white">{invoice.customer_name}</p>
+                          <p className="text-xs text-gray-500 dark:text-gray-400">{invoice.customer_mobile || 'N/A'}</p>
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 font-semibold text-gray-900 dark:text-white">£{invoice.price?.toFixed(2) || '0.00'}</td>
+                      <td className="px-6 py-4 text-gray-600 dark:text-gray-400">{new Date(invoice.booking_date).toLocaleDateString()}</td>
+                      <td className="px-6 py-4">
+                        <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 border border-gray-200 dark:border-gray-600">
+                          {invoice.status || 'Active'}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4 text-center">
+                        <div className="flex items-center justify-center gap-2">
+                          <button
+                            onClick={() => handleDownloadPDF(invoice.id)}
+                            className="p-2 hover:bg-gray-100 dark:hover:bg-slate-700 rounded-lg transition text-gray-700 dark:text-gray-300"
+                            title="Download"
+                          >
+                            <Download size={16} />
+                          </button>
+                          <button className="p-2 hover:bg-gray-100 dark:hover:bg-slate-700 rounded-lg transition text-gray-700 dark:text-gray-300"
+                            title="View">
+                            <Eye size={16} />
+                          </button>
+                          <button className="p-2 hover:bg-gray-100 dark:hover:bg-slate-700 rounded-lg transition text-gray-700 dark:text-gray-300">
+                            <MoreHorizontal size={16} />
+                          </button>
+                        </div>
+                      </td>
+                    </motion.tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan="6" className="px-6 py-12 text-center">
+                      <FileText size={48} className="mx-auto text-gray-300 dark:text-gray-600 mb-4" />
+                      <p className="text-gray-500 dark:text-gray-400 font-medium">No invoices found</p>
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+        </motion.div>
 
-              <div className="space-y-3 mb-4 pb-4 border-b border-gray-200 dark:border-slate-800">
-                <div>
-                  <p className="text-sm text-gray-500 dark:text-gray-400">Customer</p>
-                  <p className="font-medium text-gray-900 dark:text-white">{invoice.customer_name}</p>
-                </div>
-                <div>
-                  <p className="text-sm text-gray-500 dark:text-gray-400">Amount</p>
-                  <p className="text-2xl font-bold text-blue-600">£{invoice.price?.toFixed(2) || '0.00'}</p>
-                </div>
-                <div>
-                  <p className="text-sm text-gray-500 dark:text-gray-400">Date</p>
-                  <p className="text-sm text-gray-900 dark:text-white">{new Date(invoice.booking_date).toLocaleDateString()}</p>
-                </div>
-              </div>
-
-              <div className="flex gap-2">
-                <button
-                  onClick={() => handleDownloadPDF(invoice.id)}
-                  className="flex-1 flex items-center justify-center gap-2 px-3 py-2 bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-lg hover:bg-blue-200 dark:hover:bg-blue-800/50 transition font-medium text-sm"
-                >
-                  <Download size={16} />
-                  Download
-                </button>
-                <button className="flex-1 flex items-center justify-center gap-2 px-3 py-2 bg-gray-100 dark:bg-slate-800 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-200 dark:hover:bg-slate-700 transition font-medium text-sm">
-                  <Eye size={16} />
-                  View
-                </button>
-              </div>
-            </motion.div>
-          ))}
-        </div>
-
-        {filteredInvoices.length === 0 && (
-          <div className="text-center py-12">
-            <FileText size={48} className="mx-auto text-gray-300 dark:text-gray-600 mb-4" />
-            <p className="text-gray-500 dark:text-gray-400">No invoices found</p>
+        {/* Pagination Info */}
+        {filteredInvoices.length > 0 && (
+          <div className="flex items-center justify-between text-sm text-gray-600 dark:text-gray-400">
+            <span>Showing 1-{filteredInvoices.length} of {filteredInvoices.length} results</span>
+            <div className="flex gap-2">
+              <button className="px-3 py-1 border border-gray-200 dark:border-slate-700 rounded-lg hover:bg-gray-50 dark:hover:bg-slate-700 transition">Previous</button>
+              <button className="px-3 py-1 border border-gray-200 dark:border-slate-700 rounded-lg hover:bg-gray-50 dark:hover:bg-slate-700 transition">Next</button>
+            </div>
           </div>
         )}
       </div>

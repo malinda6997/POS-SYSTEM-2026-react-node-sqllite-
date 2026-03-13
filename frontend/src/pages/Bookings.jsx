@@ -343,7 +343,7 @@ const Bookings = () => {
                 whileTap={{ scale: 0.95 }}
                 type="submit"
                 disabled={loading}
-                className="md:col-span-2 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white font-bold py-3 rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                className="md:col-span-2 bg-gradient-to-r from-gray-700 to-gray-800 hover:from-gray-800 hover:to-gray-900 text-white font-bold py-3 rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed dark:from-gray-600 dark:to-gray-700 dark:hover:from-gray-700 dark:hover:to-gray-800"
               >
                 {loading ? 'Creating...' : 'Create Booking'}
               </motion.button>
@@ -373,11 +373,11 @@ const Bookings = () => {
                       <td className="px-6 py-4 text-slate-600 dark:text-slate-400">{booking.event_date}</td>
                       <td className="px-6 py-4 font-semibold text-slate-900 dark:text-white">Rs. {booking.total_amount}</td>
                       <td className="px-6 py-4">
-                        <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                          booking.status === 'Pending' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200' :
-                          booking.status === 'Confirmed' ? 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200' :
-                          booking.status === 'Completed' ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' :
-                          'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200'
+                        <span className={`px-3 py-1 rounded-full text-xs font-semibold border ${
+                          booking.status === 'Pending' ? 'bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-200 border-gray-200 dark:border-gray-600' :
+                          booking.status === 'Confirmed' ? 'bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-200 border-gray-200 dark:border-gray-600' :
+                          booking.status === 'Completed' ? 'bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-200 border-gray-200 dark:border-gray-600' :
+                          'bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-200 border-gray-200 dark:border-gray-600'
                         }`}>
                           {booking.status}
                         </span>

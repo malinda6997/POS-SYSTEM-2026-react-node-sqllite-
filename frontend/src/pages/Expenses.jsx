@@ -109,7 +109,7 @@ const Expenses = () => {
         <motion.div
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="mb-4 p-3 bg-red-900/20 border border-red-700 rounded-lg flex items-center gap-2 text-red-400"
+          className="mb-4 p-3 bg-gray-100 dark:bg-gray-900/30 border border-gray-200 dark:border-gray-700 rounded-lg flex items-center gap-2 text-gray-700 dark:text-gray-400"
         >
           <AlertCircle size={18} />
           {error}
@@ -121,7 +121,7 @@ const Expenses = () => {
         <h1 className="text-3xl font-bold text-slate-100">Expenses</h1>
         <button
           onClick={() => setShowForm(!showForm)}
-          className="flex items-center gap-2 bg-amber-500 hover:bg-amber-600 text-slate-900 px-4 py-2 rounded-lg font-semibold transition"
+          className="flex items-center gap-2 bg-gray-700 dark:bg-gray-600 hover:bg-gray-800 dark:hover:bg-gray-700 text-white px-4 py-2 rounded-lg font-semibold transition"
         >
           <Plus size={20} /> New Expense
         </button>
@@ -136,29 +136,29 @@ const Expenses = () => {
         >
           <motion.div
             whileHover={{ scale: 1.02 }}
-            className="bg-gradient-to-br from-red-900/30 to-red-900/10 border border-red-700/50 rounded-lg p-4"
+            className="bg-gray-50 dark:bg-gray-900/30 border border-gray-200 dark:border-gray-700 rounded-lg p-4"
           >
-            <div className="text-slate-400 text-sm">Total Expenses</div>
-            <div className="text-2xl font-bold text-red-400 mt-1">Rs. {summary.total_expenses?.toFixed(2) || '0.00'}</div>
-            <div className="text-xs text-slate-500 mt-2">All time</div>
+            <div className="text-gray-600 dark:text-gray-400 text-sm">Total Expenses</div>
+            <div className="text-2xl font-bold text-gray-700 dark:text-gray-300 mt-1">Rs. {summary.total_expenses?.toFixed(2) || '0.00'}</div>
+            <div className="text-xs text-gray-500 dark:text-gray-500 mt-2">All time</div>
           </motion.div>
 
           <motion.div
             whileHover={{ scale: 1.02 }}
-            className="bg-gradient-to-br from-orange-900/30 to-orange-900/10 border border-orange-700/50 rounded-lg p-4"
+            className="bg-gray-50 dark:bg-gray-900/30 border border-gray-200 dark:border-gray-700 rounded-lg p-4"
           >
-            <div className="text-slate-400 text-sm">This Month</div>
-            <div className="text-2xl font-bold text-orange-400 mt-1">Rs. {summary.this_month_expenses?.toFixed(2) || '0.00'}</div>
-            <div className="text-xs text-slate-500 mt-2">Current month</div>
+            <div className="text-gray-600 dark:text-gray-400 text-sm">This Month</div>
+            <div className="text-2xl font-bold text-gray-700 dark:text-gray-300 mt-1">Rs. {summary.this_month_expenses?.toFixed(2) || '0.00'}</div>
+            <div className="text-xs text-gray-500 dark:text-gray-500 mt-2">Current month</div>
           </motion.div>
 
           <motion.div
             whileHover={{ scale: 1.02 }}
-            className="bg-gradient-to-br from-blue-900/30 to-blue-900/10 border border-blue-700/50 rounded-lg p-4"
+            className="bg-gray-50 dark:bg-gray-900/30 border border-gray-200 dark:border-gray-700 rounded-lg p-4"
           >
-            <div className="text-slate-400 text-sm">Date Range Total</div>
-            <div className="text-2xl font-bold text-blue-400 mt-1">Rs. {filteredTotal.toFixed(2)}</div>
-            <div className="text-xs text-slate-500 mt-2">{dateRange.startDate} to {dateRange.endDate}</div>
+            <div className="text-gray-600 dark:text-gray-400 text-sm">Date Range Total</div>
+            <div className="text-2xl font-bold text-gray-700 dark:text-gray-300 mt-1">Rs. {filteredTotal.toFixed(2)}</div>
+            <div className="text-xs text-gray-500 dark:text-gray-500 mt-2">{dateRange.startDate} to {dateRange.endDate}</div>
           </motion.div>
         </motion.div>
       )}
@@ -168,7 +168,7 @@ const Expenses = () => {
         <motion.div
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-slate-800 p-4 rounded-lg mb-6 border border-slate-700"
+          className="bg-gray-100 dark:bg-gray-900/30 p-4 rounded-lg mb-6 border border-gray-200 dark:border-gray-700"
         >
           <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
             <input
@@ -196,13 +196,13 @@ const Expenses = () => {
           <div className="flex gap-2 mt-3">
             <button
               onClick={handleAddExpense}
-              className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-semibold transition"
+              className="bg-gray-700 dark:bg-gray-600 hover:bg-gray-800 dark:hover:bg-gray-700 text-white px-4 py-2 rounded-lg font-semibold transition"
             >
               Save
             </button>
             <button
               onClick={() => setShowForm(false)}
-              className="bg-slate-700 hover:bg-slate-600 text-slate-100 px-4 py-2 rounded-lg transition"
+              className="bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-900 dark:text-white px-4 py-2 rounded-lg transition"
             >
               Cancel
             </button>
@@ -211,28 +211,28 @@ const Expenses = () => {
       )}
 
       {/* Date Range Filter */}
-      <div className="bg-slate-800 p-4 rounded-lg border border-slate-700 mb-6">
+      <div className="bg-white dark:bg-gray-900/30 p-4 rounded-lg border border-gray-200 dark:border-gray-700 mb-6">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
           <div>
-            <label className="block text-sm text-slate-400 mb-2">Start Date</label>
+            <label className="block text-sm text-gray-600 dark:text-gray-400 mb-2">Start Date</label>
             <input
               type="date"
               value={dateRange.startDate}
               onChange={(e) => setDateRange({ ...dateRange, startDate: e.target.value })}
-              className="w-full bg-slate-700 border border-slate-600 rounded-lg px-3 py-2 text-slate-100 focus:outline-none focus:border-amber-500"
+              className="w-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg px-3 py-2 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-gray-700"
             />
           </div>
           <div>
-            <label className="block text-sm text-slate-400 mb-2">End Date</label>
+            <label className="block text-sm text-gray-600 dark:text-gray-400 mb-2">End Date</label>
             <input
               type="date"
               value={dateRange.endDate}
               onChange={(e) => setDateRange({ ...dateRange, endDate: e.target.value })}
-              className="w-full bg-slate-700 border border-slate-600 rounded-lg px-3 py-2 text-slate-100 focus:outline-none focus:border-amber-500"
+              className="w-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg px-3 py-2 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-gray-700"
             />
           </div>
-          <div className="text-sm text-slate-400">
-            {filteredExpenses.length} expenses • Total: <span className="text-red-400 font-semibold">Rs. {filteredTotal.toFixed(2)}</span>
+          <div className="text-sm text-gray-600 dark:text-gray-400">
+            {filteredExpenses.length} expenses • Total: <span className="text-gray-700 dark:text-gray-300 font-semibold">Rs. {filteredTotal.toFixed(2)}</span>
           </div>
         </div>
       </div>
@@ -241,16 +241,16 @@ const Expenses = () => {
       <motion.div
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        className="bg-slate-800 border border-slate-700 rounded-lg overflow-hidden"
+        className="bg-white dark:bg-gray-900/30 border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden"
       >
         <table className="w-full">
           <thead>
-            <tr className="bg-slate-700 border-b border-slate-600">
-              <th className="px-4 py-3 text-left text-slate-300 font-semibold">Expense Name</th>
-              <th className="px-4 py-3 text-left text-slate-300 font-semibold">Price</th>
-              <th className="px-4 py-3 text-left text-slate-300 font-semibold">User</th>
-              <th className="px-4 py-3 text-left text-slate-300 font-semibold">Date</th>
-              <th className="px-4 py-3 text-center text-slate-300 font-semibold">Action</th>
+            <tr className="bg-gray-100 dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
+              <th className="px-4 py-3 text-left text-gray-900 dark:text-white font-semibold">Expense Name</th>
+              <th className="px-4 py-3 text-left text-gray-900 dark:text-white font-semibold">Price</th>
+              <th className="px-4 py-3 text-left text-gray-900 dark:text-white font-semibold">User</th>
+              <th className="px-4 py-3 text-left text-gray-900 dark:text-white font-semibold">Date</th>
+              <th className="px-4 py-3 text-center text-gray-900 dark:text-white font-semibold">Action</th>
             </tr>
           </thead>
           <tbody>
@@ -261,19 +261,19 @@ const Expenses = () => {
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: idx * 0.05 }}
-                  className="border-b border-slate-700 hover:bg-slate-700/50 transition"
+                  className="border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition"
                 >
-                  <td className="px-4 py-3 text-slate-100 font-semibold flex items-center gap-2">
-                    <TrendingDown size={16} className="text-red-400" />
+                  <td className="px-4 py-3 text-gray-900 dark:text-white font-semibold flex items-center gap-2">
+                    <TrendingDown size={16} className="text-gray-600 dark:text-gray-400" />
                     {expense.expense_name}
                   </td>
-                  <td className="px-4 py-3 text-red-400 font-semibold">Rs. {parseFloat(expense.price).toFixed(2)}</td>
-                  <td className="px-4 py-3 text-slate-400">{expense.username || 'N/A'}</td>
-                  <td className="px-4 py-3 text-slate-400">{new Date(expense.expense_date).toLocaleDateString()}</td>
+                  <td className="px-4 py-3 text-gray-700 dark:text-gray-300 font-semibold">Rs. {parseFloat(expense.price).toFixed(2)}</td>
+                  <td className="px-4 py-3 text-gray-600 dark:text-gray-400">{expense.username || 'N/A'}</td>
+                  <td className="px-4 py-3 text-gray-600 dark:text-gray-400">{new Date(expense.expense_date).toLocaleDateString()}</td>
                   <td className="px-4 py-3 text-center">
                     <button
                       onClick={() => handleDeleteExpense(expense.id)}
-                      className="text-red-400 hover:text-red-300 transition p-1"
+                      className="text-gray-600 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 transition p-1"
                     >
                       <Trash2 size={18} />
                     </button>
@@ -282,7 +282,7 @@ const Expenses = () => {
               ))
             ) : (
               <tr>
-                <td colSpan="5" className="px-4 py-8 text-center text-slate-400">
+                <td colSpan="5" className="px-4 py-8 text-center text-gray-600 dark:text-gray-400">
                   No expenses in this date range
                 </td>
               </tr>
