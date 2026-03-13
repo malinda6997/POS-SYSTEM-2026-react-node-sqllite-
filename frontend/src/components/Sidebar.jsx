@@ -1,12 +1,13 @@
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { ChevronRight, BarChart3, ShoppingCart, CreditCard, FileText, Users, Palette, Package, Settings } from 'lucide-react';
+import { ChevronRight, ChevronLeft, BarChart3, ShoppingCart, CreditCard, FileText, Users, Palette, Package, Settings } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useAuth } from '../hooks/useAuth';
 
-const Sidebar = ({ isOpen, onClose }) => {
+const Sidebar = ({ isOpen, onClose, isCollapsed, onToggleCollapse }) => {
   const { userRole } = useAuth();
   const location = useLocation();
+  const [hoveredItem, setHoveredItem] = useState(null);
 
   const getMenuItems = () => {
     const baseItems = [
@@ -56,10 +57,11 @@ const Sidebar = ({ isOpen, onClose }) => {
         />
       )}
 
+      {/* Mobile Sidebar */}
       <motion.aside
         animate={{ x: isOpen ? 0 : -256 }}
         transition={{ duration: 0.3 }}
-        className="fixed md:static left-0 top-0 h-screen w-64 bg-white dark:bg-slate-950 border-r border-gray-200 dark:border-slate-800 z-50 md:z-0 overflow-y-auto shadow-sm"
+        className="fixed md:hidden left-0 top-0 h-screen w-64 bg-white dark:bg-slate-950 border-r border-gray-200 dark:border-slate-800 z-50 overflow-y-auto shadow-sm"
       >
         {/* Logo */}
         <div className="sticky top-0 bg-white dark:bg-slate-950 border-b border-gray-200 dark:border-slate-800 p-6">
@@ -96,7 +98,93 @@ const Sidebar = ({ isOpen, onClose }) => {
             );
           })}
         </nav>
+      </motion.aside>
 
+      {/* Desktop Collapsible Sidebar */}
+      <motion.aside
+        animate={{ width: isCollapsed ? 80 : 256 }}
+        transition={{ duration: 0.3, ease: 'easeInOut' }}
+        className="hidden md:flex flex-col fixed left-0 top-0 h-screen bg-white dark:bg-slate-950 border-r border-gray-200 dark:border-slate-800 z-40 overflow-hidden"
+      >
+        {/* Logo Section */}
+        <motion.div
+          className="sticky top-0 bg-white dark:bg-slate-950 border-b border-gray-200 dark:border-slate-800 p-4 flex items-center justify-between"
+          animate={{ padding: isCollapsed ? 16 : 24 }}
+        >
+          <motion.div
+            className="flex items-center gap-3"
+            animate={{ opacity: isCollapsed ? 0 : 1 }}
+            transition={{ duration: 0.2 }}
+          >
+            <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-gradient-to-br from-blue-600 to-indigo-600">
+              <span className="text-white font-bold text-lg">Z</span>
+            </div>
+            <div>
+              <h1 className="text-lg font-bold text-gray-900 dark:text-white">Zenith</h1>
+              <p className="text-xs text-gray-500 dark:text-gray-400">ERP System</p>
+            </div>
+          </motion.div>
+
+          {/* Collapse Toggle */}
+          <button
+            onClick={onToggleCollapse}
+            className="p-1.5 hover:bg-gray-100 dark:hover:bg-slate-800 rounded-lg transition-colors flex-shrink-0"
+            title={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+          >
+            {isCollapsed ? (
+              <ChevronRight size={20} className="text-gray-600 dark:text-gray-400" />
+            ) : (
+              <ChevronLeft size={20} className="text-gray-600 dark:text-gray-400" />
+            )}
+          </button>
+        </motion.div>
+
+        {/* Navigation */}
+        <nav className="flex-1 p-3 space-y-1 mt-6 overflow-y-auto">
+          {menuItems.map((item) => {
+            const Icon = item.icon;
+            const isActiveItem = isActive(item.to);
+
+            return (
+              <div key={item.to} className="relative group">
+                <Link
+                  to={item.to}
+                  onMouseEnter={() => setHoveredItem(item.to)}
+                  onMouseLeave={() => setHoveredItem(null)}
+                  className={`flex items-center gap-3 px-4 py-2.5 rounded-lg transition-all duration-200 font-medium text-sm relative ${
+                    isActiveItem
+                      ? 'bg-blue-600 text-white shadow-md'
+                      : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-800'
+                  }`}
+                >
+                  <Icon size={18} className="flex-shrink-0" />
+                  <motion.span
+                    animate={{ opacity: isCollapsed ? 0 : 1, width: isCollapsed ? 0 : 'auto' }}
+                    transition={{ duration: 0.2 }}
+                    className="flex-1 whitespace-nowrap"
+                  >
+                    {item.label}
+                  </motion.span>
+                  {isActiveItem && !isCollapsed && <ChevronRight size={16} className="flex-shrink-0" />}
+                </Link>
+
+                {/* Tooltip for Collapsed State */}
+                {isCollapsed && hoveredItem === item.to && (
+                  <motion.div
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{ opacity: 1, x: 5 }}
+                    exit={{ opacity: 0, x: -10 }}
+                    transition={{ duration: 0.15 }}
+                    className="absolute left-full ml-2 bg-gray-900 dark:bg-gray-800 text-white text-xs px-2 py-1.5 rounded-md whitespace-nowrap top-1/2 -translate-y-1/2 pointer-events-none z-50 font-medium"
+                  >
+                    {item.label}
+                    <div className="absolute right-full w-0 h-0 border-t-4 border-b-4 border-r-4 border-t-transparent border-b-transparent border-r-gray-900 dark:border-r-gray-800"></div>
+                  </motion.div>
+                )}
+              </div>
+            );
+          })}
+        </nav>
       </motion.aside>
     </>
   );
