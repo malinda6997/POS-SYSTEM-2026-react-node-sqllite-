@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useCallback, useMemo } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { X, ChevronRight, ChevronLeft, BarChart3, ShoppingCart, CreditCard, FileText, Users, Palette, Package, Settings } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -10,14 +10,15 @@ const Sidebar = ({ isOpen, onClose, isCollapsed, onToggleCollapse }) => {
   const [hoveredItem, setHoveredItem] = useState(null);
 
   // Close sidebar on item click (mobile only)
-  const handleMenuItemClick = (e) => {
+  const handleMenuItemClick = useCallback((e) => {
     if (window.innerWidth < 768) {
       e.stopPropagation();
       setTimeout(() => onClose(), 100);
     }
-  };
+  }, [onClose]);
 
-  const getMenuItems = () => {
+  // Memoize menu items to prevent unnecessary re-renders
+  const menuItems = useMemo(() => {
     const baseItems = [
       { label: 'Dashboard', to: '/dashboard', icon: BarChart3 },
     ];
@@ -48,10 +49,9 @@ const Sidebar = ({ isOpen, onClose, isCollapsed, onToggleCollapse }) => {
     };
 
     return [...baseItems, ...(roleBasedItems[userRole] || [])];
-  };
+  }, [userRole]);
 
-  const menuItems = getMenuItems();
-  const isActive = (to) => location.pathname === to;
+  const isActive = useCallback((to) => location.pathname === to, [location.pathname]);
 
   return (
     <>
