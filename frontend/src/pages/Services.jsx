@@ -136,7 +136,7 @@ const Services = () => {
 
       {/* Header */}
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold text-slate-100">Services & Categories</h1>
+        <h1 className="text-2xl font-bold text-slate-100">Services & Categories</h1>
         <button
           onClick={() => setShowCategoryForm(!showCategoryForm)}
           className="flex items-center gap-2 bg-amber-500 hover:bg-amber-600 text-slate-900 px-4 py-2 rounded-lg font-semibold transition"

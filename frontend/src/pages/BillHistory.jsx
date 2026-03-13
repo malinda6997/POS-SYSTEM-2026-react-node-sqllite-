@@ -61,8 +61,8 @@ const BillHistory = () => {
           className="flex flex-col md:flex-row md:items-center md:justify-between gap-4"
         >
           <div>
-            <h1 className="text-4xl font-bold text-gray-900 dark:text-white">Bill History</h1>
-            <p className="text-gray-600 dark:text-gray-400 mt-1">Search and manage all bills</p>
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Bill History</h1>
+            <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">Search and manage all bills</p>
           </div>
           <div className="text-right">
             <p className="text-gray-600 dark:text-gray-400 text-sm">Total Amount</p>

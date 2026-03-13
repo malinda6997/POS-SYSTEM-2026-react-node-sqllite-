@@ -63,8 +63,8 @@ const Invoices = () => {
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Invoices</h1>
-            <p className="text-gray-600 dark:text-gray-400 mt-1">Browse and manage all invoices</p>
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Invoices</h1>
+            <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">Browse and manage all invoices</p>
           </div>
           <div className="flex items-center gap-2 px-4 py-2 bg-gray-100 dark:bg-slate-800 rounded-lg border border-gray-200 dark:border-slate-700 text-sm">
             <FileText size={18} className="text-gray-700 dark:text-gray-300" />

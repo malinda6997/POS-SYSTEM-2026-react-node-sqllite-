@@ -45,8 +45,8 @@ const Inventory = () => {
       >
         {/* Header */}
         <div>
-          <h1 className="text-4xl font-bold text-slate-900 dark:text-white">Inventory</h1>
-          <p className="text-slate-600 dark:text-slate-400 mt-2">Manage your photo frames and stock levels</p>
+          <h1 className="text-2xl font-bold text-slate-900 dark:text-white">Inventory</h1>
+          <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">Manage your photo frames and stock levels</p>
         </div>
 
         {/* Summary Cards */}

@@ -72,8 +72,8 @@ const Reports = () => {
           className="flex flex-col md:flex-row md:items-center md:justify-between gap-4"
         >
           <div>
-            <h1 className="text-4xl font-bold text-gray-900 dark:text-white">Reports & Analytics</h1>
-            <p className="text-gray-600 dark:text-gray-400 mt-1">Generate comprehensive business reports</p>
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Reports & Analytics</h1>
+            <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">Generate comprehensive business reports</p>
           </div>
           <motion.button
             whileHover={{ scale: 1.05 }}

@@ -23,7 +23,7 @@ const Settings = () => {
   return (
     <Layout>
       <div className="mb-6">
-        <h1 className="text-3xl font-bold text-slate-100 flex items-center gap-2">
+        <h1 className="text-2xl font-bold text-slate-100 flex items-center gap-2">
           <SettingsIcon size={32} />
           Settings
         </h1>

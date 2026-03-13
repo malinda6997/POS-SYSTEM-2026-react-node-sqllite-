@@ -112,20 +112,21 @@ const Sidebar = ({ isOpen, onClose, isCollapsed, onToggleCollapse }) => {
             <nav className="p-4 space-y-1 mt-4">
               {menuItems.map((item) => {
                 const Icon = item.icon;
+                const active = isActive(item.to);
                 return (
                   <Link
                     key={item.to}
                     to={item.to}
                     onClick={handleMenuItemClick}
                     className={`flex items-center gap-3 px-4 py-2.5 rounded-lg transition-all duration-200 font-medium text-sm ${
-                      isActive(item.to)
-                        ? 'bg-blue-600 text-white shadow-md'
+                      active
+                        ? 'bg-slate-700 dark:bg-slate-800 text-white shadow-md'
                         : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-800'
                     }`}
                   >
-                    <Icon size={18} />
+                    <Icon size={18} className={active ? '' : 'text-gray-400'} />
                     <span className="flex-1">{item.label}</span>
-                    {isActive(item.to) && <ChevronRight size={16} />}
+                    {active && <ChevronRight size={16} />}
                   </Link>
                 );
               })}
@@ -192,7 +193,7 @@ const Sidebar = ({ isOpen, onClose, isCollapsed, onToggleCollapse }) => {
                   onMouseLeave={() => setHoveredItem(null)}
                   className={`flex items-center gap-3 px-4 py-2.5 rounded-lg transition-all duration-200 font-medium text-sm relative ${
                     isActiveItem
-                      ? 'bg-blue-600 text-white shadow-md'
+                      ? 'bg-slate-700 dark:bg-slate-800 text-white shadow-md'
                       : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-800'
                   }`}
                 >

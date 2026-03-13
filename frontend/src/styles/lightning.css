@@ -1,0 +1,195 @@
+/* Lightning border animation effect */
+@keyframes lightning-border {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@keyframes glow-pulse {
+  0%, 100% {
+    box-shadow: none;
+  }
+  50% {
+    box-shadow: none;
+  }
+}
+
+.lightning-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.lightning-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.05),
+    transparent
+  );
+  animation: lightning-border 3s ease-in-out infinite;
+  pointer-events: none;
+}
+
+/* Subtle glow on hover */
+.lightning-card:hover {
+  animation: glow-pulse 2s ease-in-out infinite;
+}
+
+/* Gradient border effect */
+.gradient-border {
+  background: linear-gradient(135deg, #1f2937, #1f2937) padding-box,
+    linear-gradient(135deg, #374151, #4b5563) border-box;
+  border: 1px solid transparent;
+}
+
+.dark .gradient-border {
+  background: linear-gradient(135deg, #1f2937, #1f2937) padding-box,
+    linear-gradient(135deg, #4b5563, #6b7280) border-box;
+  border: 1px solid transparent;
+}
+
+/* Force Recharts tooltips to be transparent - AGGRESSIVE */
+.recharts-tooltip-wrapper {
+  background-color: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  outline: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  pointer-events: none !important;
+}
+
+.recharts-default-tooltip {
+  background-color: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  outline: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  display: block !important;
+  visibility: visible !important;
+}
+
+/* Hide the default white background of recharts tooltip */
+.recharts-tooltip {
+  background-color: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  outline: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+/* Ensure no background on tooltip text */
+.recharts-tooltip-label,
+.recharts-tooltip-item {
+  background-color: transparent !important;
+  color: transparent !important;
+  padding: 0 !important;
+  border: none !important;
+  margin: 0 !important;
+  display: none !important;
+}
+
+/* Target the actual tooltip container that recharts renders */
+.recharts-tooltip > div {
+  background-color: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* Remove any div inside tooltip wrapper */
+.recharts-tooltip-wrapper > div {
+  background-color: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+/* Universal recharts fix */
+div[class*="recharts-tooltip"] {
+  background-color: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  display: block !important;
+}
+
+/* Chart interactions and animations */
+.recharts-surface {
+  transition: all 0.3s ease;
+}
+
+/* Recharts area hover effect */
+.recharts-area {
+  transition: opacity 0.3s ease;
+}
+
+.recharts-area:hover {
+  opacity: 0.8;
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1));
+}
+
+/* Recharts bar hover effect */
+.recharts-bar {
+  transition: all 0.3s ease;
+}
+
+.recharts-bar:hover {
+  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.2));
+}
+
+/* Recharts line hover effect */
+.recharts-line {
+  transition: all 0.3s ease;
+}
+
+.recharts-line:hover {
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.15));
+  stroke-width: 3 !important;
+}
+
+/* Recharts dot hover effect */
+.recharts-dot {
+  transition: all 0.3s ease;
+}
+
+.recharts-dot:hover {
+  r: 6 !important;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+}
+
+/* Pie chart slice hover */
+.recharts-pie-sector {
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.recharts-pie-sector:hover {
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2)) brightness(1.1);
+  transform-origin: center;
+}
+
+/* Smooth cursor change on chart hover */
+.recharts-surface {
+  cursor: pointer;
+}
+
+/* Card shadow on hover */
+.lightning-card {
+  transition: box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
