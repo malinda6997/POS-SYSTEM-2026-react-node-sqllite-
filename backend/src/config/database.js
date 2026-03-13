@@ -16,7 +16,15 @@ const initDatabase = () => {
             password TEXT NOT NULL,
             role TEXT NOT NULL CHECK(role IN ('Administrator', 'admin', 'staff')),
             full_name TEXT NOT NULL,
+            is_active INTEGER DEFAULT 1,
             created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+        );
+
+        CREATE TABLE IF NOT EXISTS role_features (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            role TEXT UNIQUE NOT NULL CHECK(role IN ('Administrator', 'admin', 'staff')),
+            features TEXT NOT NULL,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
         );
 
         CREATE TABLE IF NOT EXISTS service_categories (

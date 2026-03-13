@@ -21,6 +21,8 @@ app.use("/api/services", require("./routes/serviceRoutes"));
 app.use("/api/frames", require("./routes/frameRoutes"));
 app.use("/api/expenses", require("./routes/expenseRoutes"));
 app.use("/api/dashboard", require("./routes/dashboardRoutes"));
+app.use("/api/users", require("./routes/userRoutes"));
+app.use("/api/role-features", require("./routes/roleFeatureRoutes"));
 
 // ===== HEALTH CHECK =====
 app.get("/api/health", (req, res) => {

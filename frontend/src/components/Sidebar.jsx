@@ -1,6 +1,6 @@
 import { useState, useCallback, useMemo } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { X, ChevronRight, ChevronLeft, BarChart3, ShoppingCart, CreditCard, FileText, Users, Palette, Package, Settings, History, TrendingUp, HelpCircle } from 'lucide-react';
+import { X, ChevronRight, ChevronLeft, BarChart3, ShoppingCart, CreditCard, FileText, Users, Palette, Package, Settings, History, TrendingUp, HelpCircle, Calendar, Lock } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '../hooks/useAuth';
 
@@ -26,7 +26,8 @@ const Sidebar = ({ isOpen, onClose, isCollapsed, onToggleCollapse }) => {
 
     const roleBasedItems = {
       Administrator: [
-        { label: 'Orders', to: '/bookings', icon: ShoppingCart },
+        { label: 'Bookings', to: '/bookings', icon: ShoppingCart },
+        { label: 'Calendar', to: '/calendar', icon: Calendar },
         { label: 'Invoices', to: '/invoices', icon: FileText },
         { label: 'Bill History', to: '/bill-history', icon: History },
         { label: 'Customers', to: '/customers', icon: Users },
@@ -35,11 +36,13 @@ const Sidebar = ({ isOpen, onClose, isCollapsed, onToggleCollapse }) => {
         { label: 'Expenses', to: '/expenses', icon: CreditCard },
         { label: 'Reports', to: '/reports', icon: TrendingUp },
         { label: 'Users', to: '/users', icon: Users },
+        { label: 'Role Features', to: '/role-features', icon: Lock },
         { label: 'Help', to: '/help', icon: HelpCircle },
         { label: 'Settings', to: '/settings', icon: Settings },
       ],
       admin: [
-        { label: 'Orders', to: '/bookings', icon: ShoppingCart },
+        { label: 'Bookings', to: '/bookings', icon: ShoppingCart },
+        { label: 'Calendar', to: '/calendar', icon: Calendar },
         { label: 'Invoices', to: '/invoices', icon: FileText },
         { label: 'Bill History', to: '/bill-history', icon: History },
         { label: 'Customers', to: '/customers', icon: Users },
@@ -49,7 +52,8 @@ const Sidebar = ({ isOpen, onClose, isCollapsed, onToggleCollapse }) => {
         { label: 'Reports', to: '/reports', icon: TrendingUp },
       ],
       staff: [
-        { label: 'Orders', to: '/bookings', icon: ShoppingCart },
+        { label: 'Bookings', to: '/bookings', icon: ShoppingCart },
+        { label: 'Calendar', to: '/calendar', icon: Calendar },
         { label: 'Invoices', to: '/invoices', icon: FileText },
         { label: 'Bill History', to: '/bill-history', icon: History },
         { label: 'Services', to: '/services', icon: Palette },
@@ -92,7 +96,7 @@ const Sidebar = ({ isOpen, onClose, isCollapsed, onToggleCollapse }) => {
             {/* Logo with Close Button */}
             <div className="sticky top-0 bg-white dark:bg-slate-950 border-b border-gray-200 dark:border-slate-800 p-4 flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-gradient-to-br from-blue-600 to-indigo-600">
+                <div className=\"flex items-center justify-center w-10 h-10 rounded-lg bg-gradient-to-br from-gray-600 to-gray-700\">
                   <span className="text-white font-bold text-lg">Z</span>
                 </div>
                 <div>
@@ -150,7 +154,7 @@ const Sidebar = ({ isOpen, onClose, isCollapsed, onToggleCollapse }) => {
             transition={{ duration: 0.2 }}
             style={{ pointerEvents: isCollapsed ? 'none' : 'auto' }}
           >
-            <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-gradient-to-br from-blue-600 to-indigo-600 flex-shrink-0">
+            <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-gradient-to-br from-gray-600 to-gray-700 flex-shrink-0">
               <span className="text-white font-bold text-lg">Z</span>
             </div>
             <div className="min-w-0">
@@ -167,14 +171,14 @@ const Sidebar = ({ isOpen, onClose, isCollapsed, onToggleCollapse }) => {
               onToggleCollapse();
             }}
             onMouseDown={(e) => e.preventDefault()}
-            className="p-2 hover:bg-blue-100 dark:hover:bg-slate-800 rounded-lg transition-all duration-200 flex-shrink-0 ml-auto cursor-pointer active:scale-95 relative z-20 pointer-events-auto"
+            className="p-2 hover:bg-gray-100 dark:hover:bg-slate-800 rounded-lg transition-all duration-200 flex-shrink-0 ml-auto cursor-pointer active:scale-95 relative z-20 pointer-events-auto"
             title={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
             type="button"
           >
             {isCollapsed ? (
-              <ChevronRight size={20} className="text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400" />
+              <ChevronRight size={20} className="text-gray-600 dark:text-gray-400 hover:text-gray-600 dark:hover:text-gray-400" />
             ) : (
-              <ChevronLeft size={20} className="text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400" />
+              <ChevronLeft size={20} className="text-gray-600 dark:text-gray-400 hover:text-gray-600 dark:hover:text-gray-400" />
             )}
           </button>
         </div>

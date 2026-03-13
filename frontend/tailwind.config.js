@@ -15,7 +15,7 @@ export default {
         light: {
           bg: '#f8fafc',
           card: '#ffffff',
-          accent: '#2563eb',
+          accent: '#6b7280',
         },
       },
       backdropBlur: {

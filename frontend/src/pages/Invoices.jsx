@@ -95,14 +95,14 @@ const Invoices = () => {
         >
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
-              <thead className="bg-gray-50 dark:bg-slate-900 border-b border-gray-200 dark:border-slate-700">
+              <thead className="border-b border-gray-200 dark:border-gray-700">
                 <tr>
-                  <th className="px-6 py-4 text-left font-semibold text-gray-900 dark:text-white">Invoice ID</th>
-                  <th className="px-6 py-4 text-left font-semibold text-gray-900 dark:text-white">Customer</th>
-                  <th className="px-6 py-4 text-left font-semibold text-gray-900 dark:text-white">Amount</th>
-                  <th className="px-6 py-4 text-left font-semibold text-gray-900 dark:text-white">Date</th>
-                  <th className="px-6 py-4 text-left font-semibold text-gray-900 dark:text-white">Status</th>
-                  <th className="px-6 py-4 text-center font-semibold text-gray-900 dark:text-white">Actions</th>
+                  <th className="px-6 py-4 text-left font-bold text-gray-900 dark:text-white">Invoice ID</th>
+                  <th className="px-6 py-4 text-left font-bold text-gray-900 dark:text-white">Customer</th>
+                  <th className="px-6 py-4 text-left font-bold text-gray-900 dark:text-white">Amount</th>
+                  <th className="px-6 py-4 text-left font-bold text-gray-900 dark:text-white">Date</th>
+                  <th className="px-6 py-4 text-left font-bold text-gray-900 dark:text-white">Status</th>
+                  <th className="px-6 py-4 text-center font-bold text-gray-900 dark:text-white">Actions</th>
                 </tr>
               </thead>
               <tbody>

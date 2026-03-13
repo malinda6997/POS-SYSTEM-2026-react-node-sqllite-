@@ -88,7 +88,7 @@ const Bookings = () => {
   const getStatusColor = (status) => {
     switch(status) {
       case 'Completed': return 'bg-green-500 text-white border-green-600';
-      case 'Processing': return 'bg-blue-500 text-white border-blue-600';
+      case 'Processing': return 'bg-gray-500 text-white border-gray-600';
       case 'Pending': return 'bg-amber-400 text-gray-900 border-amber-500';
       case 'Cancelled': return 'bg-red-500 text-white border-red-600';
       default: return 'bg-gray-500 text-white border-gray-600';
@@ -231,7 +231,7 @@ const Bookings = () => {
                   value={formData.customer_id}
                   onChange={handleInputChange}
                   disabled={loading}
-                  className="w-full px-4 py-3 rounded-lg bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 text-slate-900 dark:text-white focus:outline-none focus:border-blue-500 transition-all disabled:opacity-50"
+                  className="w-full col-span-2 px-4 py-3 rounded-lg bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 text-slate-900 dark:text-white focus:outline-none focus:border-gray-500 transition-all disabled:opacity-50"
                 >
                   <option value="">-- Choose Customer --</option>
                   {customers.map(customer => (
@@ -346,7 +346,7 @@ const Bookings = () => {
                 whileTap={{ scale: 0.95 }}
                 type="submit"
                 disabled={loading}
-                className="md:col-span-2 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-bold py-3 rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                className="md:col-span-2 bg-gradient-to-r from-gray-600 to-gray-700 hover:from-gray-700 hover:to-gray-800 text-white font-bold py-3 rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {loading ? 'Creating...' : 'Create Order'}
               </motion.button>
@@ -365,7 +365,7 @@ const Bookings = () => {
                 whileTap={{ scale: 0.95 }}
                 className={`px-4 py-2 rounded-lg font-medium text-sm transition-all whitespace-nowrap ${
                   activeTab === tab
-                    ? 'bg-blue-600 text-white shadow-md'
+                    ? 'bg-gray-600 text-white shadow-md'
                     : 'bg-gray-100 dark:bg-slate-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-slate-700'
                 }`}
               >
@@ -382,64 +382,64 @@ const Bookings = () => {
               placeholder="Search orders..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-12 pr-4 py-3 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-800 text-gray-900 dark:text-white placeholder-gray-500 focus:outline-none focus:border-blue-500 transition-all"
+              className="w-full pl-12 pr-4 py-3 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-800 text-gray-900 dark:text-white placeholder-gray-500 focus:outline-none focus:border-gray-500 transition-all"
             />
           </div>
         </div>
 
-        {/* Table */}
+        {/* Table View */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3 }}
           className="border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden shadow-sm"
         >
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="border-b border-gray-200 dark:border-gray-700">
-                  <th className="px-6 py-4 text-left font-bold text-gray-900 dark:text-white">Order</th>
-                  <th className="px-6 py-4 text-left font-bold text-gray-900 dark:text-white">Customer</th>
-                  <th className="px-6 py-4 text-left font-bold text-gray-900 dark:text-white">Date</th>
-                  <th className="px-6 py-4 text-left font-bold text-gray-900 dark:text-white">Status</th>
-                  <th className="px-6 py-4 text-left font-bold text-gray-900 dark:text-white">Trend</th>
-                  <th className="px-6 py-4 text-right font-bold text-gray-900 dark:text-white">Amount</th>
-                </tr>
-              </thead>
-              <tbody>
-                {filteredBookings.length ? (
-                  filteredBookings.map((booking, idx) => (
-                    <motion.tr
-                      key={booking.id}
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      transition={{ delay: idx * 0.05 }}
-                      className="border-t border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-slate-900/50 transition-colors"
-                    >
-                      <td className="px-6 py-4 font-bold text-gray-900 dark:text-white">ORD-{booking.id?.toString().padStart(4, '0')}</td>
-                      <td className="px-6 py-4">
-                        <div>
-                          <p className="font-semibold text-gray-900 dark:text-white">{booking.customer_name}</p>
-                          <p className="text-xs text-gray-500 dark:text-gray-400">{booking.customer_mobile}</p>
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 text-gray-600 dark:text-gray-300">{booking.event_date}</td>
-                      <td className="px-6 py-4">
-                        <span className={`px-3 py-1.5 rounded-full text-xs font-bold border ${getStatusColor(booking.status)}`}>
-                          {booking.status}
-                        </span>
-                      </td>
-                      <td className="px-6 py-4">
-                        <ResponsiveContainer width={80} height={35}>
-                          <LineChart data={getTrendData(booking.id)}>
-                            <Line
-                              type="monotone"
-                              dataKey="value"
-                              stroke={statusColors[booking.status] || '#6b7280'}
-                              strokeWidth={2}
-                              dot={false}
-                              isAnimationActive={false}
-                            />
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="border-b border-gray-200 dark:border-gray-700">
+                    <th className="px-6 py-4 text-left font-bold text-gray-900 dark:text-white">Order</th>
+                    <th className="px-6 py-4 text-left font-bold text-gray-900 dark:text-white">Customer</th>
+                    <th className="px-6 py-4 text-left font-bold text-gray-900 dark:text-white">Date</th>
+                    <th className="px-6 py-4 text-left font-bold text-gray-900 dark:text-white">Status</th>
+                    <th className="px-6 py-4 text-left font-bold text-gray-900 dark:text-white">Trend</th>
+                    <th className="px-6 py-4 text-right font-bold text-gray-900 dark:text-white">Amount</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {filteredBookings.length ? (
+                    filteredBookings.map((booking, idx) => (
+                      <motion.tr
+                        key={booking.id}
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ delay: idx * 0.05 }}
+                        className="border-t border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-slate-900/50 transition-colors"
+                      >
+                        <td className="px-6 py-4 font-bold text-gray-900 dark:text-white">ORD-{booking.id?.toString().padStart(4, '0')}</td>
+                        <td className="px-6 py-4">
+                          <div>
+                            <p className="font-semibold text-gray-900 dark:text-white">{booking.customer_name}</p>
+                            <p className="text-xs text-gray-500 dark:text-gray-400">{booking.customer_mobile}</p>
+                          </div>
+                        </td>
+                        <td className="px-6 py-4 text-gray-600 dark:text-gray-300">{booking.event_date}</td>
+                        <td className="px-6 py-4">
+                          <span className={`px-3 py-1.5 rounded-full text-xs font-bold border ${getStatusColor(booking.status)}`}>
+                            {booking.status}
+                          </span>
+                        </td>
+                        <td className="px-6 py-4">
+                          <ResponsiveContainer width={80} height={35}>
+                            <LineChart data={getTrendData(booking.id)}>
+                              <Line
+                                type="monotone"
+                                dataKey="value"
+                                stroke={statusColors[booking.status] || '#6b7280'}
+                                strokeWidth={2}
+                                dot={false}
+                                isAnimationActive={false}
+                              />
                           </LineChart>
                         </ResponsiveContainer>
                       </td>

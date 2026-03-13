@@ -5,11 +5,13 @@ import { useAuth } from './hooks/useAuth';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import Bookings from './pages/Bookings';
+import CalendarPage from './pages/Calendar';
 import Customers from './pages/Customers';
 import Inventory from './pages/Inventory';
 import Services from './pages/Services';
 import Expenses from './pages/Expenses';
 import Users from './pages/Users';
+import RoleFeatures from './pages/RoleFeatures';
 import Settings from './pages/Settings';
 import Billing from './pages/Billing';
 import Invoices from './pages/Invoices';
@@ -41,6 +43,14 @@ const App = () => {
           element={
             <ProtectedRoute>
               <Bookings />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/calendar"
+          element={
+            <ProtectedRoute>
+              <CalendarPage />
             </ProtectedRoute>
           }
         />
@@ -81,6 +91,14 @@ const App = () => {
           element={
             <ProtectedRoute>
               <Users />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/role-features"
+          element={
+            <ProtectedRoute>
+              <RoleFeatures />
             </ProtectedRoute>
           }
         />

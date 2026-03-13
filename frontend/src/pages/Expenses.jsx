@@ -244,13 +244,13 @@ const Expenses = () => {
         className="bg-white dark:bg-gray-900/30 border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden"
       >
         <table className="w-full">
-          <thead>
-            <tr className="bg-gray-100 dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
-              <th className="px-4 py-3 text-left text-gray-900 dark:text-white font-semibold">Expense Name</th>
-              <th className="px-4 py-3 text-left text-gray-900 dark:text-white font-semibold">Price</th>
-              <th className="px-4 py-3 text-left text-gray-900 dark:text-white font-semibold">User</th>
-              <th className="px-4 py-3 text-left text-gray-900 dark:text-white font-semibold">Date</th>
-              <th className="px-4 py-3 text-center text-gray-900 dark:text-white font-semibold">Action</th>
+          <thead className="border-b border-gray-200 dark:border-gray-700">
+            <tr>
+              <th className="px-4 py-3 text-left font-bold text-gray-900 dark:text-white">Expense Name</th>
+              <th className="px-4 py-3 text-left font-bold text-gray-900 dark:text-white">Price</th>
+              <th className="px-4 py-3 text-left font-bold text-gray-900 dark:text-white">User</th>
+              <th className="px-4 py-3 text-left font-bold text-gray-900 dark:text-white">Date</th>
+              <th className="px-4 py-3 text-center font-bold text-gray-900 dark:text-white">Action</th>
             </tr>
           </thead>
           <tbody>

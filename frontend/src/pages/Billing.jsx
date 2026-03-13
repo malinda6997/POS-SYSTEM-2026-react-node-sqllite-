@@ -502,14 +502,14 @@ const Billing = () => {
             ) : (
               <div className="overflow-x-auto">
                 <table className="w-full">
-                  <thead className="bg-gray-50 dark:bg-slate-700 border-b border-gray-200 dark:border-slate-600">
+                  <thead className="border-b border-gray-200 dark:border-gray-700">
                     <tr>
-                      <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">Customer</th>
-                      <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">Contact</th>
-                      <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">Amount</th>
-                      <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">Payment</th>
-                      <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">Status</th>
-                      <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">Actions</th>
+                      <th className="px-6 py-3 text-left font-bold text-gray-900 dark:text-white">Customer</th>
+                      <th className="px-6 py-3 text-left font-bold text-gray-900 dark:text-white">Contact</th>
+                      <th className="px-6 py-3 text-left font-bold text-gray-900 dark:text-white">Amount</th>
+                      <th className="px-6 py-3 text-left font-bold text-gray-900 dark:text-white">Payment</th>
+                      <th className="px-6 py-3 text-left font-bold text-gray-900 dark:text-white">Status</th>
+                      <th className="px-6 py-3 text-left font-bold text-gray-900 dark:text-white">Actions</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-200 dark:divide-slate-700">

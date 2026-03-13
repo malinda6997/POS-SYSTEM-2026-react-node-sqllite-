@@ -32,7 +32,7 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center p-4">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -42,12 +42,12 @@ const Login = () => {
         {/* Card */}
         <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
           {/* Header */}
-          <div className="bg-gradient-to-r from-blue-600 to-indigo-600 px-8 py-12 text-center">
+          <div className="bg-gradient-to-r from-gray-600 to-gray-700 px-8 py-12 text-center">
             <div className="inline-flex items-center justify-center w-16 h-16 bg-white/20 rounded-full mb-4">
               <span className="text-3xl font-bold text-white">SA</span>
             </div>
             <h1 className="text-3xl font-bold text-white">Shine Art</h1>
-            <p className="text-blue-100 mt-2">Photography Studio POS</p>
+            <p className="text-gray-200 mt-2">Photography Studio POS</p>
           </div>
 
           {/* Form Container */}
@@ -107,7 +107,7 @@ const Login = () => {
                 whileTap={{ scale: 0.98 }}
                 type="submit"
                 disabled={loading}
-                className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold py-3 rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full bg-gradient-to-r from-gray-600 to-gray-700 hover:from-gray-700 hover:to-gray-800 text-white font-bold py-3 rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {loading ? 'Logging in...' : 'Login'}
               </motion.button>
@@ -116,14 +116,14 @@ const Login = () => {
             {/* Demo Info */}
             <div className="mt-8 pt-8 border-t border-gray-200">
               <p className="text-gray-700 text-sm font-semibold mb-3">Demo Credentials:</p>
-              <div className="space-y-2 bg-blue-50 p-4 rounded-lg">
+              <div className="space-y-2 bg-gray-50 p-4 rounded-lg">
                 <div className="flex justify-between text-sm">
                   <span className="text-gray-600">Username:</span>
-                  <code className="font-mono text-blue-600 font-semibold">admin</code>
+                  <code className="font-mono text-gray-600 font-semibold">admin</code>
                 </div>
                 <div className="flex justify-between text-sm">
                   <span className="text-gray-600">Password:</span>
-                  <code className="font-mono text-blue-600 font-semibold">admin123</code>
+                  <code className="font-mono text-gray-600 font-semibold">admin123</code>
                 </div>
               </div>
             </div>

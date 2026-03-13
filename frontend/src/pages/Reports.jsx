@@ -53,7 +53,7 @@ const Reports = () => {
   };
 
   const reportTypes = [
-    { id: 'financial', name: 'Financial Report', icon: DollarSign, color: 'from-blue-600 to-indigo-600' },
+    { id: 'financial', name: 'Financial Report', icon: DollarSign, color: 'from-gray-600 to-gray-700' },
     { id: 'executive', name: 'Executive Report', icon: TrendingUp, color: 'from-purple-600 to-pink-600' },
     { id: 'staff', name: 'Staff Report', icon: Users, color: 'from-green-600 to-emerald-600' },
     { id: 'expense', name: 'Expense Report', icon: BarChart3, color: 'from-red-600 to-orange-600' },
@@ -79,7 +79,7 @@ const Reports = () => {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={generateReport}
-            className="flex items-center gap-2 px-6 py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg hover:from-blue-700 hover:to-indigo-700 transition font-medium shadow-lg"
+            className="flex items-center gap-2 px-6 py-2.5 bg-gradient-to-r from-gray-600 to-gray-700 text-white rounded-lg hover:from-gray-700 hover:to-gray-800 transition font-medium shadow-lg"
           >
             <Download size={20} />
             Export PDF
@@ -102,7 +102,7 @@ const Reports = () => {
                 onClick={() => setReportType(report.id)}
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
-                className={`p-4 rounded-xl transition ${ isSelected ? `bg-gradient-to-br ${report.color} text-white shadow-lg` : 'bg-white dark:bg-slate-800 text-gray-900 dark:text-white border border-gray-200 dark:border-slate-700 hover:border-blue-500 dark:hover:border-blue-400'}`}
+                className={`p-4 rounded-xl transition ${ isSelected ? `bg-gradient-to-br ${report.color} text-white shadow-lg` : 'bg-white dark:bg-slate-800 text-gray-900 dark:text-white border border-gray-200 dark:border-slate-700 hover:border-gray-500 dark:hover:border-gray-400'}`}
               >
                 <Icon size={24} className="mx-auto mb-2" />
                 <p className="font-semibold text-sm">{report.name}</p>
@@ -124,7 +124,7 @@ const Reports = () => {
               type="date"
               value={dateFrom}
               onChange={(e) => setDateFrom(e.target.value)}
-              className="w-full px-4 py-2.5 border border-gray-200 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
+              className="w-full px-4 py-2.5 border border-gray-200 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-gray-500 transition"
             />
           </div>
           <div className="flex-1">
@@ -133,13 +133,13 @@ const Reports = () => {
               type="date"
               value={dateTo}
               onChange={(e) => setDateTo(e.target.value)}
-              className="w-full px-4 py-2.5 border border-gray-200 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
+              className="w-full px-4 py-2.5 border border-gray-200 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-gray-500 transition"
             />
           </div>
           <div className="flex items-end">
             <button
               onClick={fetchReportData}
-              className="px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition font-medium"
+              className="px-6 py-2.5 bg-gray-600 hover:bg-gray-700 text-white rounded-lg transition font-medium"
             >
               Refresh
             </button>
@@ -161,8 +161,8 @@ const Reports = () => {
                 <p className="text-3xl font-bold text-gray-900 dark:text-white mt-2">{statsData.totalBills || 0}</p>
                 <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">{formatLKR(statsData.billAmount || 0)}</p>
               </div>
-              <div className="p-3 bg-blue-100 dark:bg-blue-900/20 rounded-lg">
-                <BarChart3 size={24} className="text-blue-600 dark:text-blue-400" />
+              <div className="p-3 bg-gray-100 dark:bg-gray-900/20 rounded-lg">
+                <BarChart3 size={24} className="text-gray-600 dark:text-gray-400" />
               </div>
             </div>
           </div>
@@ -217,21 +217,21 @@ const Reports = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
-          className="bg-gradient-to-r from-indigo-600 to-blue-600 rounded-xl p-8 shadow-lg text-white"
+          className="bg-gradient-to-r from-gray-600 to-gray-700 rounded-xl p-8 shadow-lg text-white"
         >
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div>
-              <p className="text-indigo-100 text-sm font-medium">Total Revenue</p>
+              <p className="text-gray-200 text-sm font-medium">Total Revenue</p>
               <p className="text-4xl font-bold mt-2">
                 {formatLKR((statsData.billAmount || 0) + (statsData.invoiceAmount || 0))}
               </p>
             </div>
             <div>
-              <p className="text-indigo-100 text-sm font-medium">Total Expenses</p>
+              <p className="text-gray-200 text-sm font-medium">Total Expenses</p>
               <p className="text-4xl font-bold mt-2">{formatLKR(statsData.totalExpenses || 0)}</p>
             </div>
             <div>
-              <p className="text-indigo-100 text-sm font-medium">Net Profit/Loss</p>
+              <p className="text-gray-200 text-sm font-medium">Net Profit/Loss</p>
               <p className={`text-4xl font-bold mt-2 ${
                 ((statsData.billAmount || 0) + (statsData.invoiceAmount || 0) - (statsData.totalExpenses || 0)) >= 0
                   ? 'text-green-300'
@@ -251,7 +251,7 @@ const Reports = () => {
           className="border border-gray-200 dark:border-gray-700 rounded-xl p-8"
         >
           <div className="flex items-center gap-3 mb-6">
-            {SelectedIcon && <SelectedIcon size={28} className="text-blue-600 dark:text-blue-400" />}
+            {SelectedIcon && <SelectedIcon size={28} className="text-gray-600 dark:text-gray-400" />}
             <h2 className="text-2xl font-bold text-gray-900 dark:text-white">{selectedReport?.name}</h2>
           </div>
 
@@ -261,7 +261,7 @@ const Reports = () => {
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="border-l-4 border-blue-500 pl-4">
+              <div className="border-l-4 border-gray-500 pl-4">
                 <p className="text-gray-600 dark:text-gray-400 text-sm">Transactions</p>
                 <p className="text-2xl font-bold text-gray-900 dark:text-white mt-1">
                   {statsData.totalBills + statsData.totalInvoices}

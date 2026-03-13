@@ -114,15 +114,15 @@ const Inventory = () => {
         >
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
-              <thead className="bg-slate-100 dark:bg-slate-700">
+              <thead className="border-b border-gray-200 dark:border-gray-700">
                 <tr>
-                  <th className="px-6 py-3 text-left font-semibold text-slate-900 dark:text-white">Frame Name</th>
-                  <th className="px-6 py-3 text-left font-semibold text-slate-900 dark:text-white">Quantity</th>
-                  <th className="px-6 py-3 text-left font-semibold text-slate-900 dark:text-white">Buying Price</th>
-                  <th className="px-6 py-3 text-left font-semibold text-slate-900 dark:text-white">Selling Price</th>
-                  <th className="px-6 py-3 text-left font-semibold text-slate-900 dark:text-white">Profit/Unit</th>
-                  <th className="px-6 py-3 text-left font-semibold text-slate-900 dark:text-white">Stock Value</th>
-                  <th className="px-6 py-3 text-left font-semibold text-slate-900 dark:text-white">Status</th>
+                  <th className="px-6 py-3 text-left font-bold text-gray-900 dark:text-white">Frame Name</th>
+                  <th className="px-6 py-3 text-left font-bold text-gray-900 dark:text-white">Quantity</th>
+                  <th className="px-6 py-3 text-left font-bold text-gray-900 dark:text-white">Buying Price</th>
+                  <th className="px-6 py-3 text-left font-bold text-gray-900 dark:text-white">Selling Price</th>
+                  <th className="px-6 py-3 text-left font-bold text-gray-900 dark:text-white">Profit/Unit</th>
+                  <th className="px-6 py-3 text-left font-bold text-gray-900 dark:text-white">Stock Value</th>
+                  <th className="px-6 py-3 text-left font-bold text-gray-900 dark:text-white">Status</th>
                 </tr>
               </thead>
               <tbody>

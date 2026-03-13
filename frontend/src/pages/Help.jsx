@@ -271,15 +271,15 @@ const Help = () => {
                 className="border border-gray-200 dark:border-gray-700 rounded-xl p-8 text-center"
               >
                 <div className="flex justify-center mb-4">
-                  <div className="p-4 bg-blue-100 dark:bg-blue-900/20 rounded-full">
-                    <Mail size={32} className="text-blue-600 dark:text-blue-400" />
+                  <div className="p-4 bg-gray-100 dark:bg-gray-900/20 rounded-full">
+                    <Mail size={32} className="text-gray-600 dark:text-gray-400" />
                   </div>
                 </div>
                 <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">Email Support</h3>
                 <p className="text-gray-600 dark:text-gray-400 mb-4">Get help via email</p>
                 <a
                   href="mailto:malindaprabath876@gmail.com"
-                  className="inline-block px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition"
+                  className="inline-block px-6 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-lg font-medium transition"
                 >
                   malindaprabath876@gmail.com
                 </a>
@@ -346,10 +346,10 @@ const Help = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.35 }}
-              className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-900 rounded-xl p-6"
+              className="bg-gray-50 dark:bg-gray-900/20 border border-gray-200 dark:border-gray-900 rounded-xl p-6"
             >
-              <h3 className="text-lg font-bold text-blue-900 dark:text-blue-200 mb-4">Pro Tips</h3>
-              <ul className="space-y-2 text-blue-800 dark:text-blue-300 text-sm">
+              <h3 className="text-lg font-bold text-gray-900 dark:text-gray-200 mb-4">Pro Tips</h3>
+              <ul className="space-y-2 text-gray-800 dark:text-gray-300 text-sm">
                 <li>✓ Use keyboard shortcuts for faster navigation</li>
                 <li>✓ Search customers by phone number for quick lookup</li>
                 <li>✓ Backup your database regularly in Settings</li>
