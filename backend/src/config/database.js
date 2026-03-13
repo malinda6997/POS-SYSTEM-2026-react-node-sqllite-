@@ -1,6 +1,7 @@
 const Database = require("better-sqlite3");
 const path = require("path");
 const fs = require("fs");
+const bcrypt = require("bcryptjs");
 
 const dataDir = path.join(__dirname, "../../data");
 if (!fs.existsSync(dataDir)) fs.mkdirSync(dataDir);
@@ -13,8 +14,9 @@ const initDatabase = () => {
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             username TEXT UNIQUE NOT NULL,
             password TEXT NOT NULL,
-            role TEXT NOT NULL CHECK(role IN ('admin', 'staff')),
-            full_name TEXT NOT NULL
+            role TEXT NOT NULL CHECK(role IN ('Administrator', 'admin', 'staff')),
+            full_name TEXT NOT NULL,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP
         );
 
         CREATE TABLE IF NOT EXISTS service_categories (
@@ -28,6 +30,7 @@ const initDatabase = () => {
             category_id INTEGER NOT NULL,
             service_name TEXT NOT NULL,
             price REAL NOT NULL,
+            duration INTEGER,
             FOREIGN KEY (category_id) REFERENCES service_categories(id)
         );
 
@@ -66,10 +69,25 @@ const initDatabase = () => {
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             expense_name TEXT NOT NULL,
             price REAL NOT NULL,
-            user_name TEXT NOT NULL, -- Expense එක දාන කෙනාගේ නම
+            username TEXT NOT NULL,
             expense_date DATETIME DEFAULT CURRENT_TIMESTAMP
         );
     `);
+
+  // Seed default admin user if doesn't exist
+  try {
+    const existingUser = db.prepare("SELECT id FROM users WHERE username = ?").get("admin");
+    if (!existingUser) {
+      const hashedPassword = bcrypt.hashSync("admin123", 10);
+      db.prepare(
+        "INSERT INTO users (username, password, role, full_name) VALUES (?, ?, ?, ?)"
+      ).run("admin", hashedPassword, "Administrator", "Admin User");
+      console.log("✔️ Default admin user created (admin/admin123)");
+    }
+  } catch (err) {
+    console.error("Error seeding user:", err.message);
+  }
+
   console.log("✔️ Database & Tables Ready!");
 };
 

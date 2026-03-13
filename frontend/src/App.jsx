@@ -11,6 +11,8 @@ import Services from './pages/Services';
 import Expenses from './pages/Expenses';
 import Users from './pages/Users';
 import Settings from './pages/Settings';
+import Billing from './pages/Billing';
+import Invoices from './pages/Invoices';
 
 // Protected Route Component
 const ProtectedRoute = ({ children }) => {
@@ -84,6 +86,22 @@ const App = () => {
           element={
             <ProtectedRoute>
               <Settings />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/billing"
+          element={
+            <ProtectedRoute>
+              <Billing />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/invoices"
+          element={
+            <ProtectedRoute>
+              <Invoices />
             </ProtectedRoute>
           }
         />
