@@ -87,10 +87,10 @@ const Settings = () => {
             </div>
 
             <div className="flex gap-2 pt-4">
-              <button className="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg font-semibold transition">
+              <button className="bg-gray-700 dark:bg-gray-600 hover:bg-gray-800 dark:hover:bg-gray-700 text-white px-6 py-2 rounded-lg font-semibold transition">
                 Save Changes
               </button>
-              <button className="bg-slate-700 hover:bg-slate-600 text-slate-100 px-6 py-2 rounded-lg transition">
+              <button className="bg-gray-400 dark:bg-gray-700 hover:bg-gray-500 dark:hover:bg-gray-600 text-gray-900 dark:text-white px-6 py-2 rounded-lg transition">
                 Cancel
               </button>
             </div>
@@ -144,7 +144,7 @@ const Settings = () => {
             </div>
 
             <div className="flex gap-2 pt-4">
-              <button className="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg font-semibold transition">
+              <button className="bg-gray-700 dark:bg-gray-600 hover:bg-gray-800 dark:hover:bg-gray-700 text-white px-6 py-2 rounded-lg font-semibold transition">
                 Save Changes
               </button>
             </div>
@@ -178,7 +178,7 @@ const Settings = () => {
             </div>
 
             <div className="flex gap-2 pt-4">
-              <button className="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg font-semibold transition">
+              <button className="bg-gray-700 dark:bg-gray-600 hover:bg-gray-800 dark:hover:bg-gray-700 text-white px-6 py-2 rounded-lg font-semibold transition">
                 Save Changes
               </button>
             </div>
@@ -205,7 +205,7 @@ const Settings = () => {
 
             <div>
               <label className="block text-sm font-semibold text-slate-300 mb-2">Backup Database</label>
-              <button className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-semibold transition">
+              <button className="bg-gray-700 dark:bg-gray-600 hover:bg-gray-800 dark:hover:bg-gray-700 text-white px-6 py-2 rounded-lg font-semibold transition">
                 Create Backup
               </button>
               <p className="text-xs text-slate-400 mt-2">Last backup: Never</p>
@@ -213,7 +213,7 @@ const Settings = () => {
 
             <div>
               <label className="block text-sm font-semibold text-slate-300 mb-2">Clear Cache</label>
-              <button className="bg-orange-600 hover:bg-orange-700 text-white px-6 py-2 rounded-lg font-semibold transition">
+              <button className="bg-gray-700 dark:bg-gray-600 hover:bg-gray-800 dark:hover:bg-gray-700 text-white px-6 py-2 rounded-lg font-semibold transition">
                 Clear Application Cache
               </button>
             </div>
@@ -223,8 +223,8 @@ const Settings = () => {
 
       {/* Admin-only settings message */}
       {!isAdministrator && (
-        <div className="bg-blue-900/20 border border-blue-700 rounded-lg p-4 mt-6">
-          <p className="text-blue-300 text-sm">
+        <div className="bg-gray-100 dark:bg-gray-900/30 border border-gray-200 dark:border-gray-700 rounded-lg p-4 mt-6">
+          <p className="text-gray-700 dark:text-gray-300 text-sm">
             <Shield size={16} className="inline mr-2" />
             Some settings are only available to Administrators.
           </p>

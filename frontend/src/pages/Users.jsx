@@ -26,7 +26,7 @@ const Users = () => {
       <Layout>
         <div className="flex items-center justify-center h-96">
           <div className="text-center">
-            <Shield className="text-red-400 mx-auto mb-3" size={32} />
+            <Shield className="text-gray-600 dark:text-gray-400 mx-auto mb-3" size={32} />
             <p className="text-slate-400">Access Denied</p>
             <p className="text-slate-500 text-sm">Only Administrators can manage users.</p>
           </div>
@@ -100,7 +100,7 @@ const Users = () => {
         <motion.div
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="mb-4 p-3 bg-red-900/20 border border-red-700 rounded-lg flex items-center gap-2 text-red-400"
+          className="mb-4 p-3 bg-gray-100 dark:bg-gray-900/30 border border-gray-200 dark:border-gray-700 rounded-lg flex items-center gap-2 text-gray-700 dark:text-gray-400"
         >
           <AlertCircle size={18} />
           {error}
@@ -160,7 +160,7 @@ const Users = () => {
           <div className="flex gap-2 mt-3">
             <button
               onClick={handleAddUser}
-              className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-semibold transition"
+              className="bg-gray-700 dark:bg-gray-600 hover:bg-gray-800 dark:hover:bg-gray-700 text-white px-4 py-2 rounded-lg font-semibold transition"
             >
               Save
             </button>
@@ -201,16 +201,12 @@ const Users = () => {
                   className="border-b border-slate-700 hover:bg-slate-700/50 transition"
                 >
                   <td className="px-4 py-3 text-slate-100 font-semibold flex items-center gap-2">
-                    <Shield size={16} className="text-blue-400" />
+                    <Shield size={16} className="text-gray-600 dark:text-gray-400" />
                     {user.username}
                   </td>
                   <td className="px-4 py-3 text-slate-100">{user.full_name}</td>
                   <td className="px-4 py-3">
-                    <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                      user.role === 'Administrator' ? 'bg-red-900/40 text-red-300' :
-                      user.role === 'admin' ? 'bg-orange-900/40 text-orange-300' :
-                      'bg-blue-900/40 text-blue-300'
-                    }`}>
+                    <span className="px-3 py-1 rounded-full text-xs font-semibold bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200">
                       {user.role}
                     </span>
                   </td>
@@ -220,7 +216,7 @@ const Users = () => {
                   <td className="px-4 py-3 text-center">
                     <button
                       onClick={() => handleDeleteUser(user.id)}
-                      className="text-red-400 hover:text-red-300 transition p-1"
+                      className="text-gray-600 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 transition p-1"
                     >
                       <Trash2 size={18} />
                     </button>
