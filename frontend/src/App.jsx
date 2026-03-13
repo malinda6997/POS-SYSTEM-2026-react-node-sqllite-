@@ -13,6 +13,9 @@ import Users from './pages/Users';
 import Settings from './pages/Settings';
 import Billing from './pages/Billing';
 import Invoices from './pages/Invoices';
+import BillHistory from './pages/BillHistory';
+import Reports from './pages/Reports';
+import Help from './pages/Help';
 
 // Protected Route Component
 const ProtectedRoute = ({ children }) => {
@@ -102,6 +105,30 @@ const App = () => {
           element={
             <ProtectedRoute>
               <Invoices />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/bill-history"
+          element={
+            <ProtectedRoute>
+              <BillHistory />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/reports"
+          element={
+            <ProtectedRoute>
+              <Reports />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/help"
+          element={
+            <ProtectedRoute>
+              <Help />
             </ProtectedRoute>
           }
         />

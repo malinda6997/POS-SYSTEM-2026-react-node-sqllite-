@@ -1,6 +1,6 @@
 import { useState, useCallback, useMemo } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { X, ChevronRight, ChevronLeft, BarChart3, ShoppingCart, CreditCard, FileText, Users, Palette, Package, Settings } from 'lucide-react';
+import { X, ChevronRight, ChevronLeft, BarChart3, ShoppingCart, CreditCard, FileText, Users, Palette, Package, Settings, History, TrendingUp, HelpCircle } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '../hooks/useAuth';
 
@@ -28,20 +28,30 @@ const Sidebar = ({ isOpen, onClose, isCollapsed, onToggleCollapse }) => {
       Administrator: [
         { label: 'Orders', to: '/bookings', icon: ShoppingCart },
         { label: 'Invoices', to: '/invoices', icon: FileText },
+        { label: 'Bill History', to: '/bill-history', icon: History },
         { label: 'Customers', to: '/customers', icon: Users },
         { label: 'Services', to: '/services', icon: Palette },
         { label: 'Inventory', to: '/inventory', icon: Package },
+        { label: 'Expenses', to: '/expenses', icon: CreditCard },
+        { label: 'Reports', to: '/reports', icon: TrendingUp },
         { label: 'Users', to: '/users', icon: Users },
+        { label: 'Help', to: '/help', icon: HelpCircle },
         { label: 'Settings', to: '/settings', icon: Settings },
       ],
       admin: [
         { label: 'Orders', to: '/bookings', icon: ShoppingCart },
+        { label: 'Invoices', to: '/invoices', icon: FileText },
+        { label: 'Bill History', to: '/bill-history', icon: History },
         { label: 'Customers', to: '/customers', icon: Users },
         { label: 'Services', to: '/services', icon: Palette },
         { label: 'Inventory', to: '/inventory', icon: Package },
+        { label: 'Expenses', to: '/expenses', icon: CreditCard },
+        { label: 'Reports', to: '/reports', icon: TrendingUp },
       ],
       staff: [
         { label: 'Orders', to: '/bookings', icon: ShoppingCart },
+        { label: 'Invoices', to: '/invoices', icon: FileText },
+        { label: 'Bill History', to: '/bill-history', icon: History },
         { label: 'Services', to: '/services', icon: Palette },
         { label: 'Inventory', to: '/inventory', icon: Package },
       ],
