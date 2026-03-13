@@ -107,28 +107,25 @@ const Sidebar = ({ isOpen, onClose, isCollapsed, onToggleCollapse }) => {
         className="hidden md:flex flex-col fixed left-0 top-0 h-screen bg-white dark:bg-slate-950 border-r border-gray-200 dark:border-slate-800 z-40 overflow-hidden"
       >
         {/* Logo Section */}
-        <motion.div
-          className="sticky top-0 bg-white dark:bg-slate-950 border-b border-gray-200 dark:border-slate-800 p-4 flex items-center justify-between"
-          animate={{ padding: isCollapsed ? 16 : 24 }}
-        >
+        <div className="sticky top-0 bg-white dark:bg-slate-950 border-b border-gray-200 dark:border-slate-800 p-4 flex items-center justify-between flex-shrink-0">
           <motion.div
-            className="flex items-center gap-3"
+            className="flex items-center gap-3 min-w-0"
             animate={{ opacity: isCollapsed ? 0 : 1 }}
             transition={{ duration: 0.2 }}
           >
-            <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-gradient-to-br from-blue-600 to-indigo-600">
+            <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-gradient-to-br from-blue-600 to-indigo-600 flex-shrink-0">
               <span className="text-white font-bold text-lg">Z</span>
             </div>
-            <div>
-              <h1 className="text-lg font-bold text-gray-900 dark:text-white">Zenith</h1>
-              <p className="text-xs text-gray-500 dark:text-gray-400">ERP System</p>
+            <div className="min-w-0">
+              <h1 className="text-lg font-bold text-gray-900 dark:text-white whitespace-nowrap">Zenith</h1>
+              <p className="text-xs text-gray-500 dark:text-gray-400 whitespace-nowrap">ERP System</p>
             </div>
           </motion.div>
 
           {/* Collapse Toggle */}
           <button
             onClick={onToggleCollapse}
-            className="p-1.5 hover:bg-gray-100 dark:hover:bg-slate-800 rounded-lg transition-colors flex-shrink-0"
+            className="p-1.5 hover:bg-gray-100 dark:hover:bg-slate-800 rounded-lg transition-colors flex-shrink-0 ml-2"
             title={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
           >
             {isCollapsed ? (
@@ -137,7 +134,7 @@ const Sidebar = ({ isOpen, onClose, isCollapsed, onToggleCollapse }) => {
               <ChevronLeft size={20} className="text-gray-600 dark:text-gray-400" />
             )}
           </button>
-        </motion.div>
+        </div>
 
         {/* Navigation */}
         <nav className="flex-1 p-3 space-y-1 mt-6 overflow-y-auto">
