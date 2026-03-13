@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { Search, Filter, Trash2, Eye, Printer } from 'lucide-react';
 import Layout from '../components/Layout';
 import api from '../utils/api';
+import { formatLKR, formatLKRShort } from '../utils/currency';
 
 const Billing = () => {
   const [bills, setBills] = useState([]);
@@ -353,7 +354,7 @@ const Billing = () => {
                           <div key={service.id} className="flex items-center justify-between p-3 border border-gray-200 dark:border-gray-700 rounded">
                             <div className="flex-1">
                               <p className="text-sm font-medium text-gray-900 dark:text-white">{idx + 1}. {service.name}</p>
-                              <p className="text-xs text-gray-500 dark:text-gray-400">${service.price.toFixed(2)}</p>
+                              <p className="text-xs text-gray-500 dark:text-gray-400">{formatLKR(service.price)}</p>
                             </div>
                             <button
                               type="button"
@@ -367,7 +368,7 @@ const Billing = () => {
                       <div className="bg-gray-100 dark:bg-slate-700 rounded-lg p-4 border border-gray-300 dark:border-slate-600 mt-3">
                         <div className="flex items-center justify-between">
                           <span className="text-sm font-semibold text-gray-700 dark:text-gray-300">Total Amount:</span>
-                          <span className="text-xl font-bold text-gray-900 dark:text-white">${total.toFixed(2)}</span>
+                          <span className="text-xl font-bold text-gray-900 dark:text-white">{formatLKR(total)}</span>
                         </div>
                       </div>
                     </div>
@@ -629,7 +630,7 @@ const ThermalBillPreview = ({ formData, services, total }) => {
           {selectedServices.map((service) => (
             <div key={service.id} className="flex justify-between text-xs mb-1">
               <span className="flex-1">{service.name}</span>
-              <span className="text-right">${service.price.toFixed(2)}</span>
+              <span className="text-right">{formatLKR(service.price)}</span>
             </div>
           ))}
         </div>
@@ -639,17 +640,17 @@ const ThermalBillPreview = ({ formData, services, total }) => {
       <div className="mb-3 pb-3 border-b border-gray-300 dark:border-gray-700">
         <div className="flex justify-between text-xs font-bold mb-1">
           <span>SUBTOTAL</span>
-          <span>${total.toFixed(2)}</span>
+          <span>{formatLKR(total)}</span>
         </div>
         {formData.paymentStatus === 'advance' && (
           <>
             <div className="flex justify-between text-xs mb-1">
               <span>ADVANCE PAID</span>
-              <span>${(parseFloat(formData.advanceAmount) || 0).toFixed(2)}</span>
+              <span>{formatLKR(parseFloat(formData.advanceAmount) || 0)}</span>
             </div>
             <div className="flex justify-between text-xs font-bold text-gray-600 dark:text-gray-400">
               <span>REMAINING</span>
-              <span>${remainingAmount.toFixed(2)}</span>
+              <span>{formatLKR(remainingAmount)}</span>
             </div>
           </>
         )}
@@ -659,7 +660,7 @@ const ThermalBillPreview = ({ formData, services, total }) => {
       <div className="mb-3 pb-3 border-b border-gray-300 dark:border-gray-700 text-xs">
         <div className="flex justify-between mb-1">
           <span>TOTAL</span>
-          <span className="font-bold text-sm">${total.toFixed(2)}</span>
+          <span className="font-bold text-sm">{formatLKR(total)}</span>
         </div>
         <div className="flex justify-between">
           <span>PAYMENT</span>

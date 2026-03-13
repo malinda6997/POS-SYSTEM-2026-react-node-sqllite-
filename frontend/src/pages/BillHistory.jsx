@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { Search, Filter, Download, Eye, Printer, MoreVertical } from 'lucide-react';
 import Layout from '../components/Layout';
 import api from '../utils/api';
+import { formatLKR } from '../utils/currency';
 
 const BillHistory = () => {
   const [bills, setBills] = useState([]);
@@ -65,7 +66,7 @@ const BillHistory = () => {
           </div>
           <div className="text-right">
             <p className="text-gray-600 dark:text-gray-400 text-sm">Total Amount</p>
-            <p className="text-3xl font-bold text-gray-900 dark:text-white">${totalAmount.toFixed(2)}</p>
+            <p className="text-3xl font-bold text-gray-900 dark:text-white">{formatLKR(totalAmount)}</p>
           </div>
         </motion.div>
 
@@ -175,7 +176,7 @@ const BillHistory = () => {
                           {new Date(bill.created_at || bill.booking_date).toLocaleDateString()}
                         </td>
                         <td className="px-6 py-4 text-right font-semibold text-gray-900 dark:text-white">
-                          ${(bill.total_amount || bill.amount || 0).toFixed(2)}
+                          {formatLKR(bill.total_amount || bill.amount || 0)}
                         </td>
                         <td className="px-6 py-4">
                           <span className={`px-3 py-1 rounded-full text-xs font-medium ${

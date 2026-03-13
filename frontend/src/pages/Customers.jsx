@@ -67,7 +67,7 @@ const Customers = () => {
               <tbody>
                 {customers.length ? (
                   customers.map((customer) => (
-                    <tr key={customer.id} className="border-t border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-900/30 transition-all">>
+                    <tr key={customer.id} className="border-t border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-900/30 transition-all">
                       <td className="px-6 py-4 font-semibold text-slate-900 dark:text-white">#{customer.id}</td>
                       <td className="px-6 py-4 text-slate-900 dark:text-white font-medium">{customer.customer_name}</td>
                       <td className="px-6 py-4 text-slate-600 dark:text-slate-400">{customer.mobile_number || 'N/A'}</td>

@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { LineChart, Line, AreaChart, Area, PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { DollarSign, Users, TrendingUp, AlertCircle, CheckCircle, ArrowUpRight, ArrowDownRight, ShoppingCart, Award } from 'lucide-react';
 import api from '../utils/api';
+import { formatLKR, formatLKRShort } from '../utils/currency';
 import Layout from '../components/Layout';
 
 const Dashboard = () => {
@@ -55,7 +56,7 @@ const Dashboard = () => {
   const kpiCards = [
     {
       title: 'Total Revenue',
-      value: `$${(revenue / 1000).toFixed(1)}k`,
+      value: formatLKRShort(revenue),
       trend: revenueTrend,
       icon: DollarSign,
       color: 'bg-gray-700',
@@ -69,7 +70,7 @@ const Dashboard = () => {
     },
     {
       title: 'Net Profit',
-      value: `$${(profit / 1000).toFixed(1)}k`,
+      value: formatLKRShort(profit),
       trend: 5.3,
       icon: TrendingUp,
       color: 'bg-gray-700',
@@ -83,7 +84,7 @@ const Dashboard = () => {
     },
     {
       title: 'Avg Order Value',
-      value: totalBills + totalInvoices > 0 ? `$${((revenue / (totalBills + totalInvoices)) || 0).toFixed(0)}` : '$0',
+      value: totalBills + totalInvoices > 0 ? formatLKR((revenue / (totalBills + totalInvoices)) || 0) : formatLKR(0),
       trend: 1.5,
       icon: Award,
       color: 'bg-gray-700',
@@ -200,15 +201,15 @@ const Dashboard = () => {
             <div className="space-y-4">
               <div className="flex items-center justify-between p-3 border border-gray-200 dark:border-gray-700 rounded-lg">
                 <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Total Revenue</span>
-                <span className="font-bold text-gray-900 dark:text-white">${(revenue / 1000).toFixed(1)}k</span>
+                <span className="font-bold text-gray-900 dark:text-white">{formatLKRShort(revenue)}</span>
               </div>
               <div className="flex items-center justify-between p-3 border border-gray-200 dark:border-gray-700 rounded-lg">
                 <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Total Expenses</span>
-                <span className="font-bold text-gray-900 dark:text-white">${(expenses / 1000).toFixed(1)}k</span>
+                <span className="font-bold text-gray-900 dark:text-white">{formatLKRShort(expenses)}</span>
               </div>
               <div className="flex items-center justify-between p-3 border border-gray-200 dark:border-gray-700 rounded-lg">
                 <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Net Profit</span>
-                <span className="font-bold text-gray-900 dark:text-white">${(profit / 1000).toFixed(1)}k</span>
+                <span className="font-bold text-gray-900 dark:text-white">{formatLKRShort(profit)}</span>
               </div>
               <div className="border-t border-gray-200 dark:border-slate-700 pt-4 mt-4">
                 <p className="text-xs text-gray-500 dark:text-gray-400 text-center">
@@ -284,7 +285,7 @@ const Dashboard = () => {
                   <Cell fill="#6b7280" />
                   <Cell fill="#9ca3af" />
                 </Pie>
-                <Tooltip formatter={(value) => `$${(value / 1000).toFixed(1)}k`} />
+                <Tooltip formatter={(value) => formatLKRShort(value)} />
               </PieChart>
             </ResponsiveContainer>
             <div className="flex gap-4 justify-center mt-4 text-sm">
@@ -323,7 +324,7 @@ const Dashboard = () => {
                         <p className="text-xs text-gray-500 dark:text-gray-400">{booking.event_date}</p>
                       </div>
                       <div className="text-right">
-                        <p className="font-semibold text-gray-900 dark:text-white">£{(booking.total_amount / 100).toFixed(2)}</p>
+                        <p className="font-semibold text-gray-900 dark:text-white">{formatLKR(booking.total_amount)}</p>
                         <span className="inline-block mt-1 px-2 py-0.5 text-xs font-medium bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded">
                           Pending
                         </span>

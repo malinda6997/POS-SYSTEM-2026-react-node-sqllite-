@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { BarChart3, Download, TrendingUp, Users, DollarSign, PieChart } from 'lucide-react';
 import Layout from '../components/Layout';
 import api from '../utils/api';
+import { formatLKR, formatLKRShort } from '../utils/currency';
 
 const Reports = () => {
   const [reportType, setReportType] = useState('financial');
@@ -158,7 +159,7 @@ const Reports = () => {
               <div>
                 <p className="text-gray-600 dark:text-gray-400 text-sm font-medium">Total Bills</p>
                 <p className="text-3xl font-bold text-gray-900 dark:text-white mt-2">{statsData.totalBills || 0}</p>
-                <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">${(statsData.billAmount || 0).toFixed(2)}</p>
+                <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">{formatLKR(statsData.billAmount || 0)}</p>
               </div>
               <div className="p-3 bg-blue-100 dark:bg-blue-900/20 rounded-lg">
                 <BarChart3 size={24} className="text-blue-600 dark:text-blue-400" />
@@ -172,7 +173,7 @@ const Reports = () => {
               <div>
                 <p className="text-gray-600 dark:text-gray-400 text-sm font-medium">Total Invoices</p>
                 <p className="text-3xl font-bold text-gray-900 dark:text-white mt-2">{statsData.totalInvoices || 0}</p>
-                <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">${(statsData.invoiceAmount || 0).toFixed(2)}</p>
+                <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">{formatLKR(statsData.invoiceAmount || 0)}</p>
               </div>
               <div className="p-3 bg-green-100 dark:bg-green-900/20 rounded-lg">
                 <DollarSign size={24} className="text-green-600 dark:text-green-400" />
@@ -186,7 +187,7 @@ const Reports = () => {
               <div>
                 <p className="text-gray-600 dark:text-gray-400 text-sm font-medium">Total Expenses</p>
                 <p className="text-3xl font-bold text-gray-900 dark:text-white mt-2">{statsData.expenseCount || 0}</p>
-                <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">${(statsData.totalExpenses || 0).toFixed(2)}</p>
+                <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">{formatLKR(statsData.totalExpenses || 0)}</p>
               </div>
               <div className="p-3 bg-red-100 dark:bg-red-900/20 rounded-lg">
                 <TrendingUp size={24} className="text-red-600 dark:text-red-400" />
@@ -222,12 +223,12 @@ const Reports = () => {
             <div>
               <p className="text-indigo-100 text-sm font-medium">Total Revenue</p>
               <p className="text-4xl font-bold mt-2">
-                ${((statsData.billAmount || 0) + (statsData.invoiceAmount || 0)).toFixed(2)}
+                {formatLKR((statsData.billAmount || 0) + (statsData.invoiceAmount || 0))}
               </p>
             </div>
             <div>
               <p className="text-indigo-100 text-sm font-medium">Total Expenses</p>
-              <p className="text-4xl font-bold mt-2">${(statsData.totalExpenses || 0).toFixed(2)}</p>
+              <p className="text-4xl font-bold mt-2">{formatLKR(statsData.totalExpenses || 0)}</p>
             </div>
             <div>
               <p className="text-indigo-100 text-sm font-medium">Net Profit/Loss</p>
@@ -236,7 +237,7 @@ const Reports = () => {
                   ? 'text-green-300'
                   : 'text-red-300'
               }`}>
-                ${(((statsData.billAmount || 0) + (statsData.invoiceAmount || 0)) - (statsData.totalExpenses || 0)).toFixed(2)}
+                {formatLKR((statsData.billAmount || 0) + (statsData.invoiceAmount || 0) - (statsData.totalExpenses || 0))}
               </p>
             </div>
           </div>
