@@ -1,46 +1,44 @@
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { LogOut, ChevronRight } from 'lucide-react';
+import { ChevronRight, BarChart3, ShoppingCart, CreditCard, FileText, Users, Palette, Package, Settings } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useAuth } from '../hooks/useAuth';
 
 const Sidebar = ({ isOpen, onClose }) => {
-  const { user, logout, userRole } = useAuth();
+  const { userRole } = useAuth();
   const location = useLocation();
 
   const getMenuItems = () => {
     const baseItems = [
-      { label: 'Dashboard', to: '/dashboard', icon: '📊' },
+      { label: 'Dashboard', to: '/dashboard', icon: BarChart3 },
     ];
 
     const roleBasedItems = {
       Administrator: [
-        { label: 'Bookings', to: '/bookings', icon: '📅' },
-        { label: 'Customers', to: '/customers', icon: '👥' },
-        { label: 'Services', to: '/services', icon: '🎨' },
-        { label: 'Inventory', to: '/inventory', icon: '📦' },
-        { label: 'Expenses', to: '/expenses', icon: '💰' },
-        { label: 'Users', to: '/users', icon: '🔑' },
-        { label: 'Settings', to: '/settings', icon: '⚙️' },
+        { label: 'Orders', to: '/bookings', icon: ShoppingCart },
+        { label: 'Billing', to: '/billing', icon: CreditCard },
+        { label: 'Invoices', to: '/invoices', icon: FileText },
+        { label: 'Customers', to: '/customers', icon: Users },
+        { label: 'Services', to: '/services', icon: Palette },
+        { label: 'Inventory', to: '/inventory', icon: Package },
+        { label: 'Users', to: '/users', icon: Users },
+        { label: 'Settings', to: '/settings', icon: Settings },
       ],
       admin: [
-        { label: 'Bookings', to: '/bookings', icon: '📅' },
-        { label: 'Customers', to: '/customers', icon: '👥' },
-        { label: 'Services', to: '/services', icon: '🎨' },
-        { label: 'Inventory', to: '/inventory', icon: '📦' },
-        { label: 'Expenses', to: '/expenses', icon: '💰' },
+        { label: 'Orders', to: '/bookings', icon: ShoppingCart },
+        { label: 'Billing', to: '/billing', icon: CreditCard },
+        { label: 'Customers', to: '/customers', icon: Users },
+        { label: 'Services', to: '/services', icon: Palette },
+        { label: 'Inventory', to: '/inventory', icon: Package },
       ],
       staff: [
-        { label: 'Bookings', to: '/bookings', icon: '📝' },
-        { label: 'Services', to: '/services', icon: '🎨' },
-        { label: 'Inventory', to: '/inventory', icon: '📦' },
+        { label: 'Orders', to: '/bookings', icon: ShoppingCart },
+        { label: 'Services', to: '/services', icon: Palette },
+        { label: 'Inventory', to: '/inventory', icon: Package },
       ],
     };
 
-    return [
-      ...baseItems,
-      ...(roleBasedItems[userRole] || []),
-    ];
+    return [...baseItems, ...(roleBasedItems[userRole] || [])];
   };
 
   const menuItems = getMenuItems();
@@ -99,12 +97,9 @@ const Sidebar = ({ isOpen, onClose }) => {
           })}
         </nav>
 
-        {/* Footer info */}
-        <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-gray-200 dark:border-slate-800 bg-gray-50 dark:bg-slate-900/50">
-          <p className="text-xs text-gray-500 dark:text-gray-400">v1.0.0</p>
-        </div>
       </motion.aside>
     </>
   );
+};
 
 export default Sidebar;

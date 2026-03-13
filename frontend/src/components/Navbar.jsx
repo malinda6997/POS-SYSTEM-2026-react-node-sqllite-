@@ -92,5 +92,6 @@ const Navbar = ({ onMenuClick }) => {
       </div>
     </nav>
   );
+};
 
 export default Navbar;
