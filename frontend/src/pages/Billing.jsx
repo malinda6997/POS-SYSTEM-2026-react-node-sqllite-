@@ -122,11 +122,11 @@ const Billing = () => {
   const getStatusColor = (status) => {
     switch (status?.toLowerCase()) {
       case 'completed':
-        return { bg: 'bg-green-100 dark:bg-green-900/30', text: 'text-green-700 dark:text-green-400', icon: '✓' };
+        return { bg: 'bg-gray-100 dark:bg-slate-700', text: 'text-gray-700 dark:text-gray-400', icon: '✓' };
       case 'pending':
-        return { bg: 'bg-yellow-100 dark:bg-yellow-900/30', text: 'text-yellow-700 dark:text-yellow-400', icon: '◐' };
+        return { bg: 'bg-gray-100 dark:bg-slate-700', text: 'text-gray-700 dark:text-gray-400', icon: '◐' };
       case 'cancelled':
-        return { bg: 'bg-red-100 dark:bg-red-900/30', text: 'text-red-700 dark:text-red-400', icon: '✕' };
+        return { bg: 'bg-gray-100 dark:bg-slate-700', text: 'text-gray-700 dark:text-gray-400', icon: '✕' };
       default:
         return { bg: 'bg-gray-100 dark:bg-gray-700', text: 'text-gray-700 dark:text-gray-400', icon: '○' };
     }
@@ -135,11 +135,11 @@ const Billing = () => {
   const getPaymentStatusColor = (status) => {
     switch (status?.toLowerCase()) {
       case 'full':
-        return 'text-green-600 dark:text-green-400 bg-green-50 dark:bg-green-900/20';
+        return 'text-gray-600 dark:text-gray-400 bg-gray-50 dark:bg-gray-900/20';
       case 'advance':
-        return 'text-orange-600 dark:text-orange-400 bg-orange-50 dark:bg-orange-900/20';
+        return 'text-gray-600 dark:text-gray-400 bg-gray-50 dark:bg-gray-900/20';
       case 'partial':
-        return 'text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20';
+        return 'text-gray-600 dark:text-gray-400 bg-gray-50 dark:bg-gray-900/20';
       default:
         return 'text-gray-600 dark:text-gray-400';
     }
@@ -224,7 +224,7 @@ const Billing = () => {
                   
                   <div>
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                      Customer Name <span className="text-red-500">*</span>
+                      Customer Name <span className="text-gray-500">*</span>
                     </label>
                     <input
                       type="text"
@@ -233,7 +233,7 @@ const Billing = () => {
                       onChange={handleFormChange}
                       placeholder="Enter customer name"
                       required
-                      className="w-full px-3 py-2 border border-gray-200 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition text-sm"
+                      className="w-full px-3 py-2 border border-gray-200 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-gray-700 transition text-sm"
                     />
                   </div>
 
@@ -246,7 +246,7 @@ const Billing = () => {
                         value={formData.mobileNumber}
                         onChange={handleFormChange}
                         placeholder="+1-234-567-8900"
-                        className="w-full px-3 py-2 border border-gray-200 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition text-sm"
+                        className="w-full px-3 py-2 border border-gray-200 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-gray-700 transition text-sm"
                       />
                     </div>
                     <div>
@@ -257,7 +257,7 @@ const Billing = () => {
                         value={formData.email}
                         onChange={handleFormChange}
                         placeholder="customer@example.com"
-                        className="w-full px-3 py-2 border border-gray-200 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition text-sm"
+                        className="w-full px-3 py-2 border border-gray-200 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-gray-700 transition text-sm"
                       />
                     </div>
                   </div>
@@ -270,29 +270,29 @@ const Billing = () => {
                       onChange={handleFormChange}
                       placeholder="Enter full address"
                       rows="2"
-                      className="w-full px-3 py-2 border border-gray-200 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition text-sm"
+                      className="w-full px-3 py-2 border border-gray-200 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-gray-700 transition text-sm"
                     />
                   </div>
                 </div>
 
                 {/* Services Section */}
                 <div className="space-y-3">
-                  <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wide border-b border-gray-200 dark:border-slate-700 pb-2">Choose Services <span className="text-red-500">*</span></h3>
+                  <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wide border-b border-gray-200 dark:border-slate-700 pb-2">Choose Services <span className="text-gray-500">*</span></h3>
                   {services.length === 0 ? (
                     <p className="text-gray-500 dark:text-gray-400 text-sm">No services available</p>
                   ) : (
                     <div className="max-h-64 overflow-y-auto space-y-2">
                       {services.map((service) => (
-                        <label key={service.id} className="flex items-start gap-2 p-3 border border-gray-200 dark:border-slate-700 rounded-lg hover:bg-blue-50 dark:hover:bg-blue-900/20 cursor-pointer transition">
+                        <label key={service.id} className="flex items-start gap-2 p-3 border border-gray-200 dark:border-slate-700 rounded-lg hover:bg-gray-50 dark:hover:bg-slate-700/50 cursor-pointer transition">
                           <input
                             type="checkbox"
                             checked={formData.selectedServices.includes(service.id)}
                             onChange={() => handleServiceToggle(service.id)}
-                            className="w-4 h-4 mt-0.5 text-blue-600 rounded focus:ring-2 focus:ring-blue-500"
+                            className="w-4 h-4 mt-0.5 text-gray-700 rounded focus:ring-2 focus:ring-gray-700"
                           />
                           <div className="flex-1 min-w-0">
                             <p className="text-sm font-medium text-gray-900 dark:text-white">{service.name}</p>
-                            <p className="text-xs text-blue-600 dark:text-blue-400 font-semibold">${service.price}</p>
+                            <p className="text-xs text-gray-600 dark:text-gray-400 font-semibold">${service.price}</p>
                           </div>
                         </label>
                       ))}
@@ -304,25 +304,25 @@ const Billing = () => {
                 <div className="space-y-3">
                   <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wide border-b border-gray-200 dark:border-slate-700 pb-2">Select Payment Type</h3>
                   <div className="grid grid-cols-2 gap-3">
-                    <label className="flex items-center gap-2 p-3 border-2 rounded-lg cursor-pointer transition" style={{borderColor: formData.paymentStatus === 'full' ? 'rgb(59, 130, 246)' : 'rgb(229, 231, 235)', backgroundColor: formData.paymentStatus === 'full' ? 'rgb(239, 246, 255)' : 'transparent'}}>
+                    <label className="flex items-center gap-2 p-3 border-2 rounded-lg cursor-pointer transition" style={{borderColor: formData.paymentStatus === 'full' ? 'rgb(55, 65, 81)' : 'rgb(229, 231, 235)', backgroundColor: formData.paymentStatus === 'full' ? 'rgb(243, 244, 246)' : 'transparent'}}>
                       <input
                         type="radio"
                         name="paymentStatus"
                         value="full"
                         checked={formData.paymentStatus === 'full'}
                         onChange={handleFormChange}
-                        className="w-4 h-4 text-blue-600"
+                        className="w-4 h-4 text-gray-700"
                       />
                       <span className="text-sm font-medium text-gray-900 dark:text-white">Full Payment</span>
                     </label>
-                    <label className="flex items-center gap-2 p-3 border-2 rounded-lg cursor-pointer transition" style={{borderColor: formData.paymentStatus === 'advance' ? 'rgb(59, 130, 246)' : 'rgb(229, 231, 235)', backgroundColor: formData.paymentStatus === 'advance' ? 'rgb(239, 246, 255)' : 'transparent'}}>
+                    <label className="flex items-center gap-2 p-3 border-2 rounded-lg cursor-pointer transition" style={{borderColor: formData.paymentStatus === 'advance' ? 'rgb(55, 65, 81)' : 'rgb(229, 231, 235)', backgroundColor: formData.paymentStatus === 'advance' ? 'rgb(243, 244, 246)' : 'transparent'}}>
                       <input
                         type="radio"
                         name="paymentStatus"
                         value="advance"
                         checked={formData.paymentStatus === 'advance'}
                         onChange={handleFormChange}
-                        className="w-4 h-4 text-blue-600"
+                        className="w-4 h-4 text-gray-700"
                       />
                       <span className="text-sm font-medium text-gray-900 dark:text-white">Advance Payment</span>
                     </label>
@@ -337,7 +337,7 @@ const Billing = () => {
                       placeholder="Enter advance amount"
                       min="0"
                       step="0.01"
-                      className="w-full px-3 py-2 border border-gray-200 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition text-sm"
+                      className="w-full px-3 py-2 border border-gray-200 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-gray-700 transition text-sm"
                     />
                   )}
                 </div>
@@ -358,16 +358,16 @@ const Billing = () => {
                             <button
                               type="button"
                               onClick={() => handleServiceToggle(service.id)}
-                              className="px-2 py-1 text-xs bg-red-100 dark:bg-red-900/20 text-red-600 dark:text-red-400 rounded hover:bg-red-200 dark:hover:bg-red-900/30 transition font-medium"
+                              className="px-2 py-1 text-xs bg-gray-200 dark:bg-slate-700 text-gray-700 dark:text-gray-300 rounded hover:bg-gray-300 dark:hover:bg-slate-600 transition font-medium"
                             >
                               Remove
                             </button>
                           </div>
                         ))}
-                      <div className="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-4 border border-blue-200 dark:border-blue-800 mt-3">
+                      <div className="bg-gray-100 dark:bg-slate-700 rounded-lg p-4 border border-gray-300 dark:border-slate-600 mt-3">
                         <div className="flex items-center justify-between">
                           <span className="text-sm font-semibold text-gray-700 dark:text-gray-300">Total Amount:</span>
-                          <span className="text-xl font-bold text-blue-600 dark:text-blue-400">${total.toFixed(2)}</span>
+                          <span className="text-xl font-bold text-gray-900 dark:text-white">${total.toFixed(2)}</span>
                         </div>
                       </div>
                     </div>
@@ -379,7 +379,7 @@ const Billing = () => {
                   <button
                     type="submit"
                     disabled={formData.selectedServices.length === 0}
-                    className="flex-1 px-4 py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg hover:from-blue-700 hover:to-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed transition font-medium text-sm"
+                    className="flex-1 px-4 py-2.5 bg-gray-800 dark:bg-gray-700 text-white rounded-lg hover:bg-gray-900 dark:hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed transition font-medium text-sm"
                   >
                     Generate Bill
                   </button>
@@ -424,7 +424,7 @@ const Billing = () => {
                 <button
                   onClick={handlePrintBill}
                   disabled={formData.selectedServices.length === 0}
-                  className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-green-600 hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed text-white rounded-lg transition font-medium text-sm"
+                  className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-gray-800 dark:bg-gray-700 hover:bg-gray-900 dark:hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed text-white rounded-lg transition font-medium text-sm"
                 >
                   <Printer size={18} />
                   Generate Bill
@@ -459,7 +459,7 @@ const Billing = () => {
                   placeholder="Search by customer name, mobile, or email..."
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2.5 border border-gray-200 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
+                    className="w-full pl-10 pr-4 py-2.5 border border-gray-200 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-gray-700 transition"
                 />
               </div>
               <div className="flex items-center gap-2">
@@ -467,7 +467,7 @@ const Billing = () => {
                 <select
                   value={filter}
                   onChange={(e) => setFilter(e.target.value)}
-                  className="px-4 py-2.5 border border-gray-200 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
+                  className="px-4 py-2.5 border border-gray-200 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-gray-700 transition"
                 >
                   <option value="all">All Status</option>
                   <option value="completed">Completed</option>
@@ -556,11 +556,11 @@ const Billing = () => {
                           </td>
                           <td className="px-6 py-4">
                             <div className="flex items-center gap-2">
-                              <button className="p-2 hover:bg-blue-100 dark:hover:bg-blue-900/20 rounded-lg transition" title="View">
-                                <Eye size={16} className="text-blue-600 dark:text-blue-400" />
+                              <button className="p-2 hover:bg-gray-100 dark:hover:bg-slate-700 rounded-lg transition" title="View">
+                                <Eye size={16} className="text-gray-600 dark:text-gray-400" />
                               </button>
-                              <button className="p-2 hover:bg-red-100 dark:hover:bg-red-900/20 rounded-lg transition" title="Delete">
-                                <Trash2 size={16} className="text-red-600 dark:text-red-400" />
+                              <button className="p-2 hover:bg-gray-100 dark:hover:bg-slate-700 rounded-lg transition" title="Delete">
+                                <Trash2 size={16} className="text-gray-600 dark:text-gray-400" />
                               </button>
                             </div>
                           </td>
@@ -647,7 +647,7 @@ const ThermalBillPreview = ({ formData, services, total }) => {
               <span>ADVANCE PAID</span>
               <span>${(parseFloat(formData.advanceAmount) || 0).toFixed(2)}</span>
             </div>
-            <div className="flex justify-between text-xs font-bold text-orange-600 dark:text-orange-400">
+            <div className="flex justify-between text-xs font-bold text-gray-600 dark:text-gray-400">
               <span>REMAINING</span>
               <span>${remainingAmount.toFixed(2)}</span>
             </div>
