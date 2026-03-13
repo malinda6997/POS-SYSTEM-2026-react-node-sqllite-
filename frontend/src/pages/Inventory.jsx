@@ -110,7 +110,7 @@ const Inventory = () => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.4 }}
-          className="bg-white dark:bg-slate-800 rounded-xl shadow-lg overflow-hidden"
+          className="border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden"
         >
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
@@ -127,7 +127,7 @@ const Inventory = () => {
               </thead>
               <tbody>
                 {frames.map((frame) => (
-                  <tr key={frame.id} className="border-t border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700 transition-all">
+                  <tr key={frame.id} className="border-t border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-900/30 transition-all">
                     <td className="px-6 py-4 font-semibold text-slate-900 dark:text-white">{frame.frame_name}</td>
                     <td className="px-6 py-4 text-slate-900 dark:text-white">{frame.quantity}</td>
                     <td className="px-6 py-4 text-slate-600 dark:text-slate-400">Rs. {frame.buying_price}</td>

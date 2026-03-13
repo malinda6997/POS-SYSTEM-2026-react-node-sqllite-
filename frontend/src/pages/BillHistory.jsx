@@ -127,7 +127,7 @@ const BillHistory = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="bg-white dark:bg-slate-800 rounded-xl shadow-lg overflow-hidden"
+          className="border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden"
         >
           {loading ? (
             <div className="flex justify-center items-center h-64">

@@ -214,7 +214,7 @@ const Billing = () => {
             transition={{ delay: 0.1 }}
             className="lg:col-span-2"
           >
-            <div className="bg-white dark:bg-slate-800 rounded-xl shadow-lg p-6">
+            <div className="border border-gray-200 dark:border-gray-700 rounded-xl p-6">
               <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Create Bill</h2>
               
               <form onSubmit={handleSubmit} className="space-y-5">
@@ -350,7 +350,7 @@ const Billing = () => {
                       {services
                         .filter(s => formData.selectedServices.includes(s.id))
                         .map((service, idx) => (
-                          <div key={service.id} className="flex items-center justify-between p-3 bg-white dark:bg-slate-800 rounded border border-gray-200 dark:border-slate-700">
+                          <div key={service.id} className="flex items-center justify-between p-3 border border-gray-200 dark:border-gray-700 rounded">
                             <div className="flex-1">
                               <p className="text-sm font-medium text-gray-900 dark:text-white">{idx + 1}. {service.name}</p>
                               <p className="text-xs text-gray-500 dark:text-gray-400">${service.price.toFixed(2)}</p>
@@ -406,7 +406,7 @@ const Billing = () => {
               <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Bill Preview</h2>
               
               {/* Thermal Printer Preview */}
-              <div className="bg-white dark:bg-slate-800 rounded-xl shadow-lg p-6 border border-gray-200 dark:border-slate-700 min-h-96" id="thermal-bill-preview">
+              <div className="border border-gray-200 dark:border-gray-700 rounded-xl p-6 min-h-96" id="thermal-bill-preview">
                 {formData.selectedServices.length > 0 ? (
                   <ThermalBillPreview formData={formData} services={services} total={total} />
                 ) : (
@@ -483,7 +483,7 @@ const Billing = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="bg-white dark:bg-slate-800 rounded-xl shadow-lg overflow-hidden"
+            className="border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden"
           >
             {loading ? (
               <div className="flex justify-center items-center h-64">

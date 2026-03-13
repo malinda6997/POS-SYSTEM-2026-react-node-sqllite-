@@ -352,22 +352,22 @@ const Bookings = () => {
         )}
 
         {/* Bookings Table */}
-        <div className="bg-white dark:bg-slate-800 rounded-xl shadow-lg overflow-hidden">
+        <div className="border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead className="bg-slate-100 dark:bg-slate-700">
                 <tr>
-                  <th className="px-6 py-3 text-left font-semibold text-slate-900 dark:text-white">Booking ID</th>
-                  <th className="px-6 py-3 text-left font-semibold text-slate-900 dark:text-white">Customer</th>
-                  <th className="px-6 py-3 text-left font-semibold text-slate-900 dark:text-white">Event Date</th>
-                  <th className="px-6 py-3 text-left font-semibold text-slate-900 dark:text-white">Amount</th>
-                  <th className="px-6 py-3 text-left font-semibold text-slate-900 dark:text-white">Status</th>
+                  <th className="px-6 py-3 text-left font-semibold text-gray-900 dark:text-white bg-gray-50 dark:bg-gray-900/30">Booking ID</th>
+                  <th className="px-6 py-3 text-left font-semibold text-gray-900 dark:text-white bg-gray-50 dark:bg-gray-900/30">Customer</th>
+                  <th className="px-6 py-3 text-left font-semibold text-gray-900 dark:text-white bg-gray-50 dark:bg-gray-900/30">Event Date</th>
+                  <th className="px-6 py-3 text-left font-semibold text-gray-900 dark:text-white bg-gray-50 dark:bg-gray-900/30">Amount</th>
+                  <th className="px-6 py-3 text-left font-semibold text-gray-900 dark:text-white bg-gray-50 dark:bg-gray-900/30">Status</th>
                 </tr>
               </thead>
               <tbody>
                 {bookings.length ? (
                   bookings.map((booking) => (
-                    <tr key={booking.id} className="border-t border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700 transition-all">
+                    <tr key={booking.id} className="border-t border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-900/30 transition-all">
                       <td className="px-6 py-4 text-slate-900 dark:text-white font-semibold">#{booking.id}</td>
                       <td className="px-6 py-4 text-slate-900 dark:text-white">{booking.customer_name}</td>
                       <td className="px-6 py-4 text-slate-600 dark:text-slate-400">{booking.event_date}</td>

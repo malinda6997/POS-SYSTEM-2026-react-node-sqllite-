@@ -91,7 +91,7 @@ const Invoices = () => {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="bg-white dark:bg-slate-800 rounded-lg border border-gray-200 dark:border-slate-700 overflow-hidden"
+          className="border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden"
         >
           <div className="overflow-x-auto">
             <table className="w-full text-sm">

@@ -121,7 +121,7 @@ const Dashboard = () => {
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: idx * 0.05 }}
-                className="bg-white dark:bg-slate-800 rounded-lg border border-gray-200 dark:border-slate-700 p-5 shadow-sm hover:shadow-md transition lg:col-span-2 md:col-span-1"
+                className="border border-gray-200 dark:border-gray-700 rounded-lg p-5 hover:shadow-md transition lg:col-span-2 md:col-span-1"
               >
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
@@ -158,7 +158,7 @@ const Dashboard = () => {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4 }}
-            className="lg:col-span-2 bg-white dark:bg-slate-800 rounded-lg border border-gray-200 dark:border-slate-700 p-6 shadow-sm"
+            className="lg:col-span-2 border border-gray-200 dark:border-gray-700 rounded-lg p-6"
           >
             <div className="mb-6">
               <h3 className="text-lg font-bold text-gray-900 dark:text-white">Revenue Trend</h3>
@@ -194,19 +194,19 @@ const Dashboard = () => {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.5 }}
-            className="bg-white dark:bg-slate-800 rounded-lg border border-gray-200 dark:border-slate-700 p-6 shadow-sm lg:col-span-2"
+            className="border border-gray-200 dark:border-gray-700 rounded-lg p-6 lg:col-span-2"
           >
             <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-6">Key Metrics</h3>
             <div className="space-y-4">
-              <div className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-900/30 rounded-lg border border-gray-200 dark:border-gray-700">
+              <div className="flex items-center justify-between p-3 border border-gray-200 dark:border-gray-700 rounded-lg">
                 <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Total Revenue</span>
                 <span className="font-bold text-gray-900 dark:text-white">${(revenue / 1000).toFixed(1)}k</span>
               </div>
-              <div className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-900/30 rounded-lg border border-gray-200 dark:border-gray-700">
+              <div className="flex items-center justify-between p-3 border border-gray-200 dark:border-gray-700 rounded-lg">
                 <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Total Expenses</span>
                 <span className="font-bold text-gray-900 dark:text-white">${(expenses / 1000).toFixed(1)}k</span>
               </div>
-              <div className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-900/30 rounded-lg border border-gray-200 dark:border-gray-700">
+              <div className="flex items-center justify-between p-3 border border-gray-200 dark:border-gray-700 rounded-lg">
                 <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Net Profit</span>
                 <span className="font-bold text-gray-900 dark:text-white">${(profit / 1000).toFixed(1)}k</span>
               </div>
@@ -350,7 +350,7 @@ const Dashboard = () => {
               <div className="space-y-3 max-h-96 overflow-y-auto">
                 {pendingTasks.low_stock_frames?.length ? (
                   pendingTasks.low_stock_frames.slice(0, 5).map((frame, idx) => (
-                    <div key={idx} className="flex items-center justify-between p-3 border border-gray-200 dark:border-slate-700 rounded-lg bg-gray-50 dark:bg-gray-900/30">
+                    <div key={idx} className="flex items-center justify-between p-3 border border-gray-200 dark:border-gray-700 rounded-lg bg-gray-50 dark:bg-gray-900/30">
                       <div className="flex-1">
                         <p className="font-medium text-gray-900 dark:text-white">{frame.frame_name}</p>
                         <p className="text-xs text-gray-500 dark:text-gray-400">Qty: {frame.quantity}</p>
