@@ -21,12 +21,12 @@ const Sidebar = ({ isOpen, onClose, isCollapsed, onToggleCollapse }) => {
   const menuItems = useMemo(() => {
     const baseItems = [
       { label: 'Dashboard', to: '/dashboard', icon: BarChart3 },
+      { label: 'Billing', to: '/billing', icon: CreditCard },
     ];
 
     const roleBasedItems = {
       Administrator: [
         { label: 'Orders', to: '/bookings', icon: ShoppingCart },
-        { label: 'Billing', to: '/billing', icon: CreditCard },
         { label: 'Invoices', to: '/invoices', icon: FileText },
         { label: 'Customers', to: '/customers', icon: Users },
         { label: 'Services', to: '/services', icon: Palette },
@@ -36,7 +36,6 @@ const Sidebar = ({ isOpen, onClose, isCollapsed, onToggleCollapse }) => {
       ],
       admin: [
         { label: 'Orders', to: '/bookings', icon: ShoppingCart },
-        { label: 'Billing', to: '/billing', icon: CreditCard },
         { label: 'Customers', to: '/customers', icon: Users },
         { label: 'Services', to: '/services', icon: Palette },
         { label: 'Inventory', to: '/inventory', icon: Package },
