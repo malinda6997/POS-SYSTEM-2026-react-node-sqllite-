@@ -105,7 +105,10 @@ const Sidebar = ({ isOpen, onClose, isCollapsed, onToggleCollapse }) => {
                   <Link
                     key={item.to}
                     to={item.to}
-                    onClick={handleMenuItemClick}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleMenuItemClick();
+                    }}
                     className={`flex items-center gap-3 px-4 py-2.5 rounded-lg transition-all duration-200 font-medium text-sm ${
                       isActive(item.to)
                         ? 'bg-blue-600 text-white shadow-md'
@@ -148,8 +151,13 @@ const Sidebar = ({ isOpen, onClose, isCollapsed, onToggleCollapse }) => {
 
           {/* Collapse Toggle */}
           <button
-            onClick={onToggleCollapse}
-            className="p-2 hover:bg-blue-100 dark:hover:bg-slate-800 rounded-lg transition-all duration-200 flex-shrink-0 ml-auto cursor-pointer active:scale-95 relative z-20"
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              onToggleCollapse();
+            }}
+            onMouseDown={(e) => e.preventDefault()}
+            className="p-2 hover:bg-blue-100 dark:hover:bg-slate-800 rounded-lg transition-all duration-200 flex-shrink-0 ml-auto cursor-pointer active:scale-95 relative z-20 pointer-events-auto"
             title={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
             type="button"
           >
@@ -171,6 +179,10 @@ const Sidebar = ({ isOpen, onClose, isCollapsed, onToggleCollapse }) => {
               <div key={item.to} className="relative group">
                 <Link
                   to={item.to}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleMenuItemClick();
+                  }}
                   onMouseEnter={() => setHoveredItem(item.to)}
                   onMouseLeave={() => setHoveredItem(null)}
                   className={`flex items-center gap-3 px-4 py-2.5 rounded-lg transition-all duration-200 font-medium text-sm relative ${
