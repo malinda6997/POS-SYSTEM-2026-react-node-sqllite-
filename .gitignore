@@ -7,13 +7,12 @@ package-lock.json
 .env.local
 .env.*.local
 
-# SQLite Database
+# SQLite Database & PDFs
+backend/data/
 data/
 *.db
 *.db-journal
-
-# PDF Invoices
-invoices/
+backend/invoices/
 
 # Logs
 logs/
