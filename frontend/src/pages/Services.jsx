@@ -14,6 +14,7 @@ const Services = () => {
   const [showServiceForm, setShowServiceForm] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [newCategory, setNewCategory] = useState('');
+  const [newCategoryCharge, setNewCategoryCharge] = useState('');
   const [newService, setNewService] = useState({
     service_name: '',
     category_id: '',
@@ -45,13 +46,17 @@ const Services = () => {
   // Add new category
   const handleAddCategory = async () => {
     if (!newCategory.trim()) {
-      setError('Category name is required');
+      setError('Category name is mandatory');
       return;
     }
     try {
-      const res = await api.post('/services/categories', { category_name: newCategory });
+      const res = await api.post('/services/categories', { 
+        category_name: newCategory,
+        service_charge: newCategoryCharge ? parseFloat(newCategoryCharge) : 0
+      });
       setCategories([...categories, res.data]);
       setNewCategory('');
+      setNewCategoryCharge('');
       setShowCategoryForm(false);
       setError('');
     } catch (err) {
@@ -152,26 +157,35 @@ const Services = () => {
           animate={{ opacity: 1, y: 0 }}
           className="border border-gray-200 dark:border-gray-700 p-4 rounded-lg mb-6"
         >
-          <div className="flex gap-2">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-2">
             <input
               type="text"
               placeholder="Category name"
               value={newCategory}
               onChange={(e) => setNewCategory(e.target.value)}
-              className="flex-1 bg-black700 border border-gray-600 rounded-lg px-3 py-2 text-gray-100 placeholder-gray-400 focus:outline-none focus:border-amber-500"
+              className="md:col-span-2 bg-gray-900 border border-gray-600 rounded-lg px-3 py-2 text-gray-100 placeholder-gray-400 focus:outline-none focus:border-amber-500"
             />
-            <button
-              onClick={handleAddCategory}
-              className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-semibold transition"
-            >
-              Save
-            </button>
-            <button
-              onClick={() => setShowCategoryForm(false)}
-              className="bg-black700 hover:bg-black600 text-gray-100 px-4 py-2 rounded-lg transition"
-            >
-              Cancel
-            </button>
+            <input
+              type="number"
+              placeholder="Service Charge (Optional)"
+              value={newCategoryCharge}
+              onChange={(e) => setNewCategoryCharge(e.target.value)}
+              className="bg-gray-900 border border-gray-600 rounded-lg px-3 py-2 text-gray-100 placeholder-gray-400 focus:outline-none focus:border-amber-500"
+            />
+            <div className="flex gap-2">
+              <button
+                onClick={handleAddCategory}
+                className="flex-1 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-semibold transition"
+              >
+                Save
+              </button>
+              <button
+                onClick={() => setShowCategoryForm(false)}
+                className="flex-1 bg-gray-900 hover:bg-gray-800 text-gray-100 px-4 py-2 rounded-lg transition"
+              >
+                Cancel
+              </button>
+            </div>
           </div>
         </motion.div>
       )}
@@ -189,12 +203,12 @@ const Services = () => {
               placeholder="Service name"
               value={newService.service_name}
               onChange={(e) => setNewService({ ...newService, service_name: e.target.value })}
-              className="bg-black700 border border-gray-600 rounded-lg px-3 py-2 text-gray-100 placeholder-gray-400 focus:outline-none focus:border-amber-500"
+              className="bg-gray-900 border border-gray-600 rounded-lg px-3 py-2 text-gray-100 placeholder-gray-400 focus:outline-none focus:border-amber-500"
             />
             <select
               value={newService.category_id}
               onChange={(e) => setNewService({ ...newService, category_id: e.target.value })}
-              className="bg-black700 border border-gray-600 rounded-lg px-3 py-2 text-gray-100 focus:outline-none focus:border-amber-500"
+              className="bg-gray-900 border border-gray-600 rounded-lg px-3 py-2 text-gray-100 focus:outline-none focus:border-amber-500"
             >
               <option value="">Select Category</option>
               {categories.map((cat) => (
@@ -208,14 +222,14 @@ const Services = () => {
               placeholder="Price"
               value={newService.price}
               onChange={(e) => setNewService({ ...newService, price: e.target.value })}
-              className="bg-black700 border border-gray-600 rounded-lg px-3 py-2 text-gray-100 placeholder-gray-400 focus:outline-none focus:border-amber-500"
+              className="bg-gray-900 border border-gray-600 rounded-lg px-3 py-2 text-gray-100 placeholder-gray-400 focus:outline-none focus:border-amber-500"
             />
             <input
               type="number"
               placeholder="Duration (mins)"
               value={newService.duration}
               onChange={(e) => setNewService({ ...newService, duration: e.target.value })}
-              className="bg-black700 border border-gray-600 rounded-lg px-3 py-2 text-gray-100 placeholder-gray-400 focus:outline-none focus:border-amber-500"
+              className="bg-gray-900 border border-gray-600 rounded-lg px-3 py-2 text-gray-100 placeholder-gray-400 focus:outline-none focus:border-amber-500"
             />
           </div>
           <div className="flex gap-2 mt-3">
@@ -227,7 +241,7 @@ const Services = () => {
             </button>
             <button
               onClick={() => setShowServiceForm(false)}
-              className="bg-black700 hover:bg-black600 text-gray-100 px-4 py-2 rounded-lg transition"
+              className="bg-gray-900 hover:bg-gray-800 text-gray-100 px-4 py-2 rounded-lg transition"
             >
               Cancel
             </button>
@@ -252,11 +266,14 @@ const Services = () => {
                 {/* Category Header */}
                 <button
                   onClick={() => setExpandedCategory(isExpanded ? null : category.id)}
-                  className="w-full px-4 py-3 flex items-center justify-between hover:bg-black700/50 transition"
+                  className="w-full px-4 py-3 flex items-center justify-between hover:bg-gray-900/50 transition"
                 >
                   <div className="flex items-center gap-3 flex-1">
                     {isExpanded ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
                     <span className="font-semibold text-gray-100">{category.category_name}</span>
+                    {category.service_charge > 0 && (
+                      <span className="text-amber-400 text-sm">Service Charge: Rs. {category.service_charge}</span>
+                    )}
                     <span className="text-gray-400 text-sm">({categoryServices.length} services)</span>
                   </div>
                   <button
@@ -275,14 +292,14 @@ const Services = () => {
                   <motion.div
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
-                    className="bg-black700/30 border-t border-gray-700 px-4 py-3"
+                    className="bg-gray-900/30 border-t border-gray-700 px-4 py-3"
                   >
                     {categoryServices.length > 0 ? (
                       <div className="space-y-2">
                         {categoryServices.map((service) => (
                           <div
                             key={service.id}
-                            className="flex items-center justify-between bg-black700 p-3 rounded-lg"
+                            className="flex items-center justify-between bg-gray-900 p-3 rounded-lg"
                           >
                             <div className="flex-1">
                               <div className="font-semibold text-gray-100">{service.service_name}</div>
@@ -307,7 +324,7 @@ const Services = () => {
                         setSelectedCategory(category.id);
                         setShowServiceForm(true);
                       }}
-                      className="mt-3 w-full flex items-center justify-center gap-2 bg-black600 hover:bg-black500 text-gray-100 py-2 rounded-lg transition"
+                      className="mt-3 w-full flex items-center justify-center gap-2 bg-gray-800 hover:bg-gray-700 text-gray-100 py-2 rounded-lg transition"
                     >
                       <Plus size={16} /> Add Service
                     </button>

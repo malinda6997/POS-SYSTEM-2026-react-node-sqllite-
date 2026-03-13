@@ -20,7 +20,7 @@ exports.getFrameById = (req, res) => {
       .prepare("SELECT * FROM photo_frames WHERE id = ?")
       .get(id);
     if (!frame) {
-      return res.status(404).json({ message: "Frame not found!" });
+      return res.status(404).json({ message: "The specified inventory item does not exist in the system" });
     }
     res.json(frame);
   } catch (err) {
@@ -34,7 +34,7 @@ exports.createFrame = (req, res) => {
 
   if (!frame_name || !buying_price || !selling_price) {
     return res.status(400).json({
-      message: "Frame name, buying price, and selling price are required!",
+      message: "Frame name, buying price, and selling price are mandatory",
     });
   }
 
@@ -81,7 +81,7 @@ exports.addStock = (req, res) => {
 
   if (!quantity || quantity <= 0) {
     return res.status(400).json({
-      message: "Valid quantity is required!",
+      message: "Valid quantity is mandatory",
     });
   }
 
@@ -91,7 +91,7 @@ exports.addStock = (req, res) => {
       .get(id);
 
     if (!frame) {
-      return res.status(404).json({ message: "Frame not found!" });
+      return res.status(404).json({ message: "The specified inventory item does not exist in the system" });
     }
 
     const newQuantity = frame.quantity + quantity;
@@ -116,7 +116,7 @@ exports.sellFrame = (req, res) => {
 
   if (!quantity || quantity <= 0) {
     return res.status(400).json({
-      message: "Valid quantity is required!",
+      message: "Valid quantity is mandatory",
     });
   }
 
@@ -126,12 +126,12 @@ exports.sellFrame = (req, res) => {
       .get(id);
 
     if (!frame) {
-      return res.status(404).json({ message: "Frame not found!" });
+      return res.status(404).json({ message: "The specified inventory item does not exist in the system" });
     }
 
     if (frame.quantity < quantity) {
       return res.status(400).json({
-        message: `Insufficient stock! Available: ${frame.quantity}, Requested: ${quantity}`,
+        message: `Insufficient stock available. Required: ${quantity}, Available: ${frame.quantity}`,
       });
     }
 

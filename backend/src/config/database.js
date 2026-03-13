@@ -110,6 +110,36 @@ const initDatabase = () => {
     console.log("Note: Columns migration skipped or already exist");
   }
 
+  // Add missing columns to services table if they don't exist
+  try {
+    const tableInfo = db.pragma("table_info(services)");
+    const columnNames = tableInfo.map(col => col.name);
+    
+    // Note: service_charge is on categories, not services
+    // Services will inherit charge from their category
+  } catch (err) {
+    console.log("Note: Services column check completed");
+  }
+
+  // Add missing columns to service_categories table if they don't exist
+  try {
+    const tableInfo = db.pragma("table_info(service_categories)");
+    const columnNames = tableInfo.map(col => col.name);
+    
+    const categoriesToAdd = [
+      { name: 'service_charge', def: 'REAL DEFAULT 0' }
+    ];
+
+    categoriesToAdd.forEach(col => {
+      if (!columnNames.includes(col.name)) {
+        db.exec(`ALTER TABLE service_categories ADD COLUMN ${col.name} ${col.def}`);
+        console.log(`✔️ Added '${col.name}' column to service_categories table`);
+      }
+    });
+  } catch (err) {
+    console.log("Note: Category column migration skipped or already exist");
+  }
+
   // Seed default admin user if doesn't exist
   try {
     const existingUser = db.prepare("SELECT id FROM users WHERE username = ?").get("admin");

@@ -33,14 +33,13 @@ const Settings = () => {
   const visibleTabs = tabs.filter(tab => !tab.admin || isAdministrator);
 
   const handleAvatarChange = (e) => {
-    try {
-      const formData = new FileReader();
-      if (!file) return;
+    const file = e.target.files?.[0];
+    if (!file) return;
 
-      // Validate file size (max 2MB)
-      if (file.size > 2 * 1024 * 1024) {
-        toast.error('File size must be less than 2MB');
-        return;
+    // Validate file size (max 2MB)
+    if (file.size > 2 * 1024 * 1024) {
+      toast.error('File size must be less than 2MB');
+      return;
     }
 
     // Validate file type
@@ -351,7 +350,7 @@ const Settings = () => {
                   className={`px-6 py-2 rounded-lg font-semibold transition ${
                     theme === 'light'
                       ? 'bg-amber-500 text-gray-900'
-                      : 'bg-black700 text-gray-100 hover:bg-black600'
+                      : 'bg-gray-900 text-gray-100 hover:bg-gray-800'
                   }`}
                 >
                   {theme === 'light' ? '🌞 Light Mode (Current)' : '🌙 Dark Mode'}
@@ -361,7 +360,7 @@ const Settings = () => {
 
             <div>
               <label className="block text-sm font-semibold text-gray-300 mb-2">Font Size</label>
-              <select className="w-full bg-black700 border border-gray-600 rounded-lg px-4 py-2 text-gray-100 focus:outline-none focus:border-amber-500">
+              <select className="w-full bg-gray-900 border border-gray-600 rounded-lg px-4 py-2 text-gray-100 focus:outline-none focus:border-amber-500">
                 <option>Small</option>
                 <option selected>Medium</option>
                 <option>Large</option>
@@ -392,11 +391,11 @@ const Settings = () => {
               <input
                 type="number"
                 defaultValue="30"
-                className="w-full bg-black700 border border-gray-600 rounded-lg px-4 py-2 text-gray-100 focus:outline-none focus:border-amber-500"
+                className="w-full bg-gray-900 border border-gray-600 rounded-lg px-4 py-2 text-gray-100 focus:outline-none focus:border-amber-500"
               />
             </div>
 
-            <div className="bg-black700/50 border border-gray-600 rounded-lg p-4">
+            <div className="bg-gray-900/50 border border-gray-600 rounded-lg p-4">
               <p className="text-sm text-gray-300">
                 <strong>Security Tip:</strong> Sessions will automatically expire after the configured timeout period for enhanced security.
               </p>
@@ -421,7 +420,7 @@ const Settings = () => {
           <h2 className="text-xl font-bold text-gray-100 mb-4">Database Settings</h2>
           
           <div className="space-y-4">
-            <div className="bg-black700/50 border border-gray-600 rounded-lg p-4">
+            <div className="bg-gray-900/50 border border-gray-600 rounded-lg p-4">
               <p className="text-sm text-gray-300">
                 <strong>Database Status:</strong> <span className="text-green-400">Connected</span>
               </p>

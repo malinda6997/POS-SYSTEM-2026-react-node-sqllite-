@@ -16,7 +16,7 @@ exports.getAllServiceCategories = (req, res) => {
 
 // Create service category
 exports.createServiceCategory = (req, res) => {
-  const { category_name, base_price } = req.body;
+  const { category_name, service_charge } = req.body;
 
   if (!category_name) {
     return res.status(400).json({ message: "Category name is mandatory" });
@@ -24,13 +24,13 @@ exports.createServiceCategory = (req, res) => {
 
   try {
     const stmt = db.prepare(
-      "INSERT INTO service_categories (category_name, base_price) VALUES (?, ?)"
+      "INSERT INTO service_categories (category_name, service_charge) VALUES (?, ?)"
     );
-    const result = stmt.run(category_name, base_price || 0);
+    const result = stmt.run(category_name, service_charge || 0);
     res.status(201).json({
       id: result.lastID,
       category_name,
-      base_price: base_price || 0,
+      service_charge: service_charge || 0,
     });
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -40,13 +40,13 @@ exports.createServiceCategory = (req, res) => {
 // Update service category
 exports.updateServiceCategory = (req, res) => {
   const { id } = req.params;
-  const { category_name, base_price } = req.body;
+  const { category_name, service_charge } = req.body;
 
   try {
     const stmt = db.prepare(
-      "UPDATE service_categories SET category_name = ?, base_price = ? WHERE id = ?"
+      "UPDATE service_categories SET category_name = ?, service_charge = ? WHERE id = ?"
     );
-    stmt.run(category_name, base_price, id);
+    stmt.run(category_name, service_charge || 0, id);
     res.json({ message: "Category updated successfully!" });
   } catch (err) {
     res.status(500).json({ error: err.message });
