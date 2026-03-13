@@ -19,82 +19,78 @@ const ProtectedRoute = ({ children }) => {
 };
 
 const App = () => {
-  const { theme } = useAuth();
-
   return (
-    <div className={theme === 'dark' ? 'dark' : ''}>
-      <Router>
-        <Routes>
-          <Route path="/login" element={<Login />} />
-          <Route
-            path="/dashboard"
-            element={
-              <ProtectedRoute>
-                <Dashboard />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/bookings"
-            element={
-              <ProtectedRoute>
-                <Bookings />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/customers"
-            element={
-              <ProtectedRoute>
-                <Customers />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/inventory"
-            element={
-              <ProtectedRoute>
-                <Inventory />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/services"
-            element={
-              <ProtectedRoute>
-                <Services />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/expenses"
-            element={
-              <ProtectedRoute>
-                <Expenses />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/users"
-            element={
-              <ProtectedRoute>
-                <Users />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/settings"
-            element={
-              <ProtectedRoute>
-                <Settings />
-              </ProtectedRoute>
-            }
-          />
-          <Route path="/" element={<Navigate to="/dashboard" replace />} />
-          <Route path="*" element={<Navigate to="/login" replace />} />
-        </Routes>
-      </Router>
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/login" element={<Login />} />
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/bookings"
+          element={
+            <ProtectedRoute>
+              <Bookings />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/customers"
+          element={
+            <ProtectedRoute>
+              <Customers />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/inventory"
+          element={
+            <ProtectedRoute>
+              <Inventory />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/services"
+          element={
+            <ProtectedRoute>
+              <Services />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/expenses"
+          element={
+            <ProtectedRoute>
+              <Expenses />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/users"
+          element={
+            <ProtectedRoute>
+              <Users />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/settings"
+          element={
+            <ProtectedRoute>
+              <Settings />
+            </ProtectedRoute>
+          }
+        />
+        <Route path="/" element={<Navigate to="/dashboard" replace />} />
+        <Route path="*" element={<Navigate to="/login" replace />} />
+      </Routes>
+    </Router>
   );
 };
 
