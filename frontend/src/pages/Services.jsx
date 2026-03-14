@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
-import { AlertCircle, Plus, Edit, Trash2, ChevronDown, ChevronUp } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { AlertCircle, Plus, Edit, Trash2, ChevronDown, ChevronUp, X } from 'lucide-react';
 import Layout from '../components/Layout';
 import api from '../utils/api';
 
@@ -21,6 +21,11 @@ const Services = () => {
     price: '',
     duration: '',
   });
+  const [isDeleteServiceConfirmOpen, setIsDeleteServiceConfirmOpen] = useState(false);
+  const [serviceToDelete, setServiceToDelete] = useState(null);
+  const [isDeleteCategoryConfirmOpen, setIsDeleteCategoryConfirmOpen] = useState(false);
+  const [categoryToDelete, setCategoryToDelete] = useState(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Fetch categories and services
   useEffect(() => {
@@ -89,29 +94,49 @@ const Services = () => {
   };
 
   // Delete service
-  const handleDeleteService = async (serviceId) => {
-    if (!window.confirm('Are you sure you want to delete this service?')) return;
+  const handleDeleteServiceConfirm = (service) => {
+    setServiceToDelete(service);
+    setIsDeleteServiceConfirmOpen(true);
+  };
+
+  const handleDeleteService = async () => {
+    if (!serviceToDelete) return;
+    setIsSubmitting(true);
     try {
-      await api.delete(`/services/${serviceId}`);
-      setServices(services.filter(s => s.id !== serviceId));
+      await api.delete(`/services/${serviceToDelete.id}`);
+      setServices(services.filter(s => s.id !== serviceToDelete.id));
+      setIsDeleteServiceConfirmOpen(false);
+      setServiceToDelete(null);
       setError('');
     } catch (err) {
       setError('Failed to delete service');
       console.error(err);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
   // Delete category
-  const handleDeleteCategory = async (categoryId) => {
-    if (!window.confirm('This action will permanently delete the category and all associated services. This cannot be undone. Continue?')) return;
+  const handleDeleteCategoryConfirm = (category) => {
+    setCategoryToDelete(category);
+    setIsDeleteCategoryConfirmOpen(true);
+  };
+
+  const handleDeleteCategory = async () => {
+    if (!categoryToDelete) return;
+    setIsSubmitting(true);
     try {
-      await api.delete(`/services/categories/${categoryId}`);
-      setCategories(categories.filter(c => c.id !== categoryId));
-      setServices(services.filter(s => s.category_id !== categoryId));
+      await api.delete(`/services/categories/${categoryToDelete.id}`);
+      setCategories(categories.filter(c => c.id !== categoryToDelete.id));
+      setServices(services.filter(s => s.category_id !== categoryToDelete.id));
+      setIsDeleteCategoryConfirmOpen(false);
+      setCategoryToDelete(null);
       setError('');
     } catch (err) {
       setError('Failed to delete category');
       console.error(err);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -279,7 +304,7 @@ const Services = () => {
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
-                      handleDeleteCategory(category.id);
+                      handleDeleteCategoryConfirm(category);
                     }}
                     className="text-red-400 hover:text-red-300 transition"
                   >
@@ -308,7 +333,7 @@ const Services = () => {
                               </div>
                             </div>
                             <button
-                              onClick={() => handleDeleteService(service.id)}
+                              onClick={() => handleDeleteServiceConfirm(service)}
                               className="text-red-400 hover:text-red-300 transition p-2"
                             >
                               <Trash2 size={18} />
@@ -339,6 +364,112 @@ const Services = () => {
           </div>
         )}
       </div>
+
+      {/* Delete Service Confirmation Modal */}
+      <AnimatePresence>
+        {isDeleteServiceConfirmOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
+            onClick={() => setIsDeleteServiceConfirmOpen(false)}
+          >
+            <motion.div
+              initial={{ scale: 0.95, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.95, opacity: 0 }}
+              className="bg-white dark:bg-gray-900 rounded-xl shadow-2xl p-6 w-full max-w-sm"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-xl font-bold text-gray-900 dark:text-white">Confirm Service Deletion</h2>
+                <button
+                  onClick={() => setIsDeleteServiceConfirmOpen(false)}
+                  className="p-1 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition"
+                >
+                  <X size={20} className="text-gray-600 dark:text-gray-400" />
+                </button>
+              </div>
+
+              <p className="text-gray-700 dark:text-gray-300 mb-6">
+                Remove <span className="font-semibold">{serviceToDelete?.service_name}</span> from your service catalog? This action cannot be undone.
+              </p>
+
+              <div className="flex gap-2">
+                <button
+                  type="button"
+                  onClick={() => setIsDeleteServiceConfirmOpen(false)}
+                  className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition font-medium"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  onClick={handleDeleteService}
+                  disabled={isSubmitting}
+                  className="flex-1 px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {isSubmitting ? 'Deleting...' : 'Delete'}
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Delete Category Confirmation Modal */}
+      <AnimatePresence>
+        {isDeleteCategoryConfirmOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
+            onClick={() => setIsDeleteCategoryConfirmOpen(false)}
+          >
+            <motion.div
+              initial={{ scale: 0.95, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.95, opacity: 0 }}
+              className="bg-white dark:bg-gray-900 rounded-xl shadow-2xl p-6 w-full max-w-sm"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-xl font-bold text-gray-900 dark:text-white">Confirm Category Deletion</h2>
+                <button
+                  onClick={() => setIsDeleteCategoryConfirmOpen(false)}
+                  className="p-1 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition"
+                >
+                  <X size={20} className="text-gray-600 dark:text-gray-400" />
+                </button>
+              </div>
+
+              <p className="text-gray-700 dark:text-gray-300 mb-6">
+                Delete <span className="font-semibold">{categoryToDelete?.category_name}</span> and all its services? This action cannot be reversed.
+              </p>
+
+              <div className="flex gap-2">
+                <button
+                  type="button"
+                  onClick={() => setIsDeleteCategoryConfirmOpen(false)}
+                  className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition font-medium"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  onClick={handleDeleteCategory}
+                  disabled={isSubmitting}
+                  className="flex-1 px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {isSubmitting ? 'Deleting...' : 'Delete'}
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </Layout>
   );
 };

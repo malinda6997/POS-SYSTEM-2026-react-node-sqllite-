@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'react-toastify';
 import api from '../utils/api';
 import Layout from '../components/Layout';
-import { Package, AlertTriangle, Plus, Edit, Trash2 } from 'lucide-react';
+import { Package, AlertTriangle, Plus, Edit, Trash2, X } from 'lucide-react';
 import { useAuth } from '../hooks/useAuth';
 
 const Inventory = () => {
@@ -19,6 +19,9 @@ const Inventory = () => {
     selling_price: '',
     quantity: '',
   });
+  const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
+  const [frameToDelete, setFrameToDelete] = useState(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const isAdmin = user?.role?.toLowerCase() === 'admin' || user?.role === 'Administrator';
   const isStaff = user?.role?.toLowerCase() === 'staff' || isAdmin;
@@ -85,16 +88,25 @@ const Inventory = () => {
     setShowAddForm(true);
   };
 
-  const handleDeleteFrame = async (id, name) => {
-    if (!window.confirm(`Are you sure you want to delete "${name}" from inventory? This action cannot be undone.`)) return;
+  const handleDeleteFrameConfirm = (frame) => {
+    setFrameToDelete(frame);
+    setIsDeleteConfirmOpen(true);
+  };
 
+  const handleDeleteFrame = async () => {
+    if (!frameToDelete) return;
+    setIsSubmitting(true);
     try {
-      await api.delete(`/frames/${id}`);
+      await api.delete(`/frames/${frameToDelete.id}`);
       toast.success('Inventory item deleted successfully!');
+      setIsDeleteConfirmOpen(false);
+      setFrameToDelete(null);
       fetchInventory();
     } catch (err) {
       console.error(err);
       toast.error('Failed to delete inventory item');
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -303,7 +315,7 @@ const Inventory = () => {
                         </button>
                         {isAdmin && (
                           <button
-                            onClick={() => handleDeleteFrame(frame.id, frame.frame_name)}
+                            onClick={() => handleDeleteFrameConfirm(frame)}
                             className="text-red-400 hover:text-red-300 transition p-2"
                             title="Delete"
                           >
@@ -319,6 +331,59 @@ const Inventory = () => {
           </div>
         </motion.div>
       </motion.div>
+
+      {/* Delete Confirmation Modal */}
+      <AnimatePresence>
+        {isDeleteConfirmOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
+            onClick={() => setIsDeleteConfirmOpen(false)}
+          >
+            <motion.div
+              initial={{ scale: 0.95, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.95, opacity: 0 }}
+              className="bg-white dark:bg-gray-900 rounded-xl shadow-2xl p-6 w-full max-w-sm"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-xl font-bold text-gray-900 dark:text-white">Confirm Inventory Deletion</h2>
+                <button
+                  onClick={() => setIsDeleteConfirmOpen(false)}
+                  className="p-1 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition"
+                >
+                  <X size={20} className="text-gray-600 dark:text-gray-400" />
+                </button>
+              </div>
+
+              <p className="text-gray-700 dark:text-gray-300 mb-6">
+                Remove <span className="font-semibold">{frameToDelete?.frame_name}</span> from inventory? This action cannot be reversed.
+              </p>
+
+              <div className="flex gap-2">
+                <button
+                  type="button"
+                  onClick={() => setIsDeleteConfirmOpen(false)}
+                  className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition font-medium"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  onClick={handleDeleteFrame}
+                  disabled={isSubmitting}
+                  className="flex-1 px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {isSubmitting ? 'Deleting...' : 'Delete'}
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </Layout>
   );
 };

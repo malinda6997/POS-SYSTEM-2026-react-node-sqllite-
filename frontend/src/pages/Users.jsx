@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { AlertCircle, Plus, Edit2, Trash2, Shield, Eye, EyeOff, Check, X } from 'lucide-react';
 import Layout from '../components/Layout';
 import api from '../utils/api';
@@ -14,6 +14,9 @@ const Users = () => {
   const [showForm, setShowForm] = useState(false);
   const [editingId, setEditingId] = useState(null);
   const [validationErrors, setValidationErrors] = useState({});
+  const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
+  const [userToDelete, setUserToDelete] = useState(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [newUser, setNewUser] = useState({
     username: '',
@@ -142,16 +145,26 @@ const Users = () => {
   };
 
   // Delete user
-  const handleDeleteUser = async (userId) => {
-    if (!window.confirm('Are you sure? This action cannot be undone.')) return;
+  const handleDeleteConfirm = (user) => {
+    setUserToDelete(user);
+    setIsDeleteConfirmOpen(true);
+  };
+
+  const handleDeleteUser = async () => {
+    if (!userToDelete) return;
+    setIsSubmitting(true);
     try {
-      await api.delete(`/users/${userId}`);
+      await api.delete(`/users/${userToDelete.id}`);
       setSuccess('User deleted successfully!');
-      setUsers(users.filter(u => u.id !== userId));
+      setUsers(users.filter(u => u.id !== userToDelete.id));
+      setIsDeleteConfirmOpen(false);
+      setUserToDelete(null);
       setTimeout(() => setSuccess(''), 3000);
     } catch (err) {
       setError(err.response?.data?.message || 'Failed to delete user');
       console.error(err);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -402,7 +415,7 @@ const Users = () => {
                           <motion.button
                             whileHover={{ scale: 1.1 }}
                             whileTap={{ scale: 0.9 }}
-                            onClick={() => handleDeleteUser(user.id)}
+                            onClick={() => handleDeleteConfirm(user)}
                             className="text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 p-1"
                             title="Delete user"
                           >
@@ -424,6 +437,59 @@ const Users = () => {
           </div>
         </motion.div>
       </motion.div>
+
+      {/* Delete Confirmation Modal */}
+      <AnimatePresence>
+        {isDeleteConfirmOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
+            onClick={() => setIsDeleteConfirmOpen(false)}
+          >
+            <motion.div
+              initial={{ scale: 0.95, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.95, opacity: 0 }}
+              className="bg-white dark:bg-gray-900 rounded-xl shadow-2xl p-6 w-full max-w-sm"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-xl font-bold text-gray-900 dark:text-white">Confirm User Removal</h2>
+                <button
+                  onClick={() => setIsDeleteConfirmOpen(false)}
+                  className="p-1 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition"
+                >
+                  <X size={20} className="text-gray-600 dark:text-gray-400" />
+                </button>
+              </div>
+
+              <p className="text-gray-700 dark:text-gray-300 mb-6">
+                Permanently remove <span className="font-semibold">{userToDelete?.full_name}</span> from the system? All access and permissions will be revoked.
+              </p>
+
+              <div className="flex gap-2">
+                <button
+                  type="button"
+                  onClick={() => setIsDeleteConfirmOpen(false)}
+                  className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition font-medium"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  onClick={handleDeleteUser}
+                  disabled={isSubmitting}
+                  className="flex-1 px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {isSubmitting ? 'Deleting...' : 'Delete'}
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </Layout>
   );
 };

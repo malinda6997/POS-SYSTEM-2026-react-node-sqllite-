@@ -466,7 +466,7 @@ const Customers = () => {
                 onClick={(e) => e.stopPropagation()}
               >
                 <div className="flex items-center justify-between mb-4">
-                  <h2 className="text-xl font-bold text-gray-900 dark:text-white">Delete Customer</h2>
+                  <h2 className="text-xl font-bold text-gray-900 dark:text-white">Confirm Customer Removal</h2>
                   <button
                     onClick={() => setIsDeleteConfirmOpen(false)}
                     className="p-1 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition"
@@ -476,7 +476,7 @@ const Customers = () => {
                 </div>
 
                 <p className="text-gray-700 dark:text-gray-300 mb-6">
-                  Are you sure you want to delete <span className="font-semibold">{customerToDelete?.customer_name}</span>? This action cannot be undone.
+                  Permanently delete customer <span className="font-semibold">{customerToDelete?.customer_name}</span>? All associated records including bookings, payments, and transaction history will be permanently removed from the system and cannot be recovered.
                 </p>
 
                 <div className="flex gap-2">
