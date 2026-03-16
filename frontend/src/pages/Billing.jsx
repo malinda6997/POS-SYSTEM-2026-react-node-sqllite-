@@ -198,13 +198,13 @@ const Billing = () => {
       const bookingData = response.data.data;
 
       // Generate professional bill PDF
-      const billResponse = await api.post('/bookings/generate-bill', {
+      const billResponse = await api.post('/bookings/generate-bill-now', {
         ...billData,
         id: bookingData.id,
         date: new Date().toISOString()
       });
 
-      if (billResponse.data.data.file_path) {
+      if (billResponse.data?.data?.file_name) {
         // Download the PDF
         const link = document.createElement('a');
         link.href = `http://localhost:5000/api/bookings/download-bill/${billResponse.data.data.file_name}`;

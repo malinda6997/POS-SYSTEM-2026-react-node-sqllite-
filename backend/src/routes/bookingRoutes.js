@@ -7,45 +7,12 @@ const authMiddleware = require("../middleware/authMiddleware");
 const { generateThermalBill, generateProfessionalThermalBill, generateA4Invoice } = require("../utils/pdfService");
 const { db } = require("../config/database");
 
+// ========== GET ROUTES ==========
 // Get all bookings - PUBLIC
 router.get("/", bookingController.getAllBookings);
 
 // Get pending bookings - PUBLIC
 router.get("/pending", bookingController.getPendingBookings);
-
-// Generate professional thermal bill - PUBLIC (must be before /:id routes)
-router.post("/generate-bill", async (req, res) => {
-  try {
-    const billData = req.body;
-    
-    // Validate required fields
-    if (!billData.customer_name || !billData.total_amount) {
-      return res.status(400).json({
-        message: "Customer name and total amount are required!",
-      });
-    }
-
-    // Set default values
-    billData.id = billData.id || 1;
-    billData.date = billData.date || new Date();
-    billData.services = billData.services || [];
-
-    const filePath = await generateProfessionalThermalBill(billData);
-    
-    // Return success with file download info
-    res.json({
-      data: {
-        success: true,
-        message: "Bill generated successfully!",
-        file_path: filePath,
-        file_name: path.basename(filePath)
-      }
-    });
-  } catch (err) {
-    console.error("Bill generation error:", err);
-    res.status(500).json({ error: err.message });
-  }
-});
 
 // Download bill file - PUBLIC
 router.get("/download-bill/:filename", (req, res) => {
@@ -69,18 +36,50 @@ router.get("/download-bill/:filename", (req, res) => {
   }
 });
 
-// Get booking by ID - PUBLIC
+// Get booking by ID - PUBLIC (MUST come after specific named routes)
 router.get("/:id", bookingController.getBookingById);
 
-// Create new booking - PUBLIC (allows billing form to create bookings without auth)
+// ========== POST ROUTES ==========
+// Create new booking - PUBLIC
 router.post("/", bookingController.createBooking);
 
-// Update booking - PROTECTED
-router.put("/:id", authMiddleware, bookingController.updateBooking);
+// Generate professional thermal bill - PUBLIC
+router.post("/generate-bill-now", async (req, res) => {
+  try {
+    console.log("📄 Bill generation request received");
+    const billData = req.body;
+    
+    // Validate required fields
+    if (!billData.customer_name || !billData.total_amount) {
+      console.log("❌ Missing required fields:", { customer_name: billData.customer_name, total_amount: billData.total_amount });
+      return res.status(400).json({
+        message: "Customer name and total amount are required!",
+      });
+    }
 
-// Delete booking - PROTECTED
-router.delete("/:id", authMiddleware, bookingController.deleteBooking);
+    // Set default values
+    billData.id = billData.id || 1;
+    billData.date = billData.date || new Date();
+    billData.services = billData.services || [];
 
+    console.log("📝 Generating bill for:", billData.customer_name);
+    const filePath = await generateProfessionalThermalBill(billData);
+    console.log("✅ Bill generated at:", filePath);
+    
+    // Return success with file download info
+    res.json({
+      data: {
+        success: true,
+        message: "Bill generated successfully!",
+        file_path: filePath,
+        file_name: path.basename(filePath)
+      }
+    });
+  } catch (err) {
+    console.error("❌ Bill generation error:", err);
+    res.status(500).json({ error: err.message });
+  }
+});
 
 // Generate thermal bill (80mm format)
 router.post("/:id/generate-thermal-bill", async (req, res) => {
@@ -137,5 +136,13 @@ router.post("/:id/generate-invoice", async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
+
+// ========== PUT ROUTES ==========
+// Update booking - PROTECTED
+router.put("/:id", authMiddleware, bookingController.updateBooking);
+
+// ========== DELETE ROUTES ==========
+// Delete booking - PROTECTED
+router.delete("/:id", authMiddleware, bookingController.deleteBooking);
 
 module.exports = router;
