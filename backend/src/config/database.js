@@ -59,6 +59,7 @@ const initDatabase = () => {
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             customer_name TEXT NOT NULL,
             mobile_number TEXT,
+            email TEXT,
             address TEXT
         );
 

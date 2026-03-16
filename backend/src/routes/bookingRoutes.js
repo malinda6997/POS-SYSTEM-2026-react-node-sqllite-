@@ -5,26 +5,23 @@ const authMiddleware = require("../middleware/authMiddleware");
 const { generateThermalBill, generateA4Invoice } = require("../utils/pdfService");
 const { db } = require("../config/database");
 
-// All routes require authentication
-router.use(authMiddleware);
-
-// Get all bookings
+// Get all bookings - PUBLIC
 router.get("/", bookingController.getAllBookings);
 
-// Get pending bookings
+// Get pending bookings - PUBLIC
 router.get("/pending", bookingController.getPendingBookings);
 
-// Get booking by ID
+// Get booking by ID - PUBLIC
 router.get("/:id", bookingController.getBookingById);
 
-// Create new booking
+// Create new booking - PUBLIC (allows billing form to create bookings without auth)
 router.post("/", bookingController.createBooking);
 
-// Update booking
-router.put("/:id", bookingController.updateBooking);
+// Update booking - PROTECTED
+router.put("/:id", authMiddleware, bookingController.updateBooking);
 
-// Delete booking
-router.delete("/:id", bookingController.deleteBooking);
+// Delete booking - PROTECTED
+router.delete("/:id", authMiddleware, bookingController.deleteBooking);
 
 // Generate thermal bill (80mm format)
 router.post("/:id/generate-thermal-bill", async (req, res) => {

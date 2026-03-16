@@ -46,55 +46,88 @@ exports.getBookingById = (req, res) => {
 };
 
 // Create a new booking
-// IMPORTANT: mobile_number and address are MANDATORY
+// Accepts both old format (customer_id, event_date, event_time) and new billing form format
 exports.createBooking = (req, res) => {
   const {
     customer_id,
+    customer_name,
     customer_mobile,
+    mobile_number,
     customer_address,
+    address,
+    email,
     total_amount,
     advance_paid,
+    advance_amount,
+    payment_status,
     event_date,
     event_time,
     status,
+    services,
   } = req.body;
 
+  // Determine mobile and address (handle both old and new field names)
+  const finalMobile = customer_mobile || mobile_number;
+  const finalAddress = customer_address || address;
+  const finalTotal = total_amount || 0;
+  const finalAdvance = advance_paid || (payment_status === 'advance' ? advance_amount : 0) || 0;
+
   // Validation: mobile_number and address are mandatory
-  if (!customer_mobile || !customer_mobile.trim()) {
+  if (!finalMobile || !finalMobile.trim()) {
     return res.status(400).json({
       message: "Customer mobile number is mandatory for booking!",
     });
   }
 
-  if (!customer_address || !customer_address.trim()) {
+  if (!finalAddress || !finalAddress.trim()) {
     return res.status(400).json({
       message: "Customer address is mandatory for booking!",
     });
   }
 
-  if (!customer_id) {
-    return res.status(400).json({ message: "Customer ID is required!" });
-  }
-
-  if (!total_amount || total_amount <= 0) {
+  if (!finalTotal || finalTotal <= 0) {
     return res.status(400).json({ message: "Valid total amount is required!" });
   }
 
-  if (!event_date || !event_time) {
-    return res.status(400).json({
-      message: "Event date and time are required!",
-    });
-  }
-
   try {
-    // Verify customer exists
-    const customer = db
-      .prepare("SELECT id FROM customers WHERE id = ?")
-      .get(customer_id);
+    let customerId = customer_id;
 
-    if (!customer) {
-      return res.status(404).json({ message: "Customer not found!" });
+    // If customer_id is not provided, try to find or create customer
+    if (!customerId) {
+      if (!customer_name) {
+        return res.status(400).json({ message: "Customer name is required!" });
+      }
+
+      // Try to find customer by name and mobile
+      const existingCustomer = db
+        .prepare("SELECT id FROM customers WHERE customer_name = ? OR mobile_number = ?")
+        .get(customer_name, finalMobile);
+
+      if (existingCustomer) {
+        customerId = existingCustomer.id;
+      } else {
+        // Create new customer if doesn't exist
+        const insertCustomer = db.prepare(
+          "INSERT INTO customers (customer_name, mobile_number, email, address) VALUES (?, ?, ?, ?)"
+        );
+        const customerResult = insertCustomer.run(customer_name, finalMobile, email || null, finalAddress);
+        customerId = customerResult.lastID;
+      }
+    } else {
+      // Verify customer exists
+      const customer = db
+        .prepare("SELECT id FROM customers WHERE id = ?")
+        .get(customerId);
+
+      if (!customer) {
+        return res.status(404).json({ message: "Customer not found!" });
+      }
     }
+
+    // Use provided date/time or default to today
+    const finalDate = event_date || new Date().toISOString().split('T')[0];
+    const finalTime = event_time || new Date().toLocaleTimeString('en-US', { hour12: false });
+    const finalStatus = status || "Pending";
 
     const stmt = db.prepare(`
       INSERT INTO bookings 
@@ -103,29 +136,31 @@ exports.createBooking = (req, res) => {
     `);
 
     const result = stmt.run(
-      customer_id,
-      customer_mobile,
-      customer_address,
-      total_amount,
-      advance_paid || 0,
-      event_date,
-      event_time,
-      status || "Pending",
-      req.user.id
+      customerId,
+      finalMobile,
+      finalAddress,
+      finalTotal,
+      finalAdvance,
+      finalDate,
+      finalTime,
+      finalStatus,
+      req.user?.id || 1  // Default to user 1 if not authenticated
     );
 
     res.status(201).json({
-      id: result.lastID,
-      customer_id,
-      customer_mobile,
-      customer_address,
-      total_amount,
-      advance_paid: advance_paid || 0,
-      event_date,
-      event_time,
-      status: status || "Pending",
-      booking_date: new Date().toISOString(),
-      created_by: req.user.id,
+      data: {
+        id: result.lastID,
+        customer_id: customerId,
+        customer_mobile: finalMobile,
+        customer_address: finalAddress,
+        total_amount: finalTotal,
+        advance_paid: finalAdvance,
+        event_date: finalDate,
+        event_time: finalTime,
+        status: finalStatus,
+        booking_date: new Date().toISOString(),
+      },
+      message: "Bill created successfully!"
     });
   } catch (err) {
     res.status(500).json({ error: err.message });

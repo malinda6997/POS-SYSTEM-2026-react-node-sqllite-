@@ -3,22 +3,19 @@ const router = express.Router();
 const customerController = require("../controllers/customerController");
 const authMiddleware = require("../middleware/authMiddleware");
 
-// All routes require authentication
-router.use(authMiddleware);
-
-// Get all customers
+// Get all customers - Public endpoint for billing form
 router.get("/", customerController.getAllCustomers);
 
-// Get customer by ID
+// Get customer by ID - Public endpoint
 router.get("/:id", customerController.getCustomerById);
 
-// Create new customer
+// Create new customer - Public endpoint for billing form
 router.post("/", customerController.createCustomer);
 
-// Update customer
+// Update customer - Public endpoint for billing form
 router.put("/:id", customerController.updateCustomer);
 
-// Delete customer
-router.delete("/:id", customerController.deleteCustomer);
+// Delete customer - Requires authentication
+router.delete("/:id", authMiddleware, customerController.deleteCustomer);
 
 module.exports = router;

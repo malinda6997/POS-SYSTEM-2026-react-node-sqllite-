@@ -8,7 +8,7 @@ exports.getAllServiceCategories = (req, res) => {
     const categories = db
       .prepare("SELECT * FROM service_categories")
       .all();
-    res.json(categories);
+    res.json({ data: categories });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -90,7 +90,7 @@ exports.getAllServices = (req, res) => {
         LEFT JOIN service_categories sc ON s.category_id = sc.id
       `)
       .all();
-    res.json(services);
+    res.json({ data: services });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -110,7 +110,7 @@ exports.getServicesByCategory = (req, res) => {
         WHERE s.category_id = ?
       `)
       .all(category_id);
-    res.json(services);
+    res.json({ data: services });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

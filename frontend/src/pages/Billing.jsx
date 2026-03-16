@@ -1,9 +1,9 @@
 import { useEffect, useState, useCallback } from 'react';
-import { motion } from 'framer-motion';
-import { Search, Filter, Trash2, Eye, Printer } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Search, Filter, Trash2, Eye, X } from 'lucide-react';
 import Layout from '../components/Layout';
 import api from '../utils/api';
-import { formatLKR, formatLKRShort } from '../utils/currency';
+import { formatLKR } from '../utils/currency';
 
 const Billing = () => {
   const [bills, setBills] = useState([]);
@@ -11,6 +11,12 @@ const Billing = () => {
   const [search, setSearch] = useState('');
   const [filter, setFilter] = useState('all');
   const [services, setServices] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [customers, setCustomers] = useState([]);
+  const [filteredCustomers, setFilteredCustomers] = useState([]);
+  const [showCustomerDropdown, setShowCustomerDropdown] = useState(false);
+  const [showServiceModal, setShowServiceModal] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState(null);
 
   // Form state
   const [formData, setFormData] = useState({
@@ -20,12 +26,16 @@ const Billing = () => {
     email: '',
     paymentStatus: 'full',
     advanceAmount: '',
+    customerGivenAmount: '',
     selectedServices: [],
+    serviceQuantities: {}, // Track quantities for each service
   });
 
   useEffect(() => {
     fetchBills();
     fetchServices();
+    fetchCategories();
+    fetchCustomers();
   }, []);
 
   const fetchBills = async () => {
@@ -49,27 +59,92 @@ const Billing = () => {
     }
   };
 
+  const fetchCategories = async () => {
+    try {
+      const res = await api.get('/services/categories');
+      setCategories(res.data.data || []);
+    } catch (err) {
+      console.error('Error fetching categories:', err);
+    }
+  };
+
+  const fetchCustomers = async () => {
+    try {
+      const res = await api.get('/customers');
+      console.log('API Response:', res.data);
+      const customersData = res.data.data || [];
+      console.log('Total customers loaded:', customersData.length, customersData);
+      setCustomers(customersData);
+    } catch (err) {
+      console.error('Error fetching customers:', err);
+    }
+  };
+
   const handleFormChange = useCallback((e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
       [name]: value,
     }));
-  }, []);
+
+    // Filter customers when typing customer name - only after 3 characters
+    if (name === 'customerName') {
+      console.log('Customer name changed to:', value, 'Available customers:', customers.length);
+      if (value.length >= 3) {
+        const filtered = customers.filter(c =>
+          c.customer_name.toLowerCase().includes(value.toLowerCase()) ||
+          c.mobile_number?.includes(value) ||
+          c.address?.toLowerCase().includes(value.toLowerCase())
+        );
+        console.log('Filtered results:', filtered);
+        setFilteredCustomers(filtered);
+        setShowCustomerDropdown(true);
+      } else {
+        setFilteredCustomers([]);
+        setShowCustomerDropdown(false);
+      }
+    }
+  }, [customers]);
 
   const handleServiceToggle = (serviceId) => {
     setFormData((prev) => {
-      const selected = prev.selectedServices.includes(serviceId)
+      const isSelected = prev.selectedServices.includes(serviceId);
+      const newSelectedServices = isSelected
         ? prev.selectedServices.filter((id) => id !== serviceId)
         : [...prev.selectedServices, serviceId];
-      return { ...prev, selectedServices: selected };
+      
+      const newQuantities = { ...prev.serviceQuantities };
+      if (!isSelected && !newQuantities[serviceId]) {
+        newQuantities[serviceId] = 1; // Default quantity is 1
+      }
+      
+      return {
+        ...prev,
+        selectedServices: newSelectedServices,
+        serviceQuantities: newQuantities,
+      };
     });
+  };
+
+  const updateServiceQuantity = (serviceId, quantity) => {
+    if (quantity <= 0) {
+      handleServiceToggle(serviceId); // Deselect if quantity is 0
+    } else {
+      setFormData((prev) => ({
+        ...prev,
+        serviceQuantities: {
+          ...prev.serviceQuantities,
+          [serviceId]: quantity,
+        },
+      }));
+    }
   };
 
   const calculateTotal = () => {
     return formData.selectedServices.reduce((total, serviceId) => {
       const service = services.find((s) => s.id === serviceId);
-      return total + (service?.price || 0);
+      const quantity = formData.serviceQuantities[serviceId] || 1;
+      return total + ((service?.price || 0) * quantity);
     }, 0);
   };
 
@@ -81,8 +156,13 @@ const Billing = () => {
       return;
     }
 
-    if (formData.selectedServices.length === 0) {
-      alert('Please select at least one service');
+    if (formData.mobileNumber.trim() === '') {
+      alert('Customer mobile number is required');
+      return;
+    }
+
+    if (formData.address.trim() === '') {
+      alert('Customer address is required');
       return;
     }
 
@@ -90,17 +170,17 @@ const Billing = () => {
       const total = calculateTotal();
       const billData = {
         customer_name: formData.customerName,
-        mobile_number: formData.mobileNumber || null,
-        address: formData.address || null,
+        mobile_number: formData.mobileNumber,
+        address: formData.address,
         email: formData.email || null,
         services: formData.selectedServices,
         total_amount: total,
         payment_status: formData.paymentStatus,
         advance_amount: formData.paymentStatus === 'advance' ? parseFloat(formData.advanceAmount) || 0 : null,
-        status: 'completed',
+        status: 'Pending',
       };
 
-      await api.post('/bookings', billData);
+      const response = await api.post('/bookings', billData);
       
       setFormData({
         customerName: '',
@@ -109,14 +189,22 @@ const Billing = () => {
         email: '',
         paymentStatus: 'full',
         advanceAmount: '',
+        customerGivenAmount: '',
         selectedServices: [],
+        serviceQuantities: {},
       });
       
+      // Reset dropdowns and modals
+      setShowCustomerDropdown(false);
+      setFilteredCustomers([]);
+      setShowServiceModal(false);
+      setSelectedCategory(null);
+      
       fetchBills();
-      alert('Bill created successfully!');
+      alert('✓ Bill created successfully!');
     } catch (err) {
       console.error('Error creating bill:', err);
-      alert('Error creating bill: ' + err.message);
+      alert('Error creating bill: ' + (err.response?.data?.message || err.message));
     }
   };
 
@@ -157,26 +245,53 @@ const Billing = () => {
 
   const total = calculateTotal();
 
-  const handlePrintBill = () => {
-    const printContent = document.getElementById('thermal-bill-preview');
-    const printWindow = window.open('', '', 'width=400,height=600');
-    printWindow.document.write(`
-      <html>
-        <head>
-          <style>
-            body { font-family: 'Courier New', monospace; font-size: 12px; margin: 0; padding: 10px; }
-            .receipt { width: 80mm; }
-          </style>
-        </head>
-        <body>
-          <div class="receipt">
-            ${printContent.innerHTML}
-          </div>
-        </body>
-      </html>
-    `);
-    printWindow.document.close();
-    setTimeout(() => printWindow.print(), 250);
+  const selectCustomer = (customer) => {
+    setFormData(prev => ({
+      ...prev,
+      customerName: customer.customer_name,
+      mobileNumber: customer.mobile_number || '',
+      email: customer.email || '',
+      address: customer.address || '',
+    }));
+    setShowCustomerDropdown(false);
+    setFilteredCustomers([]);
+  };
+
+  const addNewCustomer = async () => {
+    if (!formData.customerName.trim()) {
+      alert('Customer name is required');
+      return;
+    }
+
+    try {
+      const res = await api.post('/customers', {
+        customer_name: formData.customerName,
+        mobile_number: formData.mobileNumber || null,
+        email: formData.email || null,
+        address: formData.address || null,
+      });
+      
+      // Add new customer to the list
+      const newCustomer = res.data.data;
+      setCustomers([...customers, newCustomer]);
+      setShowCustomerDropdown(false);
+      alert('Customer added successfully!');
+    } catch (err) {
+      console.error('Error adding customer:', err);
+      alert('Error adding customer: ' + err.message);
+    }
+  };
+
+  const resetCustomerSection = () => {
+    setFormData(prev => ({
+      ...prev,
+      customerName: '',
+      mobileNumber: '',
+      address: '',
+      email: '',
+    }));
+    setShowCustomerDropdown(false);
+    setFilteredCustomers([]);
   };
 
   const resetForm = () => {
@@ -187,8 +302,12 @@ const Billing = () => {
       email: '',
       paymentStatus: 'full',
       advanceAmount: '',
+      customerGivenAmount: '',
       selectedServices: [],
+      serviceQuantities: {},
     });
+    setShowCustomerDropdown(false);
+    setFilteredCustomers([]);
   };
 
   return (
@@ -218,12 +337,23 @@ const Billing = () => {
             <div className="border border-gray-200 dark:border-gray-700 rounded-xl p-6">
               <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Create Bill</h2>
               
-              <form onSubmit={handleSubmit} className="space-y-5">
-                {/* Customer Details Section */}
+              <form onSubmit={handleSubmit} className="space-y-6">
+                {/* PART 1: Customer Details Section */}
                 <div className="space-y-4">
-                  <h3 className="text-sm font-semibold text-gray-300 uppercase tracking-wide border-b border-gray-800 pb-2">Customer Details</h3>
+                  <div className="flex items-center justify-between">
+                    <h3 className="text-sm font-semibold text-gray-300 uppercase tracking-wide border-b border-gray-800 pb-2">1. Customer Details</h3>
+                    {formData.customerName && (
+                      <button
+                        type="button"
+                        onClick={resetCustomerSection}
+                        className="px-3 py-1 text-xs bg-gray-700 hover:bg-gray-600 rounded text-gray-300 transition font-medium"
+                      >
+                        Clear
+                      </button>
+                    )}
+                  </div>
                   
-                  <div>
+                  <div className="relative">
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                       Customer Name <span className="text-gray-500">*</span>
                     </label>
@@ -232,11 +362,74 @@ const Billing = () => {
                       name="customerName"
                       value={formData.customerName}
                       onChange={handleFormChange}
-                      placeholder="Enter customer name"
+                      onFocus={() => {
+                        if (formData.customerName && filteredCustomers.length > 0) {
+                          setShowCustomerDropdown(true);
+                        }
+                      }}
+                      placeholder="Enter customer name or search existing"
                       required
                       className="w-full px-3 py-2 border border-gray-800 rounded-lg bg-black dark:bg-black text-white focus:outline-none focus:ring-2 focus:ring-gray-700 transition text-sm"
                     />
+                    
+                    {/* Customer Dropdown */}
+                    <AnimatePresence>
+                      {showCustomerDropdown && filteredCustomers.length > 0 && (
+                        <motion.div
+                          initial={{ opacity: 0, y: -10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0, y: -10 }}
+                          className="absolute top-full left-0 right-0 mt-1 bg-gray-800 border border-gray-700 rounded-lg shadow-lg z-50 max-h-60 overflow-y-auto"
+                        >
+                          {filteredCustomers.map((customer) => (
+                            <button
+                              key={customer.id}
+                              type="button"
+                              onClick={() => selectCustomer(customer)}
+                              className="w-full text-left px-4 py-2 hover:bg-gray-700 transition border-b border-gray-700 last:border-b-0"
+                            >
+                              <div className="text-sm font-medium text-white">{customer.customer_name}</div>
+                              <div className="text-xs text-gray-400">
+                                {customer.mobile_number}
+                              </div>
+                            </button>
+                          ))}
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+
+                    {/* Quick Add Button */}
+                    {showCustomerDropdown && formData.customerName.length >= 3 && filteredCustomers.length === 0 && (
+                      <motion.div
+                        initial={{ opacity: 0, y: -10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="absolute top-full left-0 right-0 mt-1 bg-gray-800 border border-gray-700 rounded-lg p-3 z-50"
+                      >
+                        <p className="text-sm text-gray-400 mb-3">No matching customer found. Fill details and add as new.</p>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            // Keep dropdown open to allow filling details
+                            setShowCustomerDropdown(false);
+                          }}
+                          className="w-full px-4 py-2 bg-green-600 hover:bg-green-700 rounded-lg text-white transition font-medium text-sm"
+                        >
+                          + Add New Customer
+                        </button>
+                      </motion.div>
+                    )}
                   </div>
+
+                  {/* Fallback Add Customer Button - Shows when details filled manually */}
+                  {formData.customerName && !showCustomerDropdown && formData.customerName.length >= 3 && !filteredCustomers.some(c => c.customer_name === formData.customerName) && (
+                    <button
+                      type="button"
+                      onClick={addNewCustomer}
+                      className="w-full px-4 py-2 bg-green-600 hover:bg-green-700 rounded-lg text-white transition font-medium text-sm"
+                    >
+                      + Add New Customer
+                    </button>
+                  )}
 
                   <div className="grid grid-cols-2 gap-3">
                     <div>
@@ -276,85 +469,227 @@ const Billing = () => {
                   </div>
                 </div>
 
-                {/* Services Section */}
+                {/* PART 2: Category and Services Section */}
                 <div className="space-y-3">
-                  <h3 className="text-sm font-semibold text-gray-300 uppercase tracking-wide border-b border-gray-800 pb-2">Choose Services <span className="text-gray-500">*</span></h3>
-                  {services.length === 0 ? (
-                    <p className="text-gray-500 dark:text-gray-400 text-sm">No services available</p>
+                  <h3 className="text-sm font-semibold text-gray-300 uppercase tracking-wide border-b border-gray-800 pb-2">2. Select Category & Services <span className="text-gray-500">*</span></h3>
+                  {categories.length === 0 ? (
+                    <p className="text-gray-500 dark:text-gray-400 text-sm">No categories available</p>
                   ) : (
-                    <div className="max-h-64 overflow-y-auto space-y-2">
-                      {services.map((service) => (
-                        <label key={service.id} className="flex items-start gap-2 p-3 border border-gray-800 rounded-lg hover:bg-gray-900/50 dark:hover:bg-gray-900/50 cursor-pointer transition">
-                          <input
-                            type="checkbox"
-                            checked={formData.selectedServices.includes(service.id)}
-                            onChange={() => handleServiceToggle(service.id)}
-                            className="w-4 h-4 mt-0.5 text-gray-700 rounded focus:ring-2 focus:ring-gray-700"
-                          />
-                          <div className="flex-1 min-w-0">
-                            <p className="text-sm font-medium text-gray-900 dark:text-white">{service.name}</p>
-                            <p className="text-xs text-gray-600 dark:text-gray-400 font-semibold">${service.price}</p>
-                          </div>
-                        </label>
+                    <div className="flex flex-wrap gap-2">
+                      {categories.map((category) => (
+                        <button
+                          key={category.id}
+                          type="button"
+                          onClick={() => {
+                            setSelectedCategory(category);
+                            setShowServiceModal(true);
+                          }}
+                          className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-full text-sm font-medium transition transform hover:scale-105"
+                        >
+                          {category.category_name}
+                        </button>
                       ))}
                     </div>
                   )}
+
+                  {/* Service Selection Modal */}
+                  <AnimatePresence>
+                    {showServiceModal && selectedCategory && (
+                      <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+                        onClick={() => setShowServiceModal(false)}
+                      >
+                        <motion.div
+                          initial={{ scale: 0.9, opacity: 0 }}
+                          animate={{ scale: 1, opacity: 1 }}
+                          exit={{ scale: 0.9, opacity: 0 }}
+                          className="bg-gray-900 rounded-lg p-6 w-full max-w-md max-h-[600px] overflow-y-auto border border-gray-700"
+                          onClick={(e) => e.stopPropagation()}
+                        >
+                          {/* Modal Header with Category Info */}
+                          <div className="mb-6 pb-4 border-b border-gray-700">
+                            <div className="flex items-start justify-between mb-3">
+                              <div>
+                                <h3 className="text-lg font-bold text-white">{selectedCategory.category_name}</h3>
+                                <p className="text-sm text-gray-400 mt-1">Select services and set quantities</p>
+                              </div>
+                              <button
+                                onClick={() => setShowServiceModal(false)}
+                                className="text-gray-400 hover:text-white transition"
+                              >
+                                <X size={24} />
+                              </button>
+                            </div>
+                            
+                            {/* Category Details */}
+                            <div className="bg-gray-800 rounded-lg p-3 space-y-1">
+                              <div className="flex justify-between text-sm">
+                                <span className="text-gray-400">Category Price:</span>
+                                <span className="text-white font-semibold">{formatLKR(0)}</span>
+                              </div>
+                              {selectedCategory.service_charge > 0 && (
+                                <div className="flex justify-between text-sm">
+                                  <span className="text-gray-400">Service Charge:</span>
+                                  <span className="text-blue-400 font-semibold">{formatLKR(selectedCategory.service_charge)}</span>
+                                </div>
+                              )}
+                            </div>
+                          </div>
+
+                          {/* Services List */}
+                          <div className="space-y-3">
+                            {services.filter(s => s.category_id === selectedCategory.id).length === 0 ? (
+                              <p className="text-gray-500 text-sm">No services in this category</p>
+                            ) : (
+                              services
+                                .filter(s => s.category_id === selectedCategory.id)
+                                .map((service) => (
+                                  <div
+                                    key={service.id}
+                                    className="p-3 border border-gray-700 rounded-lg hover:bg-gray-800/50 transition"
+                                  >
+                                    <div className="flex items-start justify-between mb-2">
+                                      <div className="flex-1">
+                                        <p className="text-sm font-medium text-white">{service.name}</p>
+                                        <p className="text-xs text-gray-400">{formatLKR(service.price)}</p>
+                                      </div>
+                                      <input
+                                        type="checkbox"
+                                        checked={formData.selectedServices.includes(service.id)}
+                                        onChange={() => handleServiceToggle(service.id)}
+                                        className="w-4 h-4 text-blue-600 rounded focus:ring-2 focus:ring-blue-500 mt-1"
+                                      />
+                                    </div>
+
+                                    {/* Quantity Controls */}
+                                    {formData.selectedServices.includes(service.id) && (
+                                      <div className="flex items-center justify-between bg-gray-800 rounded-lg p-2">
+                                        <span className="text-xs text-gray-400">Quantity:</span>
+                                        <div className="flex items-center gap-2">
+                                          <button
+                                            type="button"
+                                            onClick={() => updateServiceQuantity(service.id, (formData.serviceQuantities[service.id] || 1) - 1)}
+                                            className="w-6 h-6 flex items-center justify-center bg-gray-700 hover:bg-gray-600 text-white rounded transition text-sm font-bold"
+                                          >
+                                            −
+                                          </button>
+                                          <span className="w-8 text-center text-white font-semibold">
+                                            {formData.serviceQuantities[service.id] || 1}
+                                          </span>
+                                          <button
+                                            type="button"
+                                            onClick={() => updateServiceQuantity(service.id, (formData.serviceQuantities[service.id] || 1) + 1)}
+                                            className="w-6 h-6 flex items-center justify-center bg-gray-700 hover:bg-gray-600 text-white rounded transition text-sm font-bold"
+                                          >
+                                            +
+                                          </button>
+                                        </div>
+                                      </div>
+                                    )}
+                                  </div>
+                                ))
+                            )}
+                          </div>
+                        </motion.div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
                 </div>
 
-                {/* Payment Section */}
+                {/* PART 3: Payment Type Section */}
                 <div className="space-y-3">
-                  <h3 className="text-sm font-semibold text-gray-300 uppercase tracking-wide border-b border-gray-800 pb-2">Select Payment Type</h3>
+                  <h3 className="text-sm font-semibold text-gray-300 uppercase tracking-wide border-b border-gray-800 pb-2">3. Select Payment Type</h3>
                   <div className="grid grid-cols-2 gap-3">
-                    <label className="flex items-center gap-2 p-3 border-2 rounded-lg cursor-pointer transition" style={{borderColor: formData.paymentStatus === 'full' ? 'rgb(55, 65, 81)' : 'rgb(229, 231, 235)', backgroundColor: formData.paymentStatus === 'full' ? 'rgb(243, 244, 246)' : 'transparent'}}>
+                    <label className="flex items-center gap-2 p-3 border-2 rounded-lg cursor-pointer transition" style={{borderColor: formData.paymentStatus === 'full' ? 'rgb(34, 197, 94)' : 'rgb(107, 114, 128)', backgroundColor: formData.paymentStatus === 'full' ? 'rgb(34, 197, 94)' : 'rgb(55, 65, 81)'}}>
                       <input
                         type="radio"
                         name="paymentStatus"
                         value="full"
                         checked={formData.paymentStatus === 'full'}
                         onChange={handleFormChange}
-                        className="w-4 h-4 text-gray-700"
+                        className="w-4 h-4 text-white"
                       />
-                      <span className="text-sm font-medium text-gray-900 dark:text-white">Full Payment</span>
+                      <span className="text-sm font-medium text-white">Full Payment</span>
                     </label>
-                    <label className="flex items-center gap-2 p-3 border-2 rounded-lg cursor-pointer transition" style={{borderColor: formData.paymentStatus === 'advance' ? 'rgb(55, 65, 81)' : 'rgb(229, 231, 235)', backgroundColor: formData.paymentStatus === 'advance' ? 'rgb(243, 244, 246)' : 'transparent'}}>
+                    <label className="flex items-center gap-2 p-3 border-2 rounded-lg cursor-pointer transition" style={{borderColor: formData.paymentStatus === 'advance' ? 'rgb(34, 197, 94)' : 'rgb(107, 114, 128)', backgroundColor: formData.paymentStatus === 'advance' ? 'rgb(34, 197, 94)' : 'rgb(55, 65, 81)'}}>
                       <input
                         type="radio"
                         name="paymentStatus"
                         value="advance"
                         checked={formData.paymentStatus === 'advance'}
                         onChange={handleFormChange}
-                        className="w-4 h-4 text-gray-700"
+                        className="w-4 h-4 text-white"
                       />
-                      <span className="text-sm font-medium text-gray-900 dark:text-white">Advance Payment</span>
+                      <span className="text-sm font-medium text-white">Advance Payment</span>
                     </label>
                   </div>
-
-                  {formData.paymentStatus === 'advance' && (
-                    <input
-                      type="number"
-                      name="advanceAmount"
-                      value={formData.advanceAmount}
-                      onChange={handleFormChange}
-                      placeholder="Enter advance amount"
-                      min="0"
-                      step="0.01"
-                      className="w-full px-3 py-2 border border-gray-800 rounded-lg bg-black dark:bg-black text-white focus:outline-none focus:ring-2 focus:ring-gray-700 transition text-sm"
-                    />
-                  )}
                 </div>
 
-                {/* Added Services View Section */}
-                {formData.selectedServices.length > 0 && (
-                  <div className="border-t border-gray-800 pt-5">
-                    <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wide mb-3">Added Services</h3>
-                    <div className="bg-gray-900 dark:bg-gray-900 rounded-lg p-4 space-y-2 max-h-48 overflow-y-auto">
-                      {services
-                        .filter(s => formData.selectedServices.includes(s.id))
-                        .map((service, idx) => (
+                {/* Hidden Submit - Actions moved to right side */}
+                <input type="hidden" />
+              </form>
+            </div>
+          </motion.div>
+
+          {/* RIGHT SIDE: Billing Summary with Money Fields (1 Column) */}
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.2 }}
+            className="lg:col-span-1"
+          >
+            <div className="border border-gray-200 dark:border-gray-700 rounded-xl p-6 sticky top-6">
+              <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Billing Summary</h2>
+              
+              {/* Customer Details Section */}
+              {formData.customerName && (
+                <div className="mb-6 pb-6 border-b border-gray-700">
+                  <h3 className="text-sm font-semibold text-gray-300 uppercase tracking-wide mb-3">Customer Info</h3>
+                  <div className="bg-gray-900 rounded-lg p-4 space-y-2 text-sm">
+                    <div className="flex justify-between">
+                      <span className="text-gray-400">Name:</span>
+                      <span className="text-white font-medium">{formData.customerName}</span>
+                    </div>
+                    {formData.mobileNumber && (
+                      <div className="flex justify-between">
+                        <span className="text-gray-400">Phone:</span>
+                        <span className="text-white font-medium">{formData.mobileNumber}</span>
+                      </div>
+                    )}
+                    {formData.email && (
+                      <div className="flex justify-between">
+                        <span className="text-gray-400">Email:</span>
+                        <span className="text-white font-medium text-xs truncate">{formData.email}</span>
+                      </div>
+                    )}
+                    {formData.address && (
+                      <div className="flex justify-between">
+                        <span className="text-gray-400">Address:</span>
+                        <span className="text-white font-medium text-xs truncate">{formData.address}</span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+              
+              {/* Added Services View Section */}
+              {formData.selectedServices.length > 0 && (
+                <div className="mb-6 pb-6 border-b border-gray-700">
+                  <h3 className="text-sm font-semibold text-gray-300 uppercase tracking-wide mb-3">Services ({formData.selectedServices.length})</h3>
+                  <div className="bg-gray-900 dark:bg-gray-900 rounded-lg p-4 space-y-2 max-h-48 overflow-y-auto mb-4">
+                    {services
+                      .filter(s => formData.selectedServices.includes(s.id))
+                      .map((service, idx) => {
+                        const quantity = formData.serviceQuantities[service.id] || 1;
+                        const itemTotal = service.price * quantity;
+                        return (
                           <div key={service.id} className="flex items-center justify-between p-3 border border-gray-200 dark:border-gray-700 rounded">
                             <div className="flex-1">
-                              <p className="text-sm font-medium text-gray-900 dark:text-white">{idx + 1}. {service.name}</p>
-                              <p className="text-xs text-gray-500 dark:text-gray-400">{formatLKR(service.price)}</p>
+                              <p className="text-sm font-medium text-gray-900 dark:text-white">{idx + 1}. {service.name} × {quantity}</p>
+                              <p className="text-xs text-gray-500 dark:text-gray-400">{formatLKR(service.price)} each = {formatLKR(itemTotal)}</p>
                             </div>
                             <button
                               type="button"
@@ -364,73 +699,96 @@ const Billing = () => {
                               Remove
                             </button>
                           </div>
-                        ))}
-                      <div className="bg-black dark:bg-black rounded-lg p-4 border border-gray-800 mt-3">
-                        <div className="flex items-center justify-between">
-                          <span className="text-sm font-semibold text-gray-700 dark:text-gray-300">Total Amount:</span>
-                          <span className="text-xl font-bold text-gray-900 dark:text-white">{formatLKR(total)}</span>
-                        </div>
+                        );
+                      })}
+                    <div className="bg-black dark:bg-black rounded-lg p-4 border border-gray-800 mt-3">
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm font-semibold text-gray-700 dark:text-gray-300">Total Amount:</span>
+                        <span className="text-xl font-bold text-gray-900 dark:text-white">{formatLKR(total)}</span>
                       </div>
                     </div>
                   </div>
-                )}
-
-                {/* Form Actions */}
-                <div className="flex gap-3 pt-5 border-t border-gray-800">
-                  <button
-                    type="submit"
-                    disabled={formData.selectedServices.length === 0}
-                    className="flex-1 px-4 py-2.5 bg-gray-800 dark:bg-gray-700 text-white rounded-lg hover:bg-gray-900 dark:hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed transition font-medium text-sm"
-                  >
-                    Generate Bill
-                  </button>
-                  <button
-                    type="button"
-                    onClick={resetForm}
-                    className="flex-1 px-4 py-2.5 border border-gray-800 text-gray-400 rounded-lg hover:bg-gray-900 darkto:hover:bg-gray-900 transition font-medium text-sm"
-                  >
-                    Clear
-                  </button>
                 </div>
-              </form>
-            </div>
-          </motion.div>
+              )}
 
-          {/* RIGHT SIDE: Bill Preview (1 Column) */}
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.2 }}
-            className="lg:col-span-1"
-          >
-            <div className="space-y-4">
-              <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Bill Preview</h2>
-              
-              {/* Thermal Printer Preview */}
-              <div className="border border-gray-200 dark:border-gray-700 rounded-xl p-6 min-h-96" id="thermal-bill-preview">
-                {formData.selectedServices.length > 0 ? (
-                  <ThermalBillPreview formData={formData} services={services} total={total} />
-                ) : (
-                  <div className="flex items-center justify-center h-full text-center">
+              {/* Money Input Fields */}
+              <div className="space-y-4 mb-6">
+                {formData.paymentStatus === 'full' ? (
+                  <>
                     <div>
-                      <p className="text-gray-500 dark:text-gray-400 text-lg">No Services Selected</p>
-                      <p className="text-gray-400 dark:text-gray-500 text-sm mt-2">Select services to view bill preview</p>
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                        Full Amount <span className="text-gray-500">*</span>
+                      </label>
+                      <input
+                        type="number"
+                        value={total}
+                        disabled
+                        className="w-full px-3 py-2 border border-gray-800 rounded-lg bg-gray-900 dark:bg-gray-900 text-white focus:outline-none text-sm font-semibold"
+                      />
                     </div>
-                  </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                        Customer Given Amount <span className="text-gray-500">*</span>
+                      </label>
+                      <input
+                        type="number"
+                        name="customerGivenAmount"
+                        value={formData.customerGivenAmount}
+                        onChange={handleFormChange}
+                        placeholder="0.00"
+                        min="0"
+                        step="0.01"
+                        className="w-full px-3 py-2 border border-gray-800 rounded-lg bg-black dark:bg-black text-white focus:outline-none focus:ring-2 focus:ring-gray-700 transition text-sm"
+                      />
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                        Advance Payment Amount <span className="text-gray-500">*</span>
+                      </label>
+                      <input
+                        type="number"
+                        name="advanceAmount"
+                        value={formData.advanceAmount}
+                        onChange={handleFormChange}
+                        placeholder="Enter advance amount"
+                        min="0"
+                        step="0.01"
+                        className="w-full px-3 py-2 border border-gray-800 rounded-lg bg-black dark:bg-black text-white focus:outline-none focus:ring-2 focus:ring-gray-700 transition text-sm"
+                      />
+                      <p className="text-xs text-gray-500 mt-1">Half of {formatLKR(total)} = {formatLKR(total / 2)}</p>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                        Customer Given Amount <span className="text-gray-500">*</span>
+                      </label>
+                      <input
+                        type="number"
+                        name="customerGivenAmount"
+                        value={formData.customerGivenAmount}
+                        onChange={handleFormChange}
+                        placeholder="0.00"
+                        min="0"
+                        step="0.01"
+                        className="w-full px-3 py-2 border border-gray-800 rounded-lg bg-black dark:bg-black text-white focus:outline-none focus:ring-2 focus:ring-gray-700 transition text-sm"
+                      />
+                    </div>
+                  </>
                 )}
               </div>
 
               {/* Action Buttons */}
               <div className="flex gap-3">
                 <button
-                  onClick={handlePrintBill}
-                  disabled={formData.selectedServices.length === 0}
-                  className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-gray-800 dark:bg-gray-700 hover:bg-gray-900 dark:hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed text-white rounded-lg transition font-medium text-sm"
+                  type="submit"
+                  className="flex-1 px-4 py-2.5 bg-green-600 dark:bg-green-600 text-white rounded-lg hover:bg-green-700 dark:hover:bg-green-700 transition font-medium text-sm"
                 >
-                  <Printer size={18} />
                   Generate Bill
                 </button>
                 <button
+                  type="button"
                   onClick={resetForm}
                   className="flex-1 px-4 py-2.5 border border-gray-800 text-gray-400 rounded-lg hover:bg-gray-900/50 dark:hover:bg-gray-900/50 transition font-medium text-sm"
                 >
@@ -440,243 +798,8 @@ const Billing = () => {
             </div>
           </motion.div>
         </div>
-
-        {/* BILLS HISTORY SECTION */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
-          className="space-y-6"
-        >
-          <div>
-            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">Bills History</h2>
-            
-            {/* Search and Filter */}
-            <div className="flex flex-col md:flex-row gap-4 mb-4">
-              <div className="flex-1 relative">
-                <Search size={18} className="absolute left-3 top-3 text-gray-400" />
-                <input
-                  type="text"
-                  placeholder="Search by customer name, mobile, or email..."
-                  value={search}
-                  onChange={(e) => setSearch(e.target.value)}
-                    className="w-full pl-10 pr-4 py-2.5 border border-gray-800 rounded-lg bg-black dark:bg-black text-white focus:outline-none focus:ring-2 focus:ring-gray-700 transition"
-                />
-              </div>
-              <div className="flex items-center gap-2">
-                <Filter size={18} className="text-gray-400" />
-                <select
-                  value={filter}
-                  onChange={(e) => setFilter(e.target.value)}
-                  className="px-4 py-2.5 border border-gray-800 rounded-lg bg-black dark:bg-black text-white focus:outline-none focus:ring-2 focus:ring-gray-700 transition"
-                >
-                  <option value="all">All Status</option>
-                  <option value="completed">Completed</option>
-                  <option value="pending">Pending</option>
-                  <option value="cancelled">Cancelled</option>
-                </select>
-              </div>
-            </div>
-          </div>
-
-          {/* Bills Table */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            className="border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden"
-          >
-            {loading ? (
-              <div className="flex justify-center items-center h-64">
-                <div className="text-gray-500 dark:text-gray-400">Loading bills...</div>
-              </div>
-            ) : filteredBills.length === 0 ? (
-              <div className="flex justify-center items-center h-64">
-                <div className="text-center">
-                  <p className="text-gray-500 dark:text-gray-400 text-lg">No bills found</p>
-                  <p className="text-gray-400 dark:text-gray-500 text-sm mt-2">
-                    {bills.length === 0 ? 'Create your first bill using the form above' : 'Try adjusting your search filters'}
-                  </p>
-                </div>
-              </div>
-            ) : (
-              <div className="overflow-x-auto">
-                <table className="w-full">
-                  <thead className="border-b border-gray-200 dark:border-gray-700">
-                    <tr>
-                      <th className="px-6 py-3 text-left font-bold text-gray-900 dark:text-white">Customer</th>
-                      <th className="px-6 py-3 text-left font-bold text-gray-900 dark:text-white">Contact</th>
-                      <th className="px-6 py-3 text-left font-bold text-gray-900 dark:text-white">Amount</th>
-                      <th className="px-6 py-3 text-left font-bold text-gray-900 dark:text-white">Payment</th>
-                      <th className="px-6 py-3 text-left font-bold text-gray-900 dark:text-white">Status</th>
-                      <th className="px-6 py-3 text-left font-bold text-gray-900 dark:text-white">Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-gray-800">
-                    {filteredBills.map((bill, index) => {
-                      const statusColor = getStatusColor(bill.status);
-                      const paymentStatusColor = getPaymentStatusColor(bill.payment_status);
-
-                      return (
-                        <motion.tr
-                          key={bill.id}
-                          initial={{ opacity: 0 }}
-                          animate={{ opacity: 1 }}
-                          transition={{ delay: index * 0.05 }}
-                          className="hover:bg-gray-900/50 dark:hover:bg-gray-900/50 transition"
-                        >
-                          <td className="px-6 py-4">
-                            <div>
-                              <p className="font-medium text-gray-900 dark:text-white">{bill.customer_name}</p>
-                              {bill.address && <p className="text-xs text-gray-500 dark:text-gray-400">{bill.address}</p>}
-                            </div>
-                          </td>
-                          <td className="px-6 py-4">
-                            <div className="text-sm">
-                              {bill.mobile_number && <p className="text-gray-700 dark:text-gray-300">{bill.mobile_number}</p>}
-                              {bill.email && <p className="text-gray-600 dark:text-gray-400 text-xs">{bill.email}</p>}
-                              {!bill.mobile_number && !bill.email && <p className="text-gray-400 dark:text-gray-500 italic">No contact</p>}
-                            </div>
-                          </td>
-                          <td className="px-6 py-4">
-                            <p className="font-semibold text-gray-900 dark:text-white">
-                              ${bill.amount || bill.total_amount || 0}
-                            </p>
-                          </td>
-                          <td className="px-6 py-4">
-                            <span className={`inline-block px-3 py-1 rounded-full text-xs font-medium capitalize ${paymentStatusColor}`}>
-                              {bill.payment_status || 'N/A'}
-                              {bill.payment_status === 'advance' && bill.advance_amount && ` ($${bill.advance_amount})`}
-                            </span>
-                          </td>
-                          <td className="px-6 py-4">
-                            <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-medium ${statusColor.bg} ${statusColor.text}`}>
-                              <span>{statusColor.icon}</span>
-                              <span className="uppercase">{bill.status}</span>
-                            </div>
-                          </td>
-                          <td className="px-6 py-4">
-                            <div className="flex items-center gap-2">
-                              <button className="p-2 hover:bg-gray-900/50 dark:hover:bg-gray-900/50 rounded-lg transition" title="View">
-                                <Eye size={16} className="text-gray-600 dark:text-gray-400" />
-                              </button>
-                              <button className="p-2 hover:bg-gray-900/50 dark:hover:bg-gray-900/50 rounded-lg transition" title="Delete">
-                                <Trash2 size={16} className="text-gray-600 dark:text-gray-400" />
-                              </button>
-                            </div>
-                          </td>
-                        </motion.tr>
-                      );
-                    })}
-                  </tbody>
-                </table>
-              </div>
-            )}
-          </motion.div>
-        </motion.div>
       </div>
     </Layout>
-  );
-};
-
-// Thermal Printer Bill Preview Component
-const ThermalBillPreview = ({ formData, services, total }) => {
-  const billDate = new Date();
-  const billNumber = `${Math.random().toString(36).substr(2, 9).toUpperCase()}`;
-  
-  const selectedServices = services.filter(s => formData.selectedServices.includes(s.id));
-  const remainingAmount = formData.paymentStatus === 'advance' 
-    ? (total - (parseFloat(formData.advanceAmount) || 0))
-    : 0;
-
-  return (
-    <div className="font-mono text-xs text-gray-900 dark:text-gray-100 leading-relaxed">
-      {/* Header */}
-      <div className="text-center mb-3 pb-3 border-b-2 border-gray-400 dark:border-gray-600">
-        <div className="text-sm font-bold">SHINE ART STUDIO</div>
-        <div className="text-xs text-gray-600 dark:text-gray-400">Photography & Videography</div>
-        <div className="text-xs text-gray-600 dark:text-gray-400">Professional Services</div>
-      </div>
-
-      {/* Receipt Information */}
-      <div className="mb-3 pb-3 border-b border-gray-300 dark:border-gray-700 text-xs">
-        <div className="flex justify-between">
-          <span>RECEIPT #{billNumber}</span>
-          <span>{billDate.toLocaleDateString()}</span>
-        </div>
-        <div className="flex justify-between text-gray-600 dark:text-gray-400 text-xs">
-          <span>{billDate.toLocaleTimeString()}</span>
-        </div>
-      </div>
-
-      {/* Customer Information */}
-      {formData.customerName && (
-        <div className="mb-3 pb-3 border-b border-gray-300 dark:border-gray-700 text-xs">
-          <div className="font-bold">CUSTOMER</div>
-          <div>{formData.customerName}</div>
-          {formData.mobileNumber && <div>Ph: {formData.mobileNumber}</div>}
-          {formData.email && <div className="text-xs">{formData.email}</div>}
-          {formData.address && <div className="text-xs whitespace-pre-wrap">{formData.address}</div>}
-        </div>
-      )}
-
-      {/* Items */}
-      {selectedServices.length > 0 && (
-        <div className="mb-3 pb-3 border-b border-gray-300 dark:border-gray-700">
-          <div className="flex justify-between font-bold text-xs mb-2">
-            <span>SERVICE</span>
-            <span>PRICE</span>
-          </div>
-          {selectedServices.map((service) => (
-            <div key={service.id} className="flex justify-between text-xs mb-1">
-              <span className="flex-1">{service.name}</span>
-              <span className="text-right">{formatLKR(service.price)}</span>
-            </div>
-          ))}
-        </div>
-      )}
-
-      {/* Totals */}
-      <div className="mb-3 pb-3 border-b border-gray-300 dark:border-gray-700">
-        <div className="flex justify-between text-xs font-bold mb-1">
-          <span>SUBTOTAL</span>
-          <span>{formatLKR(total)}</span>
-        </div>
-        {formData.paymentStatus === 'advance' && (
-          <>
-            <div className="flex justify-between text-xs mb-1">
-              <span>ADVANCE PAID</span>
-              <span>{formatLKR(parseFloat(formData.advanceAmount) || 0)}</span>
-            </div>
-            <div className="flex justify-between text-xs font-bold text-gray-600 dark:text-gray-400">
-              <span>REMAINING</span>
-              <span>{formatLKR(remainingAmount)}</span>
-            </div>
-          </>
-        )}
-      </div>
-
-      {/* Payment Status */}
-      <div className="mb-3 pb-3 border-b border-gray-300 dark:border-gray-700 text-xs">
-        <div className="flex justify-between mb-1">
-          <span>TOTAL</span>
-          <span className="font-bold text-sm">{formatLKR(total)}</span>
-        </div>
-        <div className="flex justify-between">
-          <span>PAYMENT</span>
-          <span className="uppercase font-bold">
-            {formData.paymentStatus === 'full' && 'PAID ✓'}
-            {formData.paymentStatus === 'advance' && 'ADVANCE'}
-          </span>
-        </div>
-      </div>
-
-      {/* Footer */}
-      <div className="text-center text-xs text-gray-600 dark:text-gray-400 pt-2">
-        <div className="mb-1">Thank you for your business!</div>
-        <div className="text-xs">&lt;- - - - - - - -&gt;</div>
-      </div>
-    </div>
   );
 };
 

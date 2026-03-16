@@ -28,8 +28,8 @@ const Services = () => {
           api.get('/services/categories'),
           api.get('/services'),
         ]);
-        setCategories(catRes.data || []);
-        setServices(svcRes.data || []);
+        setCategories(catRes.data.data || []);
+        setServices(svcRes.data.data || []);
         setError('');
       } catch (err) {
         setError('Failed to load services');

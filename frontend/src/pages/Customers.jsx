@@ -20,6 +20,7 @@ const Customers = () => {
   const [formData, setFormData] = useState({
     customer_name: '',
     mobile_number: '',
+    email: '',
     address: '',
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -37,7 +38,7 @@ const Customers = () => {
   const fetchCustomers = async () => {
     try {
       const response = await api.get('/customers');
-      setCustomers(response.data);
+      setCustomers(response.data.data || []);
       setLoading(false);
     } catch (err) {
       console.error('Error fetching customers:', err);
@@ -64,7 +65,7 @@ const Customers = () => {
     setIsSubmitting(true);
     try {
       await api.post('/customers', formData);
-      setFormData({ customer_name: '', mobile_number: '', address: '' });
+      setFormData({ customer_name: '', mobile_number: '', email: '', address: '' });
       setIsModalOpen(false);
       toast.success('Customer added successfully!');
       fetchCustomers();
@@ -95,6 +96,7 @@ const Customers = () => {
     setFormData({
       customer_name: customer.customer_name,
       mobile_number: customer.mobile_number || '',
+      email: customer.email || '',
       address: customer.address || '',
     });
     setIsEditModalOpen(true);
@@ -110,7 +112,7 @@ const Customers = () => {
     setIsSubmitting(true);
     try {
       await api.put(`/customers/${editingCustomer.id}`, formData);
-      setFormData({ customer_name: '', mobile_number: '', address: '' });
+      setFormData({ customer_name: '', mobile_number: '', email: '', address: '' });
       setIsEditModalOpen(false);
       setEditingCustomer(null);
       toast.success('Customer updated successfully!');
@@ -216,6 +218,7 @@ const Customers = () => {
                   <th className="px-6 py-3 text-left font-bold text-gray-900 dark:text-white">Customer ID</th>
                   <th className="px-6 py-3 text-left font-bold text-gray-900 dark:text-white">Name</th>
                   <th className="px-6 py-3 text-left font-bold text-gray-900 dark:text-white">Mobile</th>
+                  <th className="px-6 py-3 text-left font-bold text-gray-900 dark:text-white">Email</th>
                   <th className="px-6 py-3 text-left font-bold text-gray-900 dark:text-white">Address</th>
                   {isAdmin && <th className="px-6 py-3 text-left font-bold text-gray-900 dark:text-white">Actions</th>}
                 </tr>
@@ -227,6 +230,7 @@ const Customers = () => {
                       <td className="px-6 py-4 font-semibold text-gray-100 dark:text-white">#{customer.id}</td>
                       <td className="px-6 py-4 text-gray-100 dark:text-white font-medium">{customer.customer_name}</td>
                       <td className="px-6 py-4 text-gray-500 dark:text-gray-400">{customer.mobile_number || 'N/A'}</td>
+                      <td className="px-6 py-4 text-gray-500 dark:text-gray-400">{customer.email || 'N/A'}</td>
                       <td className="px-6 py-4 text-gray-500 dark:text-gray-400 max-w-xs truncate">{customer.address || 'N/A'}</td>
                       {isAdmin && (
                         <td className="px-6 py-4">
@@ -321,6 +325,20 @@ const Customers = () => {
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                      Email (Optional)
+                    </label>
+                    <input
+                      type="email"
+                      name="email"
+                      value={formData.email}
+                      onChange={handleInputChange}
+                      placeholder="Enter email address"
+                      className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-500 dark:focus:ring-gray-400"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                       Address
                     </label>
                     <textarea
@@ -408,6 +426,20 @@ const Customers = () => {
                       value={formData.mobile_number}
                       onChange={handleInputChange}
                       placeholder="Enter mobile number"
+                      className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-500 dark:focus:ring-gray-400"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                      Email (Optional)
+                    </label>
+                    <input
+                      type="email"
+                      name="email"
+                      value={formData.email}
+                      onChange={handleInputChange}
+                      placeholder="Enter email address"
                       className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-500 dark:focus:ring-gray-400"
                     />
                   </div>

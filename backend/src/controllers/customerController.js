@@ -6,7 +6,7 @@ exports.getAllCustomers = (req, res) => {
     const customers = db
       .prepare("SELECT * FROM customers")
       .all();
-    res.json(customers);
+    res.json({ data: customers });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -30,7 +30,7 @@ exports.getCustomerById = (req, res) => {
 
 // Create a new customer
 exports.createCustomer = (req, res) => {
-  const { customer_name, mobile_number, address } = req.body;
+  const { customer_name, mobile_number, email, address } = req.body;
 
   if (!customer_name) {
     return res.status(400).json({ message: "Customer name is required!" });
@@ -38,14 +38,17 @@ exports.createCustomer = (req, res) => {
 
   try {
     const stmt = db.prepare(
-      "INSERT INTO customers (customer_name, mobile_number, address) VALUES (?, ?, ?)"
+      "INSERT INTO customers (customer_name, mobile_number, email, address) VALUES (?, ?, ?, ?)"
     );
-    const result = stmt.run(customer_name, mobile_number || null, address || null);
+    const result = stmt.run(customer_name, mobile_number || null, email || null, address || null);
     res.status(201).json({
-      id: result.lastID,
-      customer_name,
-      mobile_number: mobile_number || null,
-      address: address || null,
+      data: {
+        id: result.lastID,
+        customer_name,
+        mobile_number: mobile_number || null,
+        email: email || null,
+        address: address || null,
+      }
     });
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -55,13 +58,13 @@ exports.createCustomer = (req, res) => {
 // Update customer
 exports.updateCustomer = (req, res) => {
   const { id } = req.params;
-  const { customer_name, mobile_number, address } = req.body;
+  const { customer_name, mobile_number, email, address } = req.body;
 
   try {
     const stmt = db.prepare(
-      "UPDATE customers SET customer_name = ?, mobile_number = ?, address = ? WHERE id = ?"
+      "UPDATE customers SET customer_name = ?, mobile_number = ?, email = ?, address = ? WHERE id = ?"
     );
-    stmt.run(customer_name, mobile_number || null, address || null, id);
+    stmt.run(customer_name, mobile_number || null, email || null, address || null, id);
     res.json({ message: "Customer updated successfully!" });
   } catch (err) {
     res.status(500).json({ error: err.message });
