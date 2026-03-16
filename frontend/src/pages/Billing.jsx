@@ -168,20 +168,53 @@ const Billing = () => {
 
     try {
       const total = calculateTotal();
+      
+      // Prepare service data with proper format
+      const servicesList = formData.selectedServices.map(serviceId => {
+        const service = services.find(s => s.id === serviceId);
+        const quantity = formData.serviceQuantities[serviceId] || 1;
+        return {
+          id: service.id,
+          service_name: service.service_name || service.name,
+          price: service.price,
+          quantity: quantity
+        };
+      });
+
       const billData = {
         customer_name: formData.customerName,
         mobile_number: formData.mobileNumber,
         address: formData.address,
         email: formData.email || null,
-        services: formData.selectedServices,
+        services: servicesList,
         total_amount: total,
         payment_status: formData.paymentStatus,
         advance_amount: formData.paymentStatus === 'advance' ? parseFloat(formData.advanceAmount) || 0 : null,
         status: 'Pending',
       };
 
+      // Create booking record
       const response = await api.post('/bookings', billData);
-      
+      const bookingData = response.data.data;
+
+      // Generate professional bill PDF
+      const billResponse = await api.post('/bookings/generate-bill', {
+        ...billData,
+        id: bookingData.id,
+        date: new Date().toISOString()
+      });
+
+      if (billResponse.data.data.file_path) {
+        // Download the PDF
+        const link = document.createElement('a');
+        link.href = `http://localhost:5000/api/bookings/download-bill/${billResponse.data.data.file_name}`;
+        link.download = billResponse.data.data.file_name;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      }
+
+      // Reset form
       setFormData({
         customerName: '',
         mobileNumber: '',
@@ -201,10 +234,10 @@ const Billing = () => {
       setSelectedCategory(null);
       
       fetchBills();
-      alert('✓ Bill created successfully!');
+      alert('✓ Bill created and downloaded successfully!');
     } catch (err) {
       console.error('Error creating bill:', err);
-      alert('Error creating bill: ' + (err.response?.data?.message || err.message));
+      alert('Error: ' + (err.response?.data?.message || err.message));
     }
   };
 
@@ -647,28 +680,28 @@ const Billing = () => {
               {/* Customer Details Section */}
               {formData.customerName && (
                 <div className="mb-6 pb-6 border-b border-gray-700">
-                  <h3 className="text-sm font-semibold text-gray-300 uppercase tracking-wide mb-3">Customer Info</h3>
-                  <div className="bg-gray-900 rounded-lg p-4 space-y-2 text-sm">
-                    <div className="flex justify-between">
-                      <span className="text-gray-400">Name:</span>
-                      <span className="text-white font-medium">{formData.customerName}</span>
+                  <h3 className="text-sm font-semibold text-gray-300 uppercase tracking-wide mb-4">Customer Info</h3>
+                  <div className="space-y-2 text-sm">
+                    <div className="flex justify-between items-center p-2 bg-gray-900 rounded">
+                      <span className="text-gray-400 font-medium">Name:</span>
+                      <span className="text-white font-semibold">{formData.customerName}</span>
                     </div>
                     {formData.mobileNumber && (
-                      <div className="flex justify-between">
-                        <span className="text-gray-400">Phone:</span>
-                        <span className="text-white font-medium">{formData.mobileNumber}</span>
+                      <div className="flex justify-between items-center p-2 bg-gray-900 rounded">
+                        <span className="text-gray-400 font-medium">Phone:</span>
+                        <span className="text-white font-semibold">{formData.mobileNumber}</span>
                       </div>
                     )}
                     {formData.email && (
-                      <div className="flex justify-between">
-                        <span className="text-gray-400">Email:</span>
-                        <span className="text-white font-medium text-xs truncate">{formData.email}</span>
+                      <div className="flex justify-between items-center p-2 bg-gray-900 rounded">
+                        <span className="text-gray-400 font-medium">Email:</span>
+                        <span className="text-white text-xs truncate ml-2">{formData.email}</span>
                       </div>
                     )}
                     {formData.address && (
-                      <div className="flex justify-between">
-                        <span className="text-gray-400">Address:</span>
-                        <span className="text-white font-medium text-xs truncate">{formData.address}</span>
+                      <div className="flex justify-between items-start p-2 bg-gray-900 rounded">
+                        <span className="text-gray-400 font-medium">Address:</span>
+                        <span className="text-white text-xs text-right max-w-[140px] ml-2">{formData.address}</span>
                       </div>
                     )}
                   </div>
@@ -678,57 +711,56 @@ const Billing = () => {
               {/* Added Services View Section */}
               {formData.selectedServices.length > 0 && (
                 <div className="mb-6 pb-6 border-b border-gray-700">
-                  <h3 className="text-sm font-semibold text-gray-300 uppercase tracking-wide mb-3">Services ({formData.selectedServices.length})</h3>
-                  <div className="bg-gray-900 dark:bg-gray-900 rounded-lg p-4 space-y-2 max-h-48 overflow-y-auto mb-4">
+                  <h3 className="text-sm font-semibold text-gray-300 uppercase tracking-wide mb-4">Services ({formData.selectedServices.length})</h3>
+                  <div className="space-y-3">
                     {services
                       .filter(s => formData.selectedServices.includes(s.id))
-                      .map((service, idx) => {
+                      .map((service) => {
                         const quantity = formData.serviceQuantities[service.id] || 1;
                         const itemTotal = service.price * quantity;
                         return (
-                          <div key={service.id} className="flex items-center justify-between p-3 border border-gray-200 dark:border-gray-700 rounded">
-                            <div className="flex-1">
-                              <p className="text-sm font-medium text-gray-900 dark:text-white">{idx + 1}. {service.name} × {quantity}</p>
-                              <p className="text-xs text-gray-500 dark:text-gray-400">{formatLKR(service.price)} each = {formatLKR(itemTotal)}</p>
+                          <div key={service.id} className="flex items-start justify-between p-3 bg-gray-900 rounded-lg border border-gray-700 hover:border-gray-600 transition">
+                            <div className="flex-1 min-w-0">
+                              <p className="text-sm font-medium text-white break-words">{service.service_name}</p>
+                              <p className="text-xs text-gray-400 mt-1">
+                                {formatLKR(service.price)} × {quantity} = <span className="text-green-400 font-semibold">{formatLKR(itemTotal)}</span>
+                              </p>
                             </div>
                             <button
                               type="button"
                               onClick={() => handleServiceToggle(service.id)}
-                              className="px-2 py-1 text-xs bg-gray-800 dark:bg-gray-800 text-gray-300 dark:text-gray-300 rounded hover:bg-gray-700 dark:hover:bg-gray-700 transition font-medium"
+                              className="ml-3 px-3 py-1 text-xs bg-red-600/20 text-red-400 rounded hover:bg-red-600/40 transition font-medium whitespace-nowrap"
                             >
                               Remove
                             </button>
                           </div>
                         );
                       })}
-                    <div className="bg-black dark:bg-black rounded-lg p-4 border border-gray-800 mt-3">
-                      <div className="flex items-center justify-between">
-                        <span className="text-sm font-semibold text-gray-700 dark:text-gray-300">Total Amount:</span>
-                        <span className="text-xl font-bold text-gray-900 dark:text-white">{formatLKR(total)}</span>
-                      </div>
+                  </div>
+                  
+                  {/* Total Amount */}
+                  <div className="mt-4 p-4 bg-gradient-to-r from-gray-800 to-gray-900 rounded-lg border border-gray-700">
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm font-semibold text-gray-400">Total Amount:</span>
+                      <span className="text-2xl font-bold text-white">{formatLKR(total)}</span>
                     </div>
                   </div>
                 </div>
               )}
 
               {/* Money Input Fields */}
-              <div className="space-y-4 mb-6">
+              <div className="space-y-4">
                 {formData.paymentStatus === 'full' ? (
                   <>
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                        Full Amount <span className="text-gray-500">*</span>
+                      <label className="block text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2">
+                        Full Amount
                       </label>
-                      <input
-                        type="number"
-                        value={total}
-                        disabled
-                        className="w-full px-3 py-2 border border-gray-800 rounded-lg bg-gray-900 dark:bg-gray-900 text-white focus:outline-none text-sm font-semibold"
-                      />
+                      <div className="text-3xl font-bold text-white">{formatLKR(total)}</div>
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                        Customer Given Amount <span className="text-gray-500">*</span>
+                      <label className="block text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2">
+                        Given by Customer
                       </label>
                       <input
                         type="number"
@@ -738,15 +770,21 @@ const Billing = () => {
                         placeholder="0.00"
                         min="0"
                         step="0.01"
-                        className="w-full px-3 py-2 border border-gray-800 rounded-lg bg-black dark:bg-black text-white focus:outline-none focus:ring-2 focus:ring-gray-700 transition text-sm"
+                        className="w-full px-3 py-2 border border-gray-700 rounded-lg bg-gray-900 text-white focus:outline-none focus:ring-2 focus:ring-green-500 transition text-sm font-medium"
                       />
                     </div>
                   </>
                 ) : (
                   <>
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                        Advance Payment Amount <span className="text-gray-500">*</span>
+                      <label className="block text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2">
+                        Total Amount
+                      </label>
+                      <div className="text-3xl font-bold text-white">{formatLKR(total)}</div>
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2">
+                        Advance to Collect
                       </label>
                       <input
                         type="number"
@@ -756,41 +794,28 @@ const Billing = () => {
                         placeholder="Enter advance amount"
                         min="0"
                         step="0.01"
-                        className="w-full px-3 py-2 border border-gray-800 rounded-lg bg-black dark:bg-black text-white focus:outline-none focus:ring-2 focus:ring-gray-700 transition text-sm"
+                        className="w-full px-3 py-2 border border-gray-700 rounded-lg bg-gray-900 text-white focus:outline-none focus:ring-2 focus:ring-green-500 transition text-sm font-medium"
                       />
-                      <p className="text-xs text-gray-500 mt-1">Half of {formatLKR(total)} = {formatLKR(total / 2)}</p>
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                        Customer Given Amount <span className="text-gray-500">*</span>
-                      </label>
-                      <input
-                        type="number"
-                        name="customerGivenAmount"
-                        value={formData.customerGivenAmount}
-                        onChange={handleFormChange}
-                        placeholder="0.00"
-                        min="0"
-                        step="0.01"
-                        className="w-full px-3 py-2 border border-gray-800 rounded-lg bg-black dark:bg-black text-white focus:outline-none focus:ring-2 focus:ring-gray-700 transition text-sm"
-                      />
+                      {total && (
+                        <p className="text-xs text-gray-500 mt-2">Remaining: {formatLKR(Math.max(0, total - (parseFloat(formData.advanceAmount) || 0)))}</p>
+                      )}
                     </div>
                   </>
                 )}
               </div>
 
               {/* Action Buttons */}
-              <div className="flex gap-3">
+              <div className="flex gap-3 mt-8 pt-6 border-t border-gray-700">
                 <button
                   type="submit"
-                  className="flex-1 px-4 py-2.5 bg-green-600 dark:bg-green-600 text-white rounded-lg hover:bg-green-700 dark:hover:bg-green-700 transition font-medium text-sm"
+                  className="flex-1 px-4 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition font-semibold text-sm"
                 >
                   Generate Bill
                 </button>
                 <button
                   type="button"
                   onClick={resetForm}
-                  className="flex-1 px-4 py-2.5 border border-gray-800 text-gray-400 rounded-lg hover:bg-gray-900/50 dark:hover:bg-gray-900/50 transition font-medium text-sm"
+                  className="flex-1 px-4 py-3 bg-gray-800 text-gray-300 rounded-lg hover:bg-gray-700 transition font-semibold text-sm"
                 >
                   Clear
                 </button>

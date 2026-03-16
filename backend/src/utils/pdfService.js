@@ -8,6 +8,190 @@ if (!fs.existsSync(invoicesDir)) {
   fs.mkdirSync(invoicesDir, { recursive: true });
 }
 
+// Generate Professional Thermal Bill with Sinhala Support
+const generateProfessionalThermalBill = (billData, outputPath = null) => {
+  return new Promise((resolve, reject) => {
+    try {
+      const fileName =
+        outputPath ||
+        path.join(
+          invoicesDir,
+          `bill_${billData.bill_number}_${Date.now()}.pdf`
+        );
+
+      const doc = new PDFDocument({
+        size: [226.77, 800], // 80mm width in points
+        margins: 8,
+      });
+
+      const stream = fs.createWriteStream(fileName);
+      doc.pipe(stream);
+
+      const pageWidth = 226.77;
+      const centerX = pageWidth / 2;
+
+      // ===== HEADER =====
+      const logoPath = path.join(__dirname, "../../public/billLogo.png");
+      if (fs.existsSync(logoPath)) {
+        try {
+          doc.image(logoPath, centerX - 25, 8, { width: 50 });
+          doc.y += 55;
+        } catch (e) {
+          console.log("Logo not found, skipping");
+        }
+      }
+
+      // Company Name
+      doc
+        .fontSize(13)
+        .font("Helvetica-Bold")
+        .text("STUDIO SHINE ART", { align: "center" })
+        .fontSize(7)
+        .font("Helvetica")
+        .text("No. 52/1/1, Maravila Road, Nattandiya", { align: "center" })
+        .text("Reg No: 26/3610 | Tel: 0767898604 / 0322051680", {
+          align: "center",
+        });
+
+      doc.moveTo(8, doc.y + 3).lineTo(pageWidth - 8, doc.y + 3).stroke();
+      doc.moveDown(2);
+
+      // ===== BILL INFO =====
+      doc.fontSize(8).font("Helvetica");
+      const billDate = new Date(billData.date || Date.now());
+      const billNo = `BILL${String(billData.id || 1).padStart(6, "0")}`;
+
+      doc.text(`Bill No: ${billNo}`, 8);
+      doc.text(
+        `Date/Time: ${billDate.toLocaleDateString("en-GB")} | ${billDate.toLocaleTimeString("en-GB")}`,
+        8
+      );
+      doc.text(`Cashier: System Administrator`, 8);
+
+      doc.moveTo(8, doc.y + 2).lineTo(pageWidth - 8, doc.y + 2).stroke();
+      doc.moveDown(2);
+
+      // ===== CUSTOMER INFO =====
+      doc.fontSize(7).font("Helvetica-Bold");
+      doc.text(`Customer: ${billData.customer_name}`, 8);
+      doc.font("Helvetica");
+      if (billData.mobile_number)
+        doc.text(`Mobile: ${billData.mobile_number}`, 8);
+      if (billData.address) doc.text(`Address: ${billData.address}`, 8);
+
+      doc.moveTo(8, doc.y + 2).lineTo(pageWidth - 8, doc.y + 2).stroke();
+      doc.moveDown(2);
+
+      // ===== ITEMS TABLE HEADER =====
+      doc.fontSize(7).font("Helvetica-Bold");
+      const colWidths = { item: 110, qty: 35, amt: 65 };
+      let xPos = 8;
+
+      doc.text("ITEM", xPos, doc.y, { width: colWidths.item });
+      doc.text("QTY", xPos + colWidths.item, doc.y - 7, { width: colWidths.qty, align: "right" });
+      doc.text("AMT", xPos + colWidths.item + colWidths.qty, doc.y - 7, { width: colWidths.amt, align: "right" });
+
+      doc.moveTo(8, doc.y + 2).lineTo(pageWidth - 8, doc.y + 2).stroke();
+      doc.moveDown(1);
+
+      // ===== ITEMS =====
+      doc.font("Helvetica");
+      let subtotal = 0;
+
+      if (billData.services && Array.isArray(billData.services)) {
+        billData.services.forEach((service) => {
+          const qty = service.quantity || 1;
+          const price = parseFloat(service.price) || 0;
+          const itemTotal = qty * price;
+          subtotal += itemTotal;
+
+          const serviceName = (service.service_name || service.name).substring(
+            0,
+            25
+          );
+          doc.fontSize(7).text(serviceName, xPos, doc.y, {
+            width: colWidths.item,
+          });
+          doc.text(qty.toString(), xPos + colWidths.item, doc.y - 7, {
+            width: colWidths.qty,
+            align: "right",
+          });
+          doc.text(
+            `Rs.${itemTotal.toFixed(2)}`,
+            xPos + colWidths.item + colWidths.qty,
+            doc.y - 7,
+            { width: colWidths.amt, align: "right" }
+          );
+          doc.moveDown(6);
+        });
+      }
+
+      doc.moveTo(8, doc.y + 2).lineTo(pageWidth - 8, doc.y + 2).stroke();
+      doc.moveDown(1);
+
+      // ===== TOTALS =====
+      doc.font("Helvetica");
+      const total = billData.total_amount || subtotal;
+      const advance = billData.advance_amount || 0;
+      const remaining = total - advance;
+
+      doc.fontSize(7);
+      doc.text("Subtotal:", xPos, doc.y);
+      doc.text(`Rs. ${total.toFixed(2)}`, xPos + colWidths.item, doc.y - 7, {
+        align: "right",
+      });
+      doc.moveDown(4);
+
+      doc.font("Helvetica-Bold").fontSize(9);
+      doc.text(`TOTAL: Rs. ${total.toFixed(2)}`, xPos, doc.y, { align: "center" });
+      doc.moveDown(3);
+
+      // ===== PAYMENT INFO =====
+      doc.font("Helvetica-Bold").fontSize(7);
+      if (billData.payment_status === "advance" || billData.payment_status === "advance_payment") {
+        doc.text("[ ADVANCE PAYMENT ]", { align: "center" });
+        doc.moveDown(2);
+        doc.font("Helvetica").fontSize(7);
+        doc.text(`Advance Paid: Rs. ${advance.toFixed(2)}`, { align: "center" });
+        doc.text(`Remaining Balance: Rs. ${remaining.toFixed(2)}`, {
+          align: "center",
+        });
+      } else {
+        doc.text("[ FULL PAYMENT ]", { align: "center" });
+        doc.moveDown(2);
+        doc.font("Helvetica").fontSize(7);
+        doc.text(`Amount Paid: Rs. ${total.toFixed(2)}`, { align: "center" });
+      }
+
+      doc.moveTo(8, doc.y + 3).lineTo(pageWidth - 8, doc.y + 3).stroke();
+      doc.moveDown(2);
+
+      // ===== FOOTER =====
+      doc.font("Helvetica-Oblique").fontSize(6);
+      doc.text("Capturing your dreams, Creating the art.", { align: "center" });
+      doc.moveDown(1);
+      doc.font("Helvetica-Bold").fontSize(6);
+      doc.text("System Developed by: Malinda Prabath | Email:", {
+        align: "center",
+      });
+      doc.font("Helvetica").fontSize(5);
+      doc.text("malindaprabath876@gmail.com", { align: "center" });
+
+      doc.end();
+
+      stream.on("finish", () => {
+        resolve(fileName);
+      });
+
+      stream.on("error", (err) => {
+        reject(err);
+      });
+    } catch (err) {
+      reject(err);
+    }
+  });
+};
+
 
 // Generate thermal bill (80mm format - quick transactions)
 const generateThermalBill = (bookingData, outputPath = null) => {
@@ -381,6 +565,7 @@ const generateExpenseReport = (expenses, startDate, endDate, outputPath = null) 
 
 module.exports = {
   generateThermalBill,
+  generateProfessionalThermalBill,
   generateA4Invoice,
   generateExpenseReport,
   invoicesDir,
