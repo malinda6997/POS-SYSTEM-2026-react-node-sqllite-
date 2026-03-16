@@ -11,6 +11,7 @@ import CalendarPage from './pages/Calendar';
 import Customers from './pages/Customers';
 import Inventory from './pages/Inventory';
 import Services from './pages/Services';
+import ServiceCategories from './pages/ServiceCategories';
 import Expenses from './pages/Expenses';
 import Users from './pages/Users';
 import RoleFeatures from './pages/RoleFeatures';
@@ -89,6 +90,14 @@ const App = () => {
           element={
             <ProtectedRoute>
               <Services />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/service-categories"
+          element={
+            <ProtectedRoute>
+              <ServiceCategories />
             </ProtectedRoute>
           }
         />
