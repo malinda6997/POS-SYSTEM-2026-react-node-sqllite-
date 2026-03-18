@@ -141,6 +141,26 @@ const initDatabase = () => {
     console.log("Note: Category column migration skipped or already exist");
   }
 
+  // Add missing columns to bookings table if they don't exist
+  try {
+    const tableInfo = db.pragma("table_info(bookings)");
+    const columnNames = tableInfo.map(col => col.name);
+    
+    const bookingsColumnsToAdd = [
+      { name: 'bill_file_name', def: 'TEXT' },
+      { name: 'bill_generated_at', def: 'DATETIME' }
+    ];
+
+    bookingsColumnsToAdd.forEach(col => {
+      if (!columnNames.includes(col.name)) {
+        db.exec(`ALTER TABLE bookings ADD COLUMN ${col.name} ${col.def}`);
+        console.log(`✔️ Added '${col.name}' column to bookings table`);
+      }
+    });
+  } catch (err) {
+    console.log("Note: Bookings column migration skipped or already exist");
+  }
+
   // Seed default admin user if doesn't exist
   try {
     const existingUser = db.prepare("SELECT id FROM users WHERE username = ?").get("admin");

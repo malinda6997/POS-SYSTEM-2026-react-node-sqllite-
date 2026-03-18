@@ -58,22 +58,46 @@ router.post("/generate-bill-now", async (req, res) => {
       });
     }
 
+    // Validate booking ID
+    if (!billData.id) {
+      console.log("❌ Booking ID is required");
+      return res.status(400).json({
+        data: null,
+        message: "Booking ID is required!",
+        error: "MISSING_BOOKING_ID"
+      });
+    }
+
     // Set default values
-    billData.id = billData.id || 1;
     billData.date = billData.date || new Date();
     billData.services = billData.services || [];
 
-    console.log("📝 Generating bill for:", billData.customer_name);
+    console.log("📝 Generating bill for:", billData.customer_name, "Booking ID:", billData.id);
     const filePath = await generateProfessionalThermalBill(billData);
+    const fileName = path.basename(filePath);
     console.log("✅ Bill generated at:", filePath);
+    
+    // Update booking with bill file reference
+    try {
+      db.prepare(`
+        UPDATE bookings 
+        SET bill_file_name = ?, bill_generated_at = ? 
+        WHERE id = ?
+      `).run(fileName, new Date().toISOString(), billData.id);
+      console.log("✅ Booking record updated with bill file reference");
+    } catch (dbErr) {
+      console.error("⚠️ Warning: Could not update booking record:", dbErr.message);
+      // Continue anyway - bill was generated successfully
+    }
     
     // Return success with file download info
     res.json({
       data: {
         success: true,
         message: "Bill generated successfully!",
+        booking_id: billData.id,
         file_path: filePath,
-        file_name: path.basename(filePath)
+        file_name: fileName
       }
     });
   } catch (err) {

@@ -255,21 +255,28 @@ const Billing = () => {
         id: bookingData.id,
         date: new Date().toISOString()
       });
-      console.log('Bill generated:', billResponse.data);
+      console.log('Bill response:', billResponse);
+      console.log('Bill data:', billResponse.data);
 
-      if (billResponse.data?.data?.file_name) {
+      if (billResponse.status === 200 && billResponse.data?.data?.file_name) {
         // Store bill info and show modal
-        console.log('Showing bill modal with:', billResponse.data.data);
+        console.log('✅ Showing bill modal with:', billResponse.data.data);
         setGeneratedBill({
+          booking_id: bookingData.id,
           file_name: billResponse.data.data.file_name,
           file_path: billResponse.data.data.file_path,
           customer_name: formData.customerName,
           total_amount: total
         });
         setShowBillModal(true);
+        
+        // Show success toast/notification
+        setSuccessMessage('✅ Bill generated successfully! Download or print now.');
+        setShowSuccessModal(true);
+        setTimeout(() => setShowSuccessModal(false), 3000);
       } else {
-        console.error('Bill response missing file_name:', billResponse.data);
-        alert('Bill generated but file name not found. Check console.');
+        console.error('❌ Bill response invalid:', billResponse.data);
+        throw new Error(billResponse.data?.message || 'Bill file not generated');
       }
 
       // Reset form
@@ -291,14 +298,25 @@ const Billing = () => {
       setShowServiceModal(false);
       setSelectedCategory(null);
       
-      fetchBills();
+      // Refresh bills list
+      setTimeout(() => fetchBills(), 1000);
     } catch (err) {
-      console.error('Full error object:', err);
-      console.error('Error response:', err.response?.data);
-      console.error('Error message:', err.message);
+      console.error('❌ Error in bill generation:');
+      console.error('  Full error object:', err);
+      console.error('  Error response:', err.response?.data);
+      console.error('  Error message:', err.message);
       
-      const errorMsg = err.response?.data?.message || err.response?.data?.error || err.message;
-      alert('Error: ' + errorMsg);
+      let errorMsg = 'Failed to generate bill';
+      if (err.response?.data?.message) {
+        errorMsg = err.response.data.message;
+      } else if (err.response?.data?.error) {
+        errorMsg = err.response.data.error;
+      } else if (err.message) {
+        errorMsg = err.message;
+      }
+      
+      console.error('📢 Showing alert:', errorMsg);
+      alert('❌ Error: ' + errorMsg);
     }
   };
 
@@ -872,6 +890,92 @@ const Billing = () => {
             </div>
           </motion.div>
         </div>
+
+        {/* BILLS HISTORY SECTION */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3 }}
+          className="mt-8"
+        >
+          <div className="border border-gray-200 dark:border-gray-700 rounded-xl p-6">
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Bills History</h2>
+            
+            {filteredBills.length === 0 ? (
+              <div className="text-center py-8">
+                <p className="text-gray-500 dark:text-gray-400">No bills generated yet. Create your first bill above.</p>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                {filteredBills.map((bill) => (
+                  <div 
+                    key={bill.id} 
+                    className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition"
+                  >
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-3">
+                        <div className="flex-1">
+                          <p className="font-semibold text-gray-900 dark:text-white">{bill.customer_name || 'Unknown Customer'}</p>
+                          <p className="text-sm text-gray-600 dark:text-gray-400">
+                            {bill.mobile_number || 'No phone'} • {formatLKR(bill.total_amount || 0)}
+                          </p>
+                          <p className="text-xs text-gray-500 dark:text-gray-500 mt-1">
+                            {bill.bill_generated_at ? new Date(bill.bill_generated_at).toLocaleString() : bill.booking_date ? new Date(bill.booking_date).toLocaleString() : 'N/A'}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Bill Actions */}
+                    <div className="flex gap-2 ml-4">
+                      {bill.bill_file_name ? (
+                        <>
+                          <button
+                            onClick={() => {
+                              const link = document.createElement('a');
+                              link.href = `http://localhost:5000/api/bookings/download-bill/${bill.bill_file_name}`;
+                              link.download = bill.bill_file_name;
+                              document.body.appendChild(link);
+                              link.click();
+                              document.body.removeChild(link);
+                            }}
+                            className="px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition font-semibold text-sm flex items-center gap-2"
+                            title="Download bill PDF"
+                          >
+                            <Download size={16} />
+                            Download
+                          </button>
+                          <button
+                            onClick={() => {
+                              const printWindow = window.open(
+                                `http://localhost:5000/api/bookings/download-bill/${bill.bill_file_name}`,
+                                '_blank'
+                              );
+                              if (printWindow) {
+                                printWindow.addEventListener('load', () => {
+                                  printWindow.print();
+                                });
+                              }
+                            }}
+                            className="px-3 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg transition font-semibold text-sm flex items-center gap-2"
+                            title="Print bill using thermal printer"
+                          >
+                            <Printer size={16} />
+                            Print
+                          </button>
+                        </>
+                      ) : (
+                        <span className="px-3 py-2 bg-gray-300 dark:bg-gray-600 text-gray-700 dark:text-gray-300 rounded-lg text-sm">
+                          No Bill
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </motion.div>
       </div>
 
       {/* Bill Generation Modal */}
