@@ -975,146 +975,126 @@ const Billing = () => {
         </motion.div>
       </div>
 
-      {/* BILLS HISTORY SECTION */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.3 }}
-        className="mt-8"
-      >
-        <div className="border border-gray-200 dark:border-gray-700 rounded-xl p-6">
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Bills History</h2>
-          {filteredBills.length === 0 ? (
-            <div className="text-center py-8">
-              <p className="text-gray-500 dark:text-gray-400">No bills generated yet. Create your first bill above.</p>
-            </div>
-          ) : (
-            <div className="space-y-4">
-              {filteredBills.map((bill) => (
-                <div key={bill.id} className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition">
-                  <div className="flex-1 min-w-0">
-                    <p className="font-semibold text-gray-900 dark:text-white">{bill.customer_name || 'Unknown Customer'}</p>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">{bill.mobile_number || 'No phone'} • {formatLKR(bill.total_amount || 0)}</p>
-                    <p className="text-xs text-gray-500 dark:text-gray-500 mt-1">
-                      {bill.bill_generated_at ? new Date(bill.bill_generated_at).toLocaleString() : bill.booking_date ? new Date(bill.booking_date).toLocaleString() : 'N/A'}
-                    </p>
-                  </div>
-                  <div className="flex gap-2 ml-4">
-                    {bill.bill_file_name ? (
-                      <>
-                        <button onClick={() => { const link = document.createElement('a'); link.href = `http://localhost:5000/api/bookings/download-bill/${bill.bill_file_name}`; link.download = bill.bill_file_name; document.body.appendChild(link); link.click(); document.body.removeChild(link); }} className="px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition font-semibold text-sm flex items-center gap-2" title="Download bill PDF">
-                          <Download size={16} />
-                          Download
-                        </button>
-                        <button onClick={() => { const printWindow = window.open(`http://localhost:5000/api/bookings/download-bill/${bill.bill_file_name}`, '_blank'); if (printWindow) { printWindow.addEventListener('load', () => { printWindow.print(); }); } }} className="px-3 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg transition font-semibold text-sm flex items-center gap-2" title="Print bill using thermal printer">
-                          <Printer size={16} />
-                          Print
-                        </button>
-                      </>
-                    ) : (
-                      <span className="px-3 py-2 bg-gray-300 dark:bg-gray-600 text-gray-700 dark:text-gray-300 rounded-lg text-sm">
-                        No Bill
-                      </span>
-                    )}
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-      </motion.div>
-    </div>
-
-    {/* MODALS - BILL GENERATION */}
-    <AnimatePresence>
-      {showBillModal && generatedBill && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
-          onClick={() => setShowBillModal(false)}
-        >
+      {/* Bill Generation Modal */}
+      <AnimatePresence>
+        {showBillModal && generatedBill && (
           <motion.div
-            initial={{ scale: 0.95, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            exit={{ scale: 0.95, opacity: 0 }}
-            onClick={(e) => e.stopPropagation()}
-            className="bg-gray-800 border border-gray-700 rounded-xl shadow-2xl max-w-md w-full p-6"
-          >
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-bold text-white">Bill Generated Successfully!</h3>
-              <button onClick={() => setShowBillModal(false)} className="p-1 hover:bg-gray-700 rounded transition">
-                <X size={20} className="text-gray-400" />
-              </button>
-            </div>
-            <div className="bg-gray-900 rounded-lg p-4 mb-6 border border-gray-700 space-y-2">
-              <div className="flex justify-between">
-                <span className="text-sm text-gray-400">Customer:</span>
-                <span className="text-sm font-medium text-white">{generatedBill.customer_name}</span>
-              </div>
-              <div className="flex justify-between pt-2 border-t border-gray-700">
-                <span className="text-sm text-gray-400">Total Amount:</span>
-                <span className="text-lg font-bold text-green-400">{formatLKR(generatedBill.total_amount)}</span>
-              </div>
-            </div>
-            <div className="flex gap-3">
-              <button onClick={handleDownloadBill} className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition font-semibold text-sm">
-                <Download size={18} />
-                Download PDF
-              </button>
-              <button onClick={handlePrintBill} className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-purple-600 hover:bg-purple-700 text-white rounded-lg transition font-semibold text-sm">
-                <Printer size={18} />
-                Print Bill
-              </button>
-            </div>
-            <button onClick={() => setShowBillModal(false)} className="w-full mt-3 px-4 py-2 bg-gray-700 hover:bg-gray-600 text-gray-300 rounded-lg transition text-sm font-medium">
-              Close
-            </button>
-          </motion.div>
-        </motion.div>
-      )}
-    </AnimatePresence>
-
-    {/* MODALS - SUCCESS */}
-    <AnimatePresence>
-      {showSuccessModal && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
-          onClick={() => setShowSuccessModal(false)}
-        >
-          <motion.div
-            initial={{ scale: 0.9, opacity: 0, y: 20 }}
-            animate={{ scale: 1, opacity: 1, y: 0 }}
-            exit={{ scale: 0.9, opacity: 0, y: 20 }}
-            transition={{ type: 'spring', damping: 20, stiffness: 300 }}
-            onClick={(e) => e.stopPropagation()}
-            className="bg-gradient-to-br from-gray-800 to-gray-900 border border-gray-700 rounded-xl shadow-2xl w-full max-w-sm p-6 text-center"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+            onClick={() => setShowBillModal(false)}
           >
             <motion.div
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              transition={{ type: 'spring', damping: 15, stiffness: 200, delay: 0.1 }}
-              className="flex justify-center mb-4"
+              initial={{ scale: 0.95, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.95, opacity: 0 }}
+              onClick={(e) => e.stopPropagation()}
+              className="bg-gray-800 border border-gray-700 rounded-xl shadow-2xl max-w-md w-full p-6"
             >
-              <div className="p-3 bg-green-500/20 rounded-full">
-                <CheckCircle size={48} className="text-green-400" />
+              {/* Header */}
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-lg font-bold text-white">Bill Generated Successfully!</h3>
+                <button
+                  onClick={() => setShowBillModal(false)}
+                  className="p-1 hover:bg-gray-700 rounded transition"
+                >
+                  <X size={20} className="text-gray-400" />
+                </button>
               </div>
+
+              {/* Bill Details */}
+              <div className="bg-gray-900 rounded-lg p-4 mb-6 border border-gray-700 space-y-2">
+                <div className="flex justify-between">
+                  <span className="text-sm text-gray-400">Customer:</span>
+                  <span className="text-sm font-medium text-white">{generatedBill.customer_name}</span>
+                </div>
+                <div className="flex justify-between pt-2 border-t border-gray-700">
+                  <span className="text-sm text-gray-400">Total Amount:</span>
+                  <span className="text-lg font-bold text-green-400">{formatLKR(generatedBill.total_amount)}</span>
+                </div>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="flex gap-3">
+                <button
+                  onClick={handleDownloadBill}
+                  className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition font-semibold text-sm"
+                >
+                  <Download size={18} />
+                  Download PDF
+                </button>
+                <button
+                  onClick={handlePrintBill}
+                  className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-purple-600 hover:bg-purple-700 text-white rounded-lg transition font-semibold text-sm"
+                >
+                  <Printer size={18} />
+                  Print Bill
+                </button>
+              </div>
+
+              {/* Close Button */}
+              <button
+                onClick={() => setShowBillModal(false)}
+                className="w-full mt-3 px-4 py-2 bg-gray-700 hover:bg-gray-600 text-gray-300 rounded-lg transition text-sm font-medium"
+              >
+                Close
+              </button>
             </motion.div>
-            <h3 className="text-xl font-bold text-white mb-2">Success!</h3>
-            <p className="text-gray-300 mb-6">{successMessage}</p>
-            <div className="h-1 bg-gradient-to-r from-transparent via-green-400 to-transparent rounded-full mb-4" />
-            <button onClick={() => setShowSuccessModal(false)} className="w-full px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg transition font-semibold text-sm">
-              Got it!
-            </button>
           </motion.div>
-        </motion.div>
-      )}
-    </AnimatePresence>
-  </Layout>
+        )}
+      </AnimatePresence>
+
+      {/* Professional Success Modal */}
+      <AnimatePresence>
+        {showSuccessModal && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+            onClick={() => setShowSuccessModal(false)}
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0, y: 20 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 0.9, opacity: 0, y: 20 }}
+              transition={{ type: 'spring', damping: 20, stiffness: 300 }}
+              onClick={(e) => e.stopPropagation()}
+              className="bg-gradient-to-br from-gray-800 to-gray-900 border border-gray-700 rounded-xl shadow-2xl w-full max-w-sm p-6 text-center"
+            >
+              {/* Success Icon */}
+              <motion.div
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                transition={{ type: 'spring', damping: 15, stiffness: 200, delay: 0.1 }}
+                className="flex justify-center mb-4"
+              >
+                <div className="p-3 bg-green-500/20 rounded-full">
+                  <CheckCircle size={48} className="text-green-400" />
+                </div>
+              </motion.div>
+
+              {/* Success Message */}
+              <h3 className="text-xl font-bold text-white mb-2">Success!</h3>
+              <p className="text-gray-300 mb-6">{successMessage}</p>
+
+              {/* Checkmark Animation Line */}
+              <div className="h-1 bg-gradient-to-r from-transparent via-green-400 to-transparent rounded-full mb-4" />
+
+              {/* Close Button */}
+              <button
+                onClick={() => setShowSuccessModal(false)}
+                className="w-full px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg transition font-semibold text-sm"
+              >
+                Got it!
+              </button>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+      </div>
+    </Layout>
   );
 };
 
