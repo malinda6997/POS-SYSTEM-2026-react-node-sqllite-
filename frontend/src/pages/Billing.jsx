@@ -728,9 +728,6 @@ const Billing = () => {
                   </div>
                 </div>
 
-                {/* Hidden Submit - Actions moved to right side */}
-                <input type="hidden" />
-              </form>
             </div>
           </motion.div>
 
@@ -887,6 +884,7 @@ const Billing = () => {
                   Clear
                 </button>
               </div>
+            </form>
             </div>
           </motion.div>
         </div>
