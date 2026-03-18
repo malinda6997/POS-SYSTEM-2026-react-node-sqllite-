@@ -4,7 +4,7 @@ const fs = require("fs");
 const router = express.Router();
 const bookingController = require("../controllers/bookingController");
 const authMiddleware = require("../middleware/authMiddleware");
-const { generateThermalBill, generateProfessionalThermalBill, generateA4Invoice } = require("../utils/pdfService");
+const { generateThermalBill, generateProfessionalThermalBill, generateA4Invoice, invoicesDir } = require("../utils/pdfService");
 const { db } = require("../config/database");
 
 // ========== GET ROUTES ==========
@@ -23,7 +23,6 @@ router.get("/download-bill/:filename", (req, res) => {
       return res.status(400).json({ error: "Invalid filename" });
     }
     
-    const { invoicesDir } = require("../utils/pdfService");
     const filepath = path.join(invoicesDir, filename);
     
     if (!fs.existsSync(filepath)) {
@@ -53,7 +52,9 @@ router.post("/generate-bill-now", async (req, res) => {
     if (!billData.customer_name || !billData.total_amount) {
       console.log("❌ Missing required fields:", { customer_name: billData.customer_name, total_amount: billData.total_amount });
       return res.status(400).json({
+        data: null,
         message: "Customer name and total amount are required!",
+        error: "VALIDATION_ERROR"
       });
     }
 
@@ -77,7 +78,11 @@ router.post("/generate-bill-now", async (req, res) => {
     });
   } catch (err) {
     console.error("❌ Bill generation error:", err);
-    res.status(500).json({ error: err.message });
+    res.status(500).json({
+      data: null,
+      message: "Failed to generate bill",
+      error: err.message
+    });
   }
 });
 

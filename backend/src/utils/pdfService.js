@@ -16,7 +16,7 @@ const generateProfessionalThermalBill = (billData, outputPath = null) => {
         outputPath ||
         path.join(
           invoicesDir,
-          `bill_${billData.bill_number}_${Date.now()}.pdf`
+          `bill_${billData.id || billData.bill_number}_${Date.now()}.pdf`
         );
 
       const doc = new PDFDocument({
@@ -105,10 +105,7 @@ const generateProfessionalThermalBill = (billData, outputPath = null) => {
           const itemTotal = qty * price;
           subtotal += itemTotal;
 
-          const serviceName = (service.service_name || service.name).substring(
-            0,
-            25
-          );
+          const serviceName = (service.service_name || service.name || 'Service').substring(0, 25);
           doc.fontSize(7).text(serviceName, xPos, doc.y, {
             width: colWidths.item,
           });

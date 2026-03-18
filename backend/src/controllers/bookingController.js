@@ -14,7 +14,10 @@ exports.getAllBookings = (req, res) => {
         LEFT JOIN users u ON b.created_by = u.id
       `)
       .all();
-    res.json(bookings);
+    res.json({
+      data: bookings,
+      message: "Bookings fetched successfully!"
+    });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -39,7 +42,10 @@ exports.getBookingById = (req, res) => {
     if (!booking) {
       return res.status(404).json({ message: "Booking not found!" });
     }
-    res.json(booking);
+    res.json({
+      data: booking,
+      message: "Booking fetched successfully!"
+    });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -236,7 +242,10 @@ exports.updateBooking = (req, res) => {
     );
     stmt.run(...values);
 
-    res.json({ message: "Booking updated successfully!" });
+    res.json({
+      data: { id },
+      message: "Booking updated successfully!"
+    });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -248,7 +257,10 @@ exports.deleteBooking = (req, res) => {
 
   try {
     db.prepare("DELETE FROM bookings WHERE id = ?").run(id);
-    res.json({ message: "Booking deleted successfully!" });
+    res.json({
+      data: { id },
+      message: "Booking deleted successfully!"
+    });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -270,7 +282,10 @@ exports.getPendingBookings = (req, res) => {
         ORDER BY b.event_date ASC
       `)
       .all();
-    res.json(bookings);
+    res.json({
+      data: bookings,
+      message: "Pending bookings fetched successfully!"
+    });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

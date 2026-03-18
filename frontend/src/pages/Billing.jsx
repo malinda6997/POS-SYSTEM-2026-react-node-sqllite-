@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Search, Filter, Trash2, Eye, X } from 'lucide-react';
+import { Search, Filter, Trash2, Eye, X, Download, Printer, CheckCircle } from 'lucide-react';
 import Layout from '../components/Layout';
 import api from '../utils/api';
 import { formatLKR } from '../utils/currency';
@@ -17,6 +17,14 @@ const Billing = () => {
   const [showCustomerDropdown, setShowCustomerDropdown] = useState(false);
   const [showServiceModal, setShowServiceModal] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState(null);
+
+  // Bill generation state
+  const [generatedBill, setGeneratedBill] = useState(null);
+  const [showBillModal, setShowBillModal] = useState(false);
+
+  // Success notification state
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [successMessage, setSuccessMessage] = useState('');
 
   // Form state
   const [formData, setFormData] = useState({
@@ -148,6 +156,33 @@ const Billing = () => {
     }, 0);
   };
 
+  const handleDownloadBill = () => {
+    if (!generatedBill?.file_name) return;
+    
+    const link = document.createElement('a');
+    link.href = `http://localhost:5000/api/bookings/download-bill/${generatedBill.file_name}`;
+    link.download = generatedBill.file_name;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  const handlePrintBill = () => {
+    if (!generatedBill?.file_name) return;
+    
+    // Open PDF in new window for printing
+    const printWindow = window.open(
+      `http://localhost:5000/api/bookings/download-bill/${generatedBill.file_name}`,
+      '_blank'
+    );
+    
+    if (printWindow) {
+      printWindow.addEventListener('load', () => {
+        printWindow.print();
+      });
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -166,9 +201,23 @@ const Billing = () => {
       return;
     }
 
+    if (formData.selectedServices.length === 0) {
+      alert('Please select at least one service');
+      return;
+    }
+
+    const total = calculateTotal();
+    if (total === 0) {
+      alert('Total amount cannot be zero. Please add services');
+      return;
+    }
+
+    if (formData.paymentStatus === 'advance' && !formData.advanceAmount) {
+      alert('Please enter advance amount');
+      return;
+    }
+
     try {
-      const total = calculateTotal();
-      
       // Prepare service data with proper format
       const servicesList = formData.selectedServices.map(serviceId => {
         const service = services.find(s => s.id === serviceId);
@@ -194,24 +243,33 @@ const Billing = () => {
       };
 
       // Create booking record
+      console.log('Submitting bill data:', billData);
       const response = await api.post('/bookings', billData);
+      console.log('Booking created:', response.data);
       const bookingData = response.data.data;
 
       // Generate professional bill PDF
+      console.log('Generating bill with ID:', bookingData.id);
       const billResponse = await api.post('/bookings/generate-bill-now', {
         ...billData,
         id: bookingData.id,
         date: new Date().toISOString()
       });
+      console.log('Bill generated:', billResponse.data);
 
       if (billResponse.data?.data?.file_name) {
-        // Download the PDF
-        const link = document.createElement('a');
-        link.href = `http://localhost:5000/api/bookings/download-bill/${billResponse.data.data.file_name}`;
-        link.download = billResponse.data.data.file_name;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
+        // Store bill info and show modal
+        console.log('Showing bill modal with:', billResponse.data.data);
+        setGeneratedBill({
+          file_name: billResponse.data.data.file_name,
+          file_path: billResponse.data.data.file_path,
+          customer_name: formData.customerName,
+          total_amount: total
+        });
+        setShowBillModal(true);
+      } else {
+        console.error('Bill response missing file_name:', billResponse.data);
+        alert('Bill generated but file name not found. Check console.');
       }
 
       // Reset form
@@ -234,10 +292,13 @@ const Billing = () => {
       setSelectedCategory(null);
       
       fetchBills();
-      alert('✓ Bill created and downloaded successfully!');
     } catch (err) {
-      console.error('Error creating bill:', err);
-      alert('Error: ' + (err.response?.data?.message || err.message));
+      console.error('Full error object:', err);
+      console.error('Error response:', err.response?.data);
+      console.error('Error message:', err.message);
+      
+      const errorMsg = err.response?.data?.message || err.response?.data?.error || err.message;
+      alert('Error: ' + errorMsg);
     }
   };
 
@@ -308,7 +369,15 @@ const Billing = () => {
       const newCustomer = res.data.data;
       setCustomers([...customers, newCustomer]);
       setShowCustomerDropdown(false);
-      alert('Customer added successfully!');
+      
+      // Show professional success modal
+      setSuccessMessage(`${formData.customerName} added successfully!`);
+      setShowSuccessModal(true);
+      
+      // Auto-close after 3 seconds
+      setTimeout(() => {
+        setShowSuccessModal(false);
+      }, 3000);
     } catch (err) {
       console.error('Error adding customer:', err);
       alert('Error adding customer: ' + err.message);
@@ -431,38 +500,7 @@ const Billing = () => {
                       )}
                     </AnimatePresence>
 
-                    {/* Quick Add Button */}
-                    {showCustomerDropdown && formData.customerName.length >= 3 && filteredCustomers.length === 0 && (
-                      <motion.div
-                        initial={{ opacity: 0, y: -10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        className="absolute top-full left-0 right-0 mt-1 bg-gray-800 border border-gray-700 rounded-lg p-3 z-50"
-                      >
-                        <p className="text-sm text-gray-400 mb-3">No matching customer found. Fill details and add as new.</p>
-                        <button
-                          type="button"
-                          onClick={() => {
-                            // Keep dropdown open to allow filling details
-                            setShowCustomerDropdown(false);
-                          }}
-                          className="w-full px-4 py-2 bg-green-600 hover:bg-green-700 rounded-lg text-white transition font-medium text-sm"
-                        >
-                          + Add New Customer
-                        </button>
-                      </motion.div>
-                    )}
                   </div>
-
-                  {/* Fallback Add Customer Button - Shows when details filled manually */}
-                  {formData.customerName && !showCustomerDropdown && formData.customerName.length >= 3 && !filteredCustomers.some(c => c.customer_name === formData.customerName) && (
-                    <button
-                      type="button"
-                      onClick={addNewCustomer}
-                      className="w-full px-4 py-2 bg-green-600 hover:bg-green-700 rounded-lg text-white transition font-medium text-sm"
-                    >
-                      + Add New Customer
-                    </button>
-                  )}
 
                   <div className="grid grid-cols-2 gap-3">
                     <div>
@@ -500,6 +538,17 @@ const Billing = () => {
                       className="w-full px-3 py-2 border border-gray-800 rounded-lg bg-black dark:bg-black text-white focus:outline-none focus:ring-2 focus:ring-gray-700 transition text-sm"
                     />
                   </div>
+
+                  {/* Add Customer Button - Shows when customer not found */}
+                  {formData.customerName.trim().length >= 3 && formData.address.trim().length > 0 && !filteredCustomers.some(c => c.customer_name.toLowerCase() === formData.customerName.toLowerCase()) && (
+                    <button
+                      type="button"
+                      onClick={addNewCustomer}
+                      className="w-full px-4 py-2 bg-green-600 hover:bg-green-700 rounded-lg text-white transition font-medium text-sm"
+                    >
+                      + Add New Customer
+                    </button>
+                  )}
                 </div>
 
                 {/* PART 2: Category and Services Section */}
@@ -824,6 +873,125 @@ const Billing = () => {
           </motion.div>
         </div>
       </div>
+
+      {/* Bill Generation Modal */}
+      <AnimatePresence>
+        {showBillModal && generatedBill && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+            onClick={() => setShowBillModal(false)}
+          >
+            <motion.div
+              initial={{ scale: 0.95, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.95, opacity: 0 }}
+              onClick={(e) => e.stopPropagation()}
+              className="bg-gray-800 border border-gray-700 rounded-xl shadow-2xl max-w-md w-full p-6"
+            >
+              {/* Header */}
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-lg font-bold text-white">Bill Generated Successfully!</h3>
+                <button
+                  onClick={() => setShowBillModal(false)}
+                  className="p-1 hover:bg-gray-700 rounded transition"
+                >
+                  <X size={20} className="text-gray-400" />
+                </button>
+              </div>
+
+              {/* Bill Details */}
+              <div className="bg-gray-900 rounded-lg p-4 mb-6 border border-gray-700 space-y-2">
+                <div className="flex justify-between">
+                  <span className="text-sm text-gray-400">Customer:</span>
+                  <span className="text-sm font-medium text-white">{generatedBill.customer_name}</span>
+                </div>
+                <div className="flex justify-between pt-2 border-t border-gray-700">
+                  <span className="text-sm text-gray-400">Total Amount:</span>
+                  <span className="text-lg font-bold text-green-400">{formatLKR(generatedBill.total_amount)}</span>
+                </div>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="flex gap-3">
+                <button
+                  onClick={handleDownloadBill}
+                  className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition font-semibold text-sm"
+                >
+                  <Download size={18} />
+                  Download PDF
+                </button>
+                <button
+                  onClick={handlePrintBill}
+                  className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-purple-600 hover:bg-purple-700 text-white rounded-lg transition font-semibold text-sm"
+                >
+                  <Printer size={18} />
+                  Print Bill
+                </button>
+              </div>
+
+              {/* Close Button */}
+              <button
+                onClick={() => setShowBillModal(false)}
+                className="w-full mt-3 px-4 py-2 bg-gray-700 hover:bg-gray-600 text-gray-300 rounded-lg transition text-sm font-medium"
+              >
+                Close
+              </button>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Professional Success Modal */}
+      <AnimatePresence>
+        {showSuccessModal && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+            onClick={() => setShowSuccessModal(false)}
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0, y: 20 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 0.9, opacity: 0, y: 20 }}
+              transition={{ type: 'spring', damping: 20, stiffness: 300 }}
+              onClick={(e) => e.stopPropagation()}
+              className="bg-gradient-to-br from-gray-800 to-gray-900 border border-gray-700 rounded-xl shadow-2xl w-full max-w-sm p-6 text-center"
+            >
+              {/* Success Icon */}
+              <motion.div
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                transition={{ type: 'spring', damping: 15, stiffness: 200, delay: 0.1 }}
+                className="flex justify-center mb-4"
+              >
+                <div className="p-3 bg-green-500/20 rounded-full">
+                  <CheckCircle size={48} className="text-green-400" />
+                </div>
+              </motion.div>
+
+              {/* Success Message */}
+              <h3 className="text-xl font-bold text-white mb-2">Success!</h3>
+              <p className="text-gray-300 mb-6">{successMessage}</p>
+
+              {/* Checkmark Animation Line */}
+              <div className="h-1 bg-gradient-to-r from-transparent via-green-400 to-transparent rounded-full mb-4" />
+
+              {/* Close Button */}
+              <button
+                onClick={() => setShowSuccessModal(false)}
+                className="w-full px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg transition font-semibold text-sm"
+              >
+                Got it!
+              </button>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </Layout>
   );
 };
