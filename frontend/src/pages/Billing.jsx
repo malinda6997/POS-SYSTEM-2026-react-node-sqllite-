@@ -887,6 +887,11 @@ const Billing = () => {
             </form>
             </div>
           </motion.div>
+
+          {/* RIGHT SIDE: Billing Summary - CLOSING TAGS */}
+          </div>
+        </motion.div>
+
         </div>
 
         {/* BILLS HISTORY SECTION */}
